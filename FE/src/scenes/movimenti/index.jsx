@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { mockDataTransazioni } from "../../data/mockData";
 import { tokens } from "../../theme";
 
-const Invoices = () => {
+const Movimenti = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 const columns = [
@@ -77,4 +77,4 @@ const columns = [
   );
 };
 
-export default Invoices;
+export default Movimenti;

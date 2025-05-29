@@ -4,7 +4,7 @@ import App from "./App";
 import {
   Dashboard,
   Team,
-  Invoices,
+  Movimenti,
   Contacts,
   Form,
   Bar,
@@ -24,7 +24,7 @@ const AppRouter = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/team" element={<Team />} />
           <Route path="/contacts" element={<Contacts />} />
-          <Route path="/invoices" element={<Invoices />} />
+          <Route path="/movimenti" element={<Movimenti />} />
           <Route path="/form" element={<Form />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/bar" element={<Bar />} />
