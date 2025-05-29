@@ -169,7 +169,7 @@ const SideBar = () => {
           />
           <Item
             title="Movimenti"
-            path="/movimenti"
+            path="/invoices"
             colors={colors}
             icon={<AccountBalanceOutlinedIcon />}
           />

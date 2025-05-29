@@ -1,50 +1,33 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { Header } from "../../components";
 import { DataGrid } from "@mui/x-data-grid";
-import { mockDataInvoices } from "../../data/mockData";
+import { mockDataTransazioni } from "../../data/mockData";
 import { tokens } from "../../theme";
 
 const Invoices = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+const columns = [
+  { field: "tipo", headerName: "Tipo", flex: 1 }, 
+  {
+    field: "importo",
+    headerName: "Importo",
+    flex: 1,
+    renderCell: (params) => (
+      <Typography color={colors.greenAccent[500]}>
+        €{params.row.importo}
+      </Typography>
+    ),
+  },
+  { field: "stato", headerName: "Stato", flex: 1 }, 
+  { field: "metodo", headerName: "Metodo di Pagamento", flex: 1 }, 
+  { field: "data", headerName: "Data", flex: 1 },
+  { field: 'indirizzo', headerName: "Indirizzo", flex:1},
+];
 
-  const columns = [
-    { field: "id", headerName: "ID" },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "cost",
-      headerName: "Cost",
-      flex: 1,
-      renderCell: (params) => (
-        <Typography color={colors.greenAccent[500]}>
-          ${params.row.cost}
-        </Typography>
-      ),
-    },
-    {
-      field: "date",
-      headerName: "Date",
-      flex: 1,
-    },
-  ];
   return (
     <Box m="20px">
-      <Header title="INVOICES" subtitle="List of Invoice Balances" />
+      <Header title="Movimenti" subtitle="Lista ultime 20 transazioni" />
       <Box
         mt="40px"
         height="75vh"
@@ -79,7 +62,7 @@ const Invoices = () => {
         }}
       >
         <DataGrid
-          rows={mockDataInvoices}
+          rows={mockDataTransazioni}
           columns={columns}
           initialState={{
             pagination: {
@@ -88,7 +71,6 @@ const Invoices = () => {
               },
             },
           }}
-          checkboxSelection
         />
       </Box>
     </Box>
