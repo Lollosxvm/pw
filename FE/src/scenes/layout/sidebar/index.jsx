@@ -78,7 +78,7 @@ const SideBar = () => {
                   textTransform="capitalize"
                   color={colors.greenAccent[500]}
                 >
-                  Argon
+                  PW Bank
                 </Typography>
               </Box>
             )}
