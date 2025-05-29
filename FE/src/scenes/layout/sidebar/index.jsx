@@ -3,6 +3,7 @@ import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useContext, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import {
   BarChartOutlined,
   CalendarTodayOutlined,
@@ -17,6 +18,7 @@ import {
   ReceiptOutlined,
   TimelineOutlined,
   WavesOutlined,
+  HomeOutlined ,
 } from "@mui/icons-material";
 import avatar from "../../../assets/images/avatar.png";
 import logo from "../../../assets/images/logo.png";
@@ -129,10 +131,10 @@ const SideBar = () => {
           }}
         >
           <Item
-            title="Dashboard"
+            title="Homepage"
             path="/"
             colors={colors}
-            icon={<DashboardOutlined />}
+            icon={<HomeOutlined  />}
           />
         </Menu>
         <Typography
@@ -166,10 +168,10 @@ const SideBar = () => {
             icon={<ContactsOutlined />}
           />
           <Item
-            title="Invoices Balances"
-            path="/invoices"
+            title="Movimenti"
+            path="/movimenti"
             colors={colors}
-            icon={<ReceiptOutlined />}
+            icon={<AccountBalanceOutlinedIcon />}
           />
         </Menu>
         <Typography
