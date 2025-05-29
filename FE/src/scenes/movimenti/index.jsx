@@ -1,8 +1,9 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { Header } from "../../components";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { mockDataTransazioni } from "../../data/mockData";
 import { tokens } from "../../theme";
+
 
 const Movimenti = () => {
   const theme = useTheme();
@@ -59,11 +60,15 @@ const columns = [
           "& .MuiDataGrid-iconSeparator": {
             color: colors.primary[100],
           },
+           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.gray[100]} !important`,
+          },
         }}
       >
         <DataGrid
           rows={mockDataTransazioni}
           columns={columns}
+          components={{ Toolbar: GridToolbar }}
           initialState={{
             pagination: {
               paginationModel: {
@@ -71,6 +76,7 @@ const columns = [
               },
             },
           }}
+          checkboxSelection
         />
       </Box>
     </Box>

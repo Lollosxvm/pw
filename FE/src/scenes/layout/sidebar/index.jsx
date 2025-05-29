@@ -156,12 +156,6 @@ const SideBar = () => {
           }}
         >
           <Item
-            title="Manage Team"
-            path="/team"
-            colors={colors}
-            icon={<PeopleAltOutlined />}
-          />
-          <Item
             title="Contacts Information"
             path="/contacts"
             colors={colors}

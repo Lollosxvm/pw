@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import App from "./App";
 import {
   Dashboard,
-  Team,
   Movimenti,
   Contacts,
   Form,
@@ -22,7 +21,6 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/team" element={<Team />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/movimenti" element={<Movimenti />} />
           <Route path="/form" element={<Form />} />
