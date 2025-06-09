@@ -9,23 +9,33 @@ import {
   createTheme,
   ThemeProvider,
   CssBaseline,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "@mui/material";
+import logo from "../../assets/images/logo.png";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import PasswordRecovery from "./PasswordRecovery";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  // Forziamo tema scuro solo per questa pagina
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
 
-  const colors = tokens("dark"); // Forziamo anche i tokens su dark
+  const colors = tokens("dark");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [openRecovery, setOpenRecovery] = React.useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleLogin = () => {
     navigate("/dashboard");
@@ -53,6 +63,8 @@ const LoginPage = () => {
           maxWidth="400px"
           boxShadow={4}
         >
+          <img src={logo} alt="Logo" style={{ width: 80, marginBottom: 16 }} />
+
           <Typography
             variant="h4"
             color={colors.greenAccent[500]}
@@ -69,18 +81,34 @@ const LoginPage = () => {
             variant="filled"
             sx={{ mb: 2 }}
             InputProps={{ disableUnderline: true }}
+            autoComplete="username"
           />
           <TextField
             fullWidth
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             variant="filled"
             sx={{ mb: 2 }}
-            InputProps={{ disableUnderline: true }}
+            InputProps={{
+              disableUnderline: true,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleTogglePassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            autoComplete="current-password"
           />
 
           <Box width="100%" textAlign="right" mb={2}>
-            <Link href="#" underline="hover" color={colors.greenAccent[500]}>
+            <Link
+              component="button"
+              underline="hover"
+              color={colors.greenAccent[500]}
+              onClick={() => setOpenRecovery(true)}
+            >
               Password dimenticata?
             </Link>
           </Box>
@@ -101,6 +129,9 @@ const LoginPage = () => {
           </Button>
         </Box>
       </Box>
+
+      {/* Modale per il recupero password */}
+      <PasswordRecovery open={openRecovery} onClose={() => setOpenRecovery(false)} />
     </ThemeProvider>
   );
 };
