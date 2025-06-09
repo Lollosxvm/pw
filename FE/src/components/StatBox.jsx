@@ -16,7 +16,7 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
           </Typography>
         </Box>
         <Box>
-          <ProgressCircle progress={progress} />
+<ProgressCircle progress={progress} x={Math.round(progress * 100)} y={100 - Math.round(progress * 100)} />
         </Box>
       </Box>
       <Box display="flex" justifyContent="space-between" mt="2px">

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { ResponsiveBar } from "@nivo/bar";
-import { mockBarData as data } from "../data/mockData";
+import { mockBarDataSpese as data } from "../data/mockData";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 
@@ -12,6 +12,13 @@ const BarChart = ({ isDashboard = false }) => {
     <ResponsiveBar
       data={data}
       theme={{
+          tooltip: {
+    container: {
+      background: "#ffffff",
+      color: colors.gray[900],
+      fontSize: "13px",
+    },
+  },
         axis: {
           domain: {
             line: {
@@ -39,8 +46,8 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-      indexBy="country"
+      keys={["Affitto", "Alimentari", "Trasporti", "Svago"]}
+      indexBy="mese"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
@@ -76,7 +83,7 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country",
+        legend: isDashboard ? undefined : "Mese",
         legendPosition: "middle",
         legendOffset: 32,
       }}
@@ -84,7 +91,7 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food",
+        legend: isDashboard ? undefined : "Spese (€)",
         legendPosition: "middle",
         legendOffset: -40,
       }}
