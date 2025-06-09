@@ -84,6 +84,10 @@ function Dashboard() {
             subtitle="Portafoglio investimenti"
             progress={0.4}
             increase="+4.2% YTD"
+            x={60}
+            y={40}
+            labelX="Azioni"
+            labelY="Obbligazioni"
             icon={
               <Email
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -103,6 +107,10 @@ function Dashboard() {
             subtitle="Mutuo residuo"
             progress={0.68}
             increase="32 rate residue"
+            x={68}
+            y={32}
+            labelX="Importo già pagato"
+            labelY="Rimanente"
             icon={
               <PointOfSale
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -122,6 +130,10 @@ function Dashboard() {
             subtitle="Prestito rimanente"
             progress={0.75}
             increase="25% da saldare"
+            x={75}
+            y={25}
+            labelX="Rimborsato"
+            labelY="Da rimborsare"
             icon={
               <PersonAdd
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -141,6 +153,10 @@ function Dashboard() {
             subtitle="Stabilità finanziaria"
             progress={0.67}
             increase="entrate > spese"
+            x={67}
+            y={33}
+            labelX="Entrate"
+            labelY="Spese"
             icon={
               <Traffic
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -251,7 +267,14 @@ function Dashboard() {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle progress={0.6} size={125} x={60} y={40} />
+            <ProgressCircle
+              progress={0.6}
+              size={125}
+              x={60}
+              y={40}
+              labelX="Azioni"
+              labelY="Obbligazioni"
+            />
             <Typography
               textAlign="center"
               variant="h5"

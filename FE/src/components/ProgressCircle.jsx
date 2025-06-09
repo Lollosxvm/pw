@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Tooltip, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-
-const ProgressCircle = ({ progress = 0.75, size = 40, x, y }) => {
+const ProgressCircle = ({ progress = 0.75, size = 40, x, y, labelX, labelY }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const angle = progress * 360;
@@ -24,8 +23,9 @@ const ProgressCircle = ({ progress = 0.75, size = 40, x, y }) => {
 
   const tooltipContent = (
     <Box>
-      <Typography variant="caption">{x}%: parte primaria</Typography>
-      <Typography variant="caption">{y}%: parte secondaria</Typography>
+      <Typography variant="caption">{x}%: {labelX || "parte primaria"}</Typography> 
+      <br></br>
+      <Typography variant="caption">{y}%: {labelY || "parte secondaria"}</Typography>
     </Box>
   );
 
