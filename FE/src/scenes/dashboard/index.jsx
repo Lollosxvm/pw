@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  IconButton,
   Typography,
   useMediaQuery,
   useTheme,
@@ -21,6 +20,11 @@ import {
   PointOfSale,
   Traffic,
 } from "@mui/icons-material";
+import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
 
@@ -33,7 +37,8 @@ function Dashboard() {
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="Situazione economica"   subtitle={`Dati aggiornati al ${new Date().toLocaleDateString("it-IT")}`}
+ />
         {!isXsDevices && (
           <Box>
             <Button
@@ -89,7 +94,7 @@ function Dashboard() {
             labelX="Azioni"
             labelY="Obbligazioni"
             icon={
-              <Email
+              <TrendingUpOutlinedIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -112,7 +117,7 @@ function Dashboard() {
             labelX="Importo già pagato"
             labelY="Rimanente"
             icon={
-              <PointOfSale
+              <HomeOutlinedIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -135,7 +140,7 @@ function Dashboard() {
             labelX="Rimborsato"
             labelY="Da rimborsare"
             icon={
-              <PersonAdd
+              <CreditCardOutlinedIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -158,7 +163,7 @@ function Dashboard() {
             labelX="Entrate"
             labelY="Spese"
             icon={
-              <Traffic
+              <SecurityOutlinedIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -187,14 +192,14 @@ function Dashboard() {
                 fontWeight="600"
                 color={colors.gray[100]}
               >
-                Saldo Conto Corrente 012456789012334
+                Conto Corrente 012456789012334
               </Typography>
               <Typography
                 variant="h5"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                $59,342.32
+  Saldo $59,342.32
               </Typography>
             </Box>
           </Box>
@@ -270,10 +275,10 @@ function Dashboard() {
             <ProgressCircle
               progress={0.6}
               size={125}
-              x={60}
-              y={40}
+              x={55}
+              y={45}
               labelX="Azioni"
-              labelY="Obbligazioni"
+              labelY="ETF"
             />
             <Typography
               textAlign="center"
