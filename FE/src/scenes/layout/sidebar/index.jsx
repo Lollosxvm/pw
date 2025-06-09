@@ -8,7 +8,6 @@ import {
   BarChartOutlined,
   CalendarTodayOutlined,
   ContactsOutlined,
-  DashboardOutlined,
   DonutLargeOutlined,
   HelpOutlineOutlined,
   MapOutlined,
