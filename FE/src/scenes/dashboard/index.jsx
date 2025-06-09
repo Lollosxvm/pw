@@ -80,10 +80,10 @@ function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="11,361"
-            subtitle="Email Sent"
-            progress="0.75"
-            increase="+14%"
+            title="€12.400"
+            subtitle="Portafoglio investimenti"
+            progress={0.4}
+            increase="+4.2% YTD"
             icon={
               <Email
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -99,10 +99,10 @@ function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
-            progress="0.50"
-            increase="+21%"
+            title="€86.000"
+            subtitle="Mutuo residuo"
+            progress={0.68}
+            increase="32 rate residue"
             icon={
               <PointOfSale
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -118,10 +118,10 @@ function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
-            subtitle="New Clients"
-            progress="0.30"
-            increase="+5%"
+            title="€2.700"
+            subtitle="Prestito rimanente"
+            progress={0.75}
+            increase="25% da saldare"
             icon={
               <PersonAdd
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -137,10 +137,10 @@ function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
-            progress="0.80"
-            increase="+43%"
+            title="67%"
+            subtitle="Stabilità finanziaria"
+            progress={0.67}
+            increase="entrate > spese"
             icon={
               <Traffic
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -171,7 +171,7 @@ function Dashboard() {
                 fontWeight="600"
                 color={colors.gray[100]}
               >
-                Revenue Generated
+                Saldo Conto Corrente 012456789012334
               </Typography>
               <Typography
                 variant="h5"
@@ -181,11 +181,6 @@ function Dashboard() {
                 $59,342.32
               </Typography>
             </Box>
-            <IconButton>
-              <DownloadOutlined
-                sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-              />
-            </IconButton>
           </Box>
           <Box height="250px" mt="-20px">
             <LineChart isDashboard={true} />
@@ -201,7 +196,7 @@ function Dashboard() {
         >
           <Box borderBottom={`4px solid ${colors.primary[500]}`} p="15px">
             <Typography color={colors.gray[100]} variant="h5" fontWeight="600">
-              Recent Transactions
+              Transazioni recenti
             </Typography>
           </Box>
 
@@ -248,7 +243,7 @@ function Dashboard() {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Campaign
+            Suddivisione attuale del portafoglio
           </Typography>
           <Box
             display="flex"
@@ -256,22 +251,20 @@ function Dashboard() {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
+            <ProgressCircle progress={0.6} size={125} x={60} y={40} />
             <Typography
               textAlign="center"
               variant="h5"
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+              €48.352 investiti
             </Typography>
-            <Typography textAlign="center">
-              Includes extra misc expenditures and costs
-            </Typography>
+            <Typography textAlign="center">% per categoria</Typography>
           </Box>
         </Box>
 
-        {/* Bar Chart */}
+        {/*  Distribuzione delle spese per categoria */}
         <Box
           gridColumn={isXlDevices ? "span 4" : "span 3"}
           gridRow="span 2"
@@ -282,7 +275,7 @@ function Dashboard() {
             fontWeight="600"
             sx={{ p: "30px 30px 0 30px" }}
           >
-            Sales Quantity
+            Spese mensili per categoria
           </Typography>
           <Box
             display="flex"
