@@ -37,8 +37,12 @@ function Dashboard() {
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between">
-        <Header title="Situazione economica"   subtitle={`Dati aggiornati al ${new Date().toLocaleDateString("it-IT")}`}
- />
+        <Header
+          title="Situazione economica"
+          subtitle={`Dati aggiornati al ${new Date().toLocaleDateString(
+            "it-IT"
+          )}`}
+        />
         {!isXsDevices && (
           <Box>
             <Button
@@ -199,7 +203,7 @@ function Dashboard() {
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-  Saldo $59,342.32
+                Saldo $59,342.32
               </Typography>
             </Box>
           </Box>
@@ -316,7 +320,7 @@ function Dashboard() {
           </Box>
         </Box>
 
-        {/* Geography Chart */}
+        {/* Distribuzione delle spese per area geografica */}
         <Box
           gridColumn={isXlDevices ? "span 4" : "span 3"}
           gridRow="span 2"
@@ -324,7 +328,7 @@ function Dashboard() {
           padding="30px"
         >
           <Typography variant="h5" fontWeight="600" mb="15px">
-            Geography Based Traffic
+            Località transazioni
           </Typography>
           <Box
             display="flex"
