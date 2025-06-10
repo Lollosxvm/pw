@@ -1,204 +1,5 @@
 import { tokens } from "../theme";
 
-export const mockDataTeam = [
-  {
-    id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
-    age: 35,
-    phone: "(665)121-5454",
-    access: "admin",
-  },
-  {
-    id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
-    age: 42,
-    phone: "(421)314-2288",
-    access: "manager",
-  },
-  {
-    id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
-    age: 45,
-    phone: "(422)982-6739",
-    access: "user",
-  },
-  {
-    id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
-    age: 16,
-    phone: "(921)425-6742",
-    access: "admin",
-  },
-  {
-    id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
-    age: 31,
-    phone: "(421)445-1189",
-    access: "user",
-  },
-  {
-    id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
-    age: 150,
-    phone: "(232)545-6483",
-    access: "manager",
-  },
-  {
-    id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
-    age: 44,
-    phone: "(543)124-0123",
-    access: "user",
-  },
-  {
-    id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
-    age: 36,
-    phone: "(222)444-5555",
-    access: "user",
-  },
-  {
-    id: 9,
-    name: "Harvey Roxie",
-    email: "harveyroxie@gmail.com",
-    age: 65,
-    phone: "(444)555-6239",
-    access: "admin",
-  },
-];
-
-export const mockDataContacts = [
-  {
-    id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
-    age: 35,
-    phone: "(665)121-5454",
-    address: "0912 Won Street, Alabama, SY 10001",
-    city: "New York",
-    zipCode: "10001",
-    registrarId: 123512,
-  },
-  {
-    id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
-    age: 42,
-    phone: "(421)314-2288",
-    address: "1234 Main Street, New York, NY 10001",
-    city: "New York",
-    zipCode: "13151",
-    registrarId: 123512,
-  },
-  {
-    id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
-    age: 45,
-    phone: "(422)982-6739",
-    address: "3333 Want Blvd, Estanza, NAY 42125",
-    city: "New York",
-    zipCode: "87281",
-    registrarId: 4132513,
-  },
-  {
-    id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
-    age: 16,
-    phone: "(921)425-6742",
-    address: "1514 Main Street, New York, NY 22298",
-    city: "New York",
-    zipCode: "15551",
-    registrarId: 123512,
-  },
-  {
-    id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
-    age: 31,
-    phone: "(421)445-1189",
-    address: "11122 Welping Ave, Tenting, CD 21321",
-    city: "Tenting",
-    zipCode: "14215",
-    registrarId: 123512,
-  },
-  {
-    id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
-    age: 150,
-    phone: "(232)545-6483",
-    address: "1234 Canvile Street, Esvazark, NY 10001",
-    city: "Esvazark",
-    zipCode: "10001",
-    registrarId: 123512,
-  },
-  {
-    id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
-    age: 44,
-    phone: "(543)124-0123",
-    address: "22215 Super Street, Everting, ZO 515234",
-    city: "Evertin",
-    zipCode: "51523",
-    registrarId: 123512,
-  },
-  {
-    id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
-    age: 36,
-    phone: "(222)444-5555",
-    address: "4123 Ever Blvd, Wentington, AD 142213",
-    city: "Esteras",
-    zipCode: "44215",
-    registrarId: 512315,
-  },
-  {
-    id: 9,
-    name: "Harvey Roxie",
-    email: "harveyroxie@gmail.com",
-    age: 65,
-    phone: "(444)555-6239",
-    address: "51234 Avery Street, Cantory, ND 212412",
-    city: "Colunza",
-    zipCode: "111234",
-    registrarId: 928397,
-  },
-  {
-    id: 10,
-    name: "Enteri Redack",
-    email: "enteriredack@gmail.com",
-    age: 42,
-    phone: "(222)444-5555",
-    address: "4123 Easer Blvd, Wentington, AD 142213",
-    city: "Esteras",
-    zipCode: "44215",
-    registrarId: 533215,
-  },
-  {
-    id: 11,
-    name: "Steve Goodman",
-    email: "stevegoodmane@gmail.com",
-    age: 11,
-    phone: "(444)555-6239",
-    address: "51234 Fiveton Street, CunFory, ND 212412",
-    city: "Colunza",
-    zipCode: "1234",
-    registrarId: 92197,
-  },
-];
-
 export const mockDataTransazioni = [
   {
     id: 1,
@@ -212,7 +13,7 @@ export const mockDataTransazioni = [
   {
     id: 2,
     tipo: "Rimborso",
-    importo: 45.50,
+    importo: 45.5,
     stato: "In attesa",
     metodo: "PayPal",
     data: "02/05/2025",
@@ -221,7 +22,7 @@ export const mockDataTransazioni = [
   {
     id: 3,
     tipo: "Acquisto",
-    importo: 215.00,
+    importo: 215.0,
     stato: "Completato",
     metodo: "Bonifico",
     data: "03/05/2025",
@@ -239,7 +40,7 @@ export const mockDataTransazioni = [
   {
     id: 5,
     tipo: "Acquisto",
-    importo: 499.90,
+    importo: 499.9,
     stato: "Completato",
     metodo: "Contanti",
     data: "05/05/2025",
@@ -257,7 +58,7 @@ export const mockDataTransazioni = [
   {
     id: 7,
     tipo: "Acquisto",
-    importo: 300.00,
+    importo: 300.0,
     stato: "Completato",
     metodo: "Carta di Credito",
     data: "07/05/2025",
@@ -275,7 +76,7 @@ export const mockDataTransazioni = [
   {
     id: 9,
     tipo: "Acquisto",
-    importo: 165.40,
+    importo: 165.4,
     stato: "Fallito",
     metodo: "Carta di Debito",
     data: "09/05/2025",
@@ -284,7 +85,7 @@ export const mockDataTransazioni = [
   {
     id: 10,
     tipo: "Rimborso",
-    importo: 34.00,
+    importo: 34.0,
     stato: "Completato",
     metodo: "Contanti",
     data: "10/05/2025",
@@ -293,7 +94,7 @@ export const mockDataTransazioni = [
   {
     id: 11,
     tipo: "Acquisto",
-    importo: 78.90,
+    importo: 78.9,
     stato: "Completato",
     metodo: "Carta di Credito",
     data: "11/05/2025",
@@ -302,7 +103,7 @@ export const mockDataTransazioni = [
   {
     id: 12,
     tipo: "Acquisto",
-    importo: 250.00,
+    importo: 250.0,
     stato: "In attesa",
     metodo: "Bonifico",
     data: "12/05/2025",
@@ -311,7 +112,7 @@ export const mockDataTransazioni = [
   {
     id: 13,
     tipo: "Rimborso",
-    importo: 60.00,
+    importo: 60.0,
     stato: "Rimborsato",
     metodo: "PayPal",
     data: "13/05/2025",
@@ -329,7 +130,7 @@ export const mockDataTransazioni = [
   {
     id: 15,
     tipo: "Acquisto",
-    importo: 410.00,
+    importo: 410.0,
     stato: "Completato",
     metodo: "Contanti",
     data: "15/05/2025",
@@ -365,7 +166,7 @@ export const mockDataTransazioni = [
   {
     id: 19,
     tipo: "Acquisto",
-    importo: 135.00,
+    importo: 135.0,
     stato: "Fallito",
     metodo: "Carta di Debito",
     data: "19/05/2025",
@@ -374,14 +175,13 @@ export const mockDataTransazioni = [
   {
     id: 20,
     tipo: "Rimborso",
-    importo: 25.00,
+    importo: 25.0,
     stato: "Rimborsato",
     metodo: "Contanti",
     data: "20/05/2025",
     indirizzo: "Via Napoli 7, Cagliari",
   },
 ];
-
 
 export const mockAccordionData = [
   {
@@ -556,7 +356,6 @@ export const mockBarDataSpese = [
   },
 ];
 
-
 export const mockStreamData = [
   {
     Raoul: 171,
@@ -715,7 +514,6 @@ export const mockLineData = [
     ],
   },
 ];
-
 
 export const mockGeographyData = [
   {
