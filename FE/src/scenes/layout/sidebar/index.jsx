@@ -3,21 +3,17 @@ import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useContext, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import {
   BarChartOutlined,
-  CalendarTodayOutlined,
-  ContactsOutlined,
   DonutLargeOutlined,
   HelpOutlineOutlined,
   MapOutlined,
   MenuOutlined,
-  PeopleAltOutlined,
   PersonOutlined,
-  ReceiptOutlined,
   TimelineOutlined,
   WavesOutlined,
-  HomeOutlined ,
+  HomeOutlined,
 } from "@mui/icons-material";
 import avatar from "../../../assets/images/avatar.png";
 import logo from "../../../assets/images/logo.png";
@@ -133,7 +129,7 @@ const SideBar = () => {
             title="Homepage"
             path="/dashboard"
             colors={colors}
-            icon={<HomeOutlined  />}
+            icon={<HomeOutlined />}
           />
         </Menu>
         <Typography
@@ -154,12 +150,6 @@ const SideBar = () => {
             },
           }}
         >
-          <Item
-            title="Contacts Information"
-            path="/dashboard/contacts"
-            colors={colors}
-            icon={<ContactsOutlined />}
-          />
           <Item
             title="Movimenti"
             path="/dashboard/movimenti"
@@ -191,12 +181,7 @@ const SideBar = () => {
             colors={colors}
             icon={<PersonOutlined />}
           />
-          <Item
-            title="Calendar"
-            path="/dashboard/calendar"
-            colors={colors}
-            icon={<CalendarTodayOutlined />}
-          />
+
           <Item
             title="FAQ Page"
             path="/dashboard/faq"
