@@ -79,6 +79,19 @@ const GeographyChart = ({ isDashboard = false }) => {
             ]
           : undefined
       }
+      tooltip={({ feature }) => (
+        <div
+          style={{
+            color: "#fff",
+            background: "#333",
+            padding: "6px",
+            borderRadius: "4px",
+          }}
+        >
+          {feature.properties.name}:{" "}
+          {feature.value ? feature.value.toLocaleString() : "Nessun dato"}
+        </div>
+      )}
     />
   );
 };
