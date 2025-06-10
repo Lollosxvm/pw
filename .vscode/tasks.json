@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "tasks": [
     // ————————————————
-    // 1) Task per il dev server
+    //  Lancia il task di build per il frontend (modalità Development)
     // ————————————————
     {
       "label": "🚀 Run Dev FE",
@@ -11,6 +11,22 @@
       "command": "npm run dev",
       "options": {
         "cwd": "${workspaceFolder}/FE"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    // ————————————————
+    //  Lancia il task di build per il backend
+    // ————————————————
+    {
+      "label": "🎡 Run BE",
+      "type": "shell",
+      "command": "node server.js",
+      "options": {
+        "cwd": "${workspaceFolder}/BE"
       },
       "problemMatcher": [],
       "group": {
