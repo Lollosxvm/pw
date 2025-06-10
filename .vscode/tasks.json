@@ -1,0 +1,22 @@
+// .vscode/tasks.json
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ————————————————
+    // 1) Task per il dev server
+    // ————————————————
+    {
+      "label": "🚀 Run Dev FE",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/FE"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

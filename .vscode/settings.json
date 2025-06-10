@@ -1,0 +1,27 @@
+{
+  //Imposta Prettier come formattatore di default per tutti i linguaggi supportati.
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  //Applica automaticamente il formattatore (Prettier, in questo caso) ogni volta che salvo un file.
+  "editor.formatOnSave": true,
+  //Al salvataggio di un file aggiunge import mancanti e/o rimuove quelli non usati
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.validate": ["javascript", "javascriptreact"],
+  //Disattiva la “minimap” laterale (quella anteprima in piccolo del file).
+  "editor.minimap.enabled": false,
+    //Disabilita le “preview tabs”: ogni file aperto apre sempre una nuova scheda permanente, non un’anteprima.
+  "workbench.editor.enablePreview": false,
+    //Seleziona il tema colori “Kanagawa” per l’intero editor.
+  "workbench.colorTheme": "Kanagawa",
+    //Esclude queste cartelle/file dalla ricerca (e dall’Explorer, se non vuoi vederle), migliorando performance e pulizia dell’albero dei file.
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/target": true,
+    "**/.tmp": true
+  },
+  
+
+}
