@@ -26,3 +26,19 @@ export const getSpesePerPaese = async (req, res) => {
     res.status(500).json({ message: "Errore server" });
   }
 };
+
+export const getLastTransactions = async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT categoria, indirizzo, data, importo, stato, metodo
+      FROM transazioni
+      WHERE stato = 'Completato'
+      ORDER BY data DESC
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error("Errore nel recupero delle transazioni recenti:", error);
+    res.status(500).json({ message: "Errore nel server" });
+  }
+};

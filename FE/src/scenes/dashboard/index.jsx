@@ -13,20 +13,23 @@ import {
   BarChart,
   GeographyChart,
 } from "../../components";
-import {
-  DownloadOutlined,
-  Email,
-  PersonAdd,
-  PointOfSale,
-  Traffic,
-} from "@mui/icons-material";
-import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
+import { DownloadOutlined } from "@mui/icons-material";
+import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
+import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined";
+import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
+import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
+import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
+import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
+import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined";
+
+import { Tooltip } from "@mui/material";
 
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Dashboard() {
   const theme = useTheme();
@@ -34,6 +37,26 @@ function Dashboard() {
   const isXlDevices = useMediaQuery("(min-width: 1260px)");
   const isMdDevices = useMediaQuery("(min-width: 724px)");
   const isXsDevices = useMediaQuery("(max-width: 436px)");
+
+  const iconeCategoria = {
+    Alimentari: <RestaurantMenuOutlinedIcon />,
+    Affitto: <HomeOutlinedIcon />,
+    Trasporti: <DirectionsCarFilledOutlinedIcon />,
+    Svago: <SportsEsportsOutlinedIcon />,
+    Utenze: <ElectricBoltOutlinedIcon />,
+    Assicurazioni: <SecurityOutlinedIcon />,
+    Mutuo: <AccountBalanceOutlinedIcon />,
+  };
+
+  const [recentTransactions, setRecentTransactions] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/transactions/spese-recenti")
+      .then((res) => setRecentTransactions(res.data))
+      .catch((err) => console.error("Errore nel caricamento:", err));
+  }, []);
+
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between">
@@ -212,7 +235,7 @@ function Dashboard() {
           </Box>
         </Box>
 
-        {/* Transaction Data */}
+        {/*  Transazioni recenti */}
         <Box
           gridColumn={isXlDevices ? "span 4" : "span 3"}
           gridRow="span 2"
@@ -225,39 +248,59 @@ function Dashboard() {
             </Typography>
           </Box>
 
-          {mockTransactions.map((transaction, index) => (
-            <Box
-              key={`${transaction.txId}-${index}`}
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
-            >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="h5"
-                  fontWeight="600"
-                >
-                  {transaction.txId}
-                </Typography>
-                <Typography color={colors.gray[100]}>
-                  {transaction.user}
-                </Typography>
-              </Box>
-              <Typography color={colors.gray[100]}>
-                {transaction.date}
-              </Typography>
+          {recentTransactions.map((tx, i) => {
+            const luogo = tx.indirizzo.split(",").pop().trim();
+            const dataFormattata = new Date(tx.data).toLocaleDateString(
+              "it-IT"
+            );
+
+            return (
               <Box
-                bgcolor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
+                key={i}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                borderBottom={`4px solid ${colors.primary[500]}`}
+                p="15px"
+                gap={2}
               >
-                ${transaction.cost}
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                >
+                  <Tooltip
+                    title={`${tx.categoria} - ${luogo}`}
+                    arrow
+                    placement="top"
+                  >
+                    <Box color={colors.greenAccent[500]}>
+                      {iconeCategoria[tx.categoria] || <LocalOfferOutlined />}
+                    </Box>
+                  </Tooltip>
+                </Box>
+
+                <Box flex="1" textAlign="center">
+                  <Typography color={colors.gray[100]}>
+                    {dataFormattata}
+                  </Typography>
+                </Box>
+
+                <Box flex="1" textAlign="center">
+                  <Typography color={colors.gray[100]}>{tx.metodo}</Typography>
+                </Box>
+                <Box
+                  bgcolor={colors.greenAccent[500]}
+                  p="5px 10px"
+                  borderRadius="4px"
+                  minWidth="80px"
+                  textAlign="center"
+                >
+                  €{tx.importo}
+                </Box>
               </Box>
-            </Box>
-          ))}
+            );
+          })}
         </Box>
 
         {/* Revenue Details */}
