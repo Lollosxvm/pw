@@ -514,26 +514,3 @@ export const mockLineData = [
     ],
   },
 ];
-
-export const mockGeographyData = [
-  { id: "USA", value: 4200 },
-  { id: "BRA", value: 3000 },
-  { id: "CAN", value: 1800 },
-  { id: "MEX", value: 1500 },
-  { id: "ARG", value: 2200 },
-  { id: "FRA", value: 3100 },
-  { id: "DEU", value: 5000 },
-  { id: "ITA", value: 3500 },
-  { id: "EGY", value: 2700 },
-  { id: "ZAF", value: 4000 },
-  { id: "KEN", value: 1200 },
-  { id: "SAU", value: 4800 },
-  { id: "IND", value: 6100 },
-  { id: "PAK", value: 4300 },
-  { id: "CHN", value: 7100 },
-  { id: "JPN", value: 7900 },
-  { id: "KOR", value: 3200 },
-  { id: "AUS", value: 3400 },
-  { id: "IDN", value: 5900 },
-  { id: "RUS", value: 7700 },
-];

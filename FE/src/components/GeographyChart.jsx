@@ -3,11 +3,24 @@ import { useTheme } from "@mui/material";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import { geoFeatures } from "../data/mockGeoFeatures";
 import { tokens } from "../theme";
-import { mockGeographyData as data } from "../data/mockData";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const GeographyChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/transactions/spese-paese")
+      .then((res) => setData(res.data))
+      .catch((err) =>
+        console.error("Errore nel caricamento dati geografici:", err)
+      );
+  }, []);
+
   return (
     <ResponsiveChoropleth
       data={data}

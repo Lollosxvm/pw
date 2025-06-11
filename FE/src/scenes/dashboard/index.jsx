@@ -328,7 +328,7 @@ function Dashboard() {
           padding="30px"
         >
           <Typography variant="h5" fontWeight="600" mb="15px">
-            Località transazioni
+            Area Geografica transazioni
           </Typography>
           <Box
             display="flex"
