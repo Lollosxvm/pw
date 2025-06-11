@@ -350,7 +350,7 @@ function Dashboard() {
             fontWeight="600"
             sx={{ p: "30px 30px 0 30px" }}
           >
-            Spese mensili per categoria
+            Uscite ultimi 30 giorni
           </Typography>
           <Box
             display="flex"

@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
-import { Header, BarChart } from "../../components";
+import { Header, BarChartWithFilter } from "../../components";
 
 const Bar = () => {
   return (
     <Box m="20px">
-      <Header title="Bar Chart" subtitle="Simple Bar Chart" />
+      <Header title="Bar Chart" subtitle="Spese mensili per categoria" />
       <Box height="75vh">
-        <BarChart />
+        <BarChartWithFilter />
       </Box>
     </Box>
   );

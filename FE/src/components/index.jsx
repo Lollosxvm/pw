@@ -1,6 +1,7 @@
 import Header from "./Header";
 import AccordionItem from "./AccordionItem";
 import BarChart from "./BarChart";
+import BarChartWithFilter from "./BarChartWithFilter";
 import PieChart from "./PieChart";
 import LineChart from "./LineChart";
 import StreamChart from "./StreamChart";
@@ -12,6 +13,7 @@ export {
   Header,
   AccordionItem,
   BarChart,
+  BarChartWithFilter,
   PieChart,
   LineChart,
   StreamChart,

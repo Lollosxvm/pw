@@ -42,3 +42,26 @@ export const getLastTransactions = async (req, res) => {
     res.status(500).json({ message: "Errore nel server" });
   }
 };
+
+export const getSpesePerCategoria = async (req, res) => {
+  const { from, to } = req.query;
+
+  try {
+    const [rows] = await db.query(
+      `SELECT 
+        DATE_FORMAT(data, '%Y-%m') as mese,
+        categoria,
+        SUM(importo) as totale
+      FROM transazioni
+      WHERE stato = 'Completato' AND data BETWEEN ? AND ?
+      GROUP BY mese, categoria
+      ORDER BY mese ASC;`,
+      [from, to]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Errore nel recupero delle spese:", err);
+    res.status(500).json({ message: "Errore nel recupero delle spese" });
+  }
+};
