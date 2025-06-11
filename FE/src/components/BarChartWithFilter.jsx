@@ -6,6 +6,7 @@ import { it } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BarChart from "./BarChart";
+import TextField from "@mui/material/TextField";
 
 const BarChartWithFilter = ({ isDashboard = false }) => {
   const [data, setData] = useState([]);
@@ -81,8 +82,18 @@ const BarChartWithFilter = ({ isDashboard = false }) => {
               dateAdapter={AdapterDateFns}
               adapterLocale={it}
             >
-              <DatePicker label="Da" value={da} onChange={setDa} />
-              <DatePicker label="A" value={a} onChange={setA} />
+              <DatePicker
+                label="Da"
+                value={da}
+                onChange={setDa}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <DatePicker
+                label="A"
+                value={a}
+                onChange={setA}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </LocalizationProvider>
           )}
         </Box>
