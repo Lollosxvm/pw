@@ -57,6 +57,15 @@ function Dashboard() {
       .catch((err) => console.error("Errore nel caricamento:", err));
   }, []);
 
+  const [mutuoData, setMutuoData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/mutuo/situazione")
+      .then((res) => setMutuoData(res.data))
+      .catch((err) => console.error("Errore nel caricamento mutuo:", err));
+  }, []);
+
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between">
@@ -134,21 +143,44 @@ function Dashboard() {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="€86.000"
-            subtitle="Mutuo residuo"
-            progress={0.68}
-            increase="32 rate residue"
-            x={68}
-            y={32}
-            labelX="Importo già pagato"
-            labelY="Rimanente"
-            icon={
-              <HomeOutlinedIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          {mutuoData && (
+            <StatBox
+              title={`€${(
+                mutuoData.in_scadenza.totale + mutuoData.da_pagare.totale
+              ).toLocaleString()}`}
+              subtitle="Mutuo residuo"
+              progress={
+                mutuoData.pagata.count /
+                (mutuoData.pagata.count +
+                  mutuoData.in_scadenza.count +
+                  mutuoData.da_pagare.count)
+              }
+              increase={`${
+                mutuoData.in_scadenza.count + mutuoData.da_pagare.count
+              } rate residue`}
+              x={mutuoData.pagata.count}
+              y={mutuoData.in_scadenza.count + mutuoData.da_pagare.count}
+              labelX={`Pagate (${Math.round(
+                (mutuoData.pagata.count /
+                  (mutuoData.pagata.count +
+                    mutuoData.in_scadenza.count +
+                    mutuoData.da_pagare.count)) *
+                  100
+              )}%)`}
+              labelY={`Residue (${Math.round(
+                ((mutuoData.in_scadenza.count + mutuoData.da_pagare.count) /
+                  (mutuoData.pagata.count +
+                    mutuoData.in_scadenza.count +
+                    mutuoData.da_pagare.count)) *
+                  100
+              )}%)`}
+              icon={
+                <HomeOutlinedIcon
+                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                />
+              }
+            />
+          )}
         </Box>
         <Box
           gridColumn="span 3"
