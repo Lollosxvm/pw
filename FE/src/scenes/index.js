@@ -10,6 +10,7 @@ import Stream from "./stream";
 import FAQ from "./faq";
 import Geography from "./geography";
 import LoginPage from "./login";
+import LineChartWithFilter from "./LineChartWithFilter";
 
 export {
   Navbar,
@@ -24,4 +25,5 @@ export {
   FAQ,
   Geography,
   LoginPage,
+  LineChartWithFilter,
 };

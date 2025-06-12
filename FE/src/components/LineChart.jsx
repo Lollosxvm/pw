@@ -1,47 +1,20 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
-const LineChart = ({ isDashboard = false }) => {
+const LineChart = ({ isDashboard = false, data = [] }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/transactions/andamento")
-      .then((res) => {
-        const raw = res.data;
-
-        // Costruzione serie
-        const serieSaldo = {
-          id: "Saldo",
-          color: tokens("dark").greenAccent[500],
-          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.saldo) })),
-        };
-
-        const serieEntrate = {
-          id: "Entrate",
-          color: tokens("dark").blueAccent[300],
-          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.entrate) })),
-        };
-
-        const serieUscite = {
-          id: "Uscite",
-          color: tokens("dark").redAccent[200],
-          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.uscite) })),
-        };
-
-        setData([serieSaldo, serieEntrate, serieUscite]);
-      })
-      .catch((err) => console.error("Errore andamento:", err));
-  }, []);
+  if (!data || data.length === 0) return null;
 
   return (
     <ResponsiveLine
-      data={data}
+      data={
+        Array.isArray(data)
+          ? data.filter((serie) => serie && Array.isArray(serie.data))
+          : []
+      }
       theme={{
         axis: {
           domain: { line: { stroke: colors.gray[100] } },
@@ -57,8 +30,13 @@ const LineChart = ({ isDashboard = false }) => {
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
-      yScale={{ type: "linear", min: "auto", max: "auto", stacked: true }}
-      yFormat=" >-.2f"
+      yScale={{
+        type: "linear",
+        min: "auto",
+        max: "auto",
+        stacked: true,
+        reverse: false,
+      }}
       curve="catmullRom"
       axisTop={null}
       axisRight={null}
@@ -66,16 +44,17 @@ const LineChart = ({ isDashboard = false }) => {
         orient: "bottom",
         tickSize: 0,
         tickPadding: 5,
+        tickRotation: 0,
         legend: isDashboard ? undefined : "Mese",
         legendOffset: 36,
         legendPosition: "middle",
       }}
       axisLeft={{
         orient: "left",
-        tickValues: 5,
         tickSize: 3,
         tickPadding: 5,
-        legend: isDashboard ? undefined : "€",
+        tickRotation: 0,
+        legend: isDashboard ? undefined : "Importo (€)",
         legendOffset: -40,
         legendPosition: "middle",
       }}
@@ -86,16 +65,26 @@ const LineChart = ({ isDashboard = false }) => {
       pointBorderWidth={2}
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
-      useMesh={true}
+      useMesh
       legends={[
         {
           anchor: "bottom-right",
           direction: "column",
           translateX: 100,
+          itemsSpacing: 0,
           itemWidth: 80,
           itemHeight: 20,
           symbolSize: 12,
           symbolShape: "circle",
+          effects: [
+            {
+              on: "hover",
+              style: {
+                itemBackground: "rgba(0, 0, 0, .03)",
+                itemOpacity: 1,
+              },
+            },
+          ],
         },
       ]}
     />

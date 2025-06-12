@@ -8,11 +8,11 @@ import {
 import {
   Header,
   StatBox,
-  LineChart,
   ProgressCircle,
   BarChart,
   GeographyChart,
 } from "../../components";
+import LineChartWithFilter from "../../scenes/LineChartWithFilter";
 import { DownloadOutlined } from "@mui/icons-material";
 import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -243,25 +243,19 @@ function Dashboard() {
             display="flex"
             justifyContent="space-between"
           >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.gray[100]}
-              >
-                Conto Corrente 012456789012334
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                Saldo $59,342.32
-              </Typography>
-            </Box>
+            <Typography variant="h5" fontWeight="600" color={colors.gray[100]}>
+              Andamento ultimi 3 mesi
+            </Typography>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              color={colors.greenAccent[500]}
+            >
+              Saldo $59,342.32
+            </Typography>
           </Box>
           <Box height="250px" mt="-20px">
-            <LineChart isDashboard={true} />
+            <LineChartWithFilter isDashboard={true} />
           </Box>
         </Box>
 
