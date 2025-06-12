@@ -12,7 +12,7 @@ export const aggiornaRateMutuo = async () => {
       `[Mutuo] Avvio aggiornamento automatico ${new Date().toLocaleString()}`
     );
 
-    // 1. Controllo rate "pagata" senza data_pagamento
+    //Controllo rate pagata senza data_pagamento
     const [righe] = await db.query(`
       SELECT * FROM rate_mutuo
       WHERE stato = 'pagata'
@@ -22,10 +22,10 @@ export const aggiornaRateMutuo = async () => {
 
     if (righe.length > 0) {
       console.log(
-        `⚠️  ${righe.length} rata/e pagata/e senza data_pagamento trovata/e (${meseCorrente})`
+        `${righe.length} rata/e pagata/e senza data_pagamento trovata/e (${meseCorrente})`
       );
     } else {
-      console.log(`✅ Nessuna rata senza data_pagamento per ${meseCorrente}`);
+      console.log(`Nessuna rata senza data_pagamento per ${meseCorrente}`);
     }
 
     const [checkMissingDate] = await db.query(`
@@ -37,11 +37,11 @@ export const aggiornaRateMutuo = async () => {
     `);
     console.log(
       checkMissingDate.affectedRows > 0
-        ? `📝 Aggiunta data_pagamento a ${checkMissingDate.affectedRows} rata/e (${meseCorrente})`
-        : `ℹ️  Nessuna data_pagamento da aggiornare`
+        ? `Aggiunta data_pagamento a ${checkMissingDate.affectedRows} rata/e (${meseCorrente})`
+        : `Nessuna data_pagamento da aggiornare`
     );
 
-    // 2. Aggiorno rata del mese corrente a "pagata"
+    //Aggiorno rata del mese corrente a "pagata"
     const [pagataOra] = await db.query(
       `
       UPDATE rate_mutuo
@@ -54,11 +54,11 @@ export const aggiornaRateMutuo = async () => {
     );
     console.log(
       pagataOra.affectedRows > 0
-        ? `💰 Pagata rata ${meseCorrente} (aggiornate ${pagataOra.affectedRows})`
-        : `ℹ️  Nessuna rata da pagare per ${meseCorrente}`
+        ? `Pagata rata ${meseCorrente} (aggiornate ${pagataOra.affectedRows})`
+        : `Nessuna rata da pagare per ${meseCorrente}`
     );
 
-    // 3. Imposto "in scadenza" rata del mese prossimo
+    //Imposto "in scadenza" rata del mese prossimo
     const [inScadenza] = await db.query(
       `
       UPDATE rate_mutuo
@@ -70,12 +70,12 @@ export const aggiornaRateMutuo = async () => {
     );
     console.log(
       inScadenza.affectedRows > 0
-        ? `📅 Impostata in scadenza rata ${meseProssimo}`
-        : `ℹ️  Nessuna rata impostata in scadenza per ${meseProssimo}`
+        ? `Impostata in scadenza rata ${meseProssimo}`
+        : `Nessuna rata impostata in scadenza per ${meseProssimo}`
     );
 
     console.groupEnd();
   } catch (err) {
-    console.error("❌ Errore aggiornamento automatico rate mutuo:", err);
+    console.error("Errore aggiornamento automatico rate mutuo:", err);
   }
 };
