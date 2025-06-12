@@ -1,59 +1,63 @@
-/* eslint-disable react/prop-types */
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockLineData as data } from "../data/mockData";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const LineChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/transactions/andamento")
+      .then((res) => {
+        const raw = res.data;
+
+        // Costruzione serie
+        const serieSaldo = {
+          id: "Saldo",
+          color: tokens("dark").greenAccent[500],
+          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.saldo) })),
+        };
+
+        const serieEntrate = {
+          id: "Entrate",
+          color: tokens("dark").blueAccent[300],
+          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.entrate) })),
+        };
+
+        const serieUscite = {
+          id: "Uscite",
+          color: tokens("dark").redAccent[200],
+          data: raw.map((r) => ({ x: r.mese, y: parseFloat(r.uscite) })),
+        };
+
+        setData([serieSaldo, serieEntrate, serieUscite]);
+      })
+      .catch((err) => console.error("Errore andamento:", err));
+  }, []);
 
   return (
     <ResponsiveLine
       data={data}
       theme={{
         axis: {
-          domain: {
-            line: {
-              stroke: colors.gray[100],
-            },
-          },
-          legend: {
-            text: {
-              fill: colors.gray[100],
-            },
-          },
+          domain: { line: { stroke: colors.gray[100] } },
+          legend: { text: { fill: colors.gray[100] } },
           ticks: {
-            line: {
-              stroke: colors.gray[100],
-              strokeWidth: 1,
-            },
-            text: {
-              fill: colors.gray[100],
-            },
+            line: { stroke: colors.gray[100], strokeWidth: 1 },
+            text: { fill: colors.gray[100] },
           },
         },
-        legends: {
-          text: {
-            fill: colors.gray[100],
-          },
-        },
-        tooltip: {
-          container: {
-            color: colors.primary[500],
-          },
-        },
+        legends: { text: { fill: colors.gray[100] } },
+        tooltip: { container: { color: colors.primary[500] } },
       }}
-      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
+      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
+      yScale={{ type: "linear", min: "auto", max: "auto", stacked: true }}
       yFormat=" >-.2f"
       curve="catmullRom"
       axisTop={null}
@@ -62,18 +66,16 @@ const LineChart = ({ isDashboard = false }) => {
         orient: "bottom",
         tickSize: 0,
         tickPadding: 5,
-        tickRotation: 0,
-        legend: isDashboard ? undefined : "transportation", // added
+        legend: isDashboard ? undefined : "Mese",
         legendOffset: 36,
         legendPosition: "middle",
       }}
       axisLeft={{
         orient: "left",
-        tickValues: 5, // added
+        tickValues: 5,
         tickSize: 3,
         tickPadding: 5,
-        tickRotation: 0,
-        legend: isDashboard ? undefined : "count", // added
+        legend: isDashboard ? undefined : "€",
         legendOffset: -40,
         legendPosition: "middle",
       }}
@@ -89,26 +91,11 @@ const LineChart = ({ isDashboard = false }) => {
         {
           anchor: "bottom-right",
           direction: "column",
-          justify: false,
           translateX: 100,
-          translateY: 0,
-          itemsSpacing: 0,
-          itemDirection: "left-to-right",
           itemWidth: 80,
           itemHeight: 20,
-          itemOpacity: 0.75,
           symbolSize: 12,
           symbolShape: "circle",
-          symbolBorderColor: "rgba(0, 0, 0, .5)",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemBackground: "rgba(0, 0, 0, .03)",
-                itemOpacity: 1,
-              },
-            },
-          ],
         },
       ]}
     />

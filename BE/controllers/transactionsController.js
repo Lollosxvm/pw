@@ -65,3 +65,31 @@ export const getSpesePerCategoria = async (req, res) => {
     res.status(500).json({ message: "Errore nel recupero delle spese" });
   }
 };
+
+export const getAndamentiMensili = async (req, res) => {
+  const { from, to } = req.query;
+
+  try {
+    const [rows] = await db.query(
+      `SELECT
+  DATE_FORMAT(data, '%Y-%m') AS mese,
+  SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE 0 END) AS entrate,
+  SUM(CASE WHEN tipo != 'Entrata' THEN importo ELSE 0 END) AS uscite,
+  SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE 0 END) -
+  SUM(CASE WHEN tipo != 'Entrata' THEN importo ELSE 0 END) AS saldo
+FROM transazioni
+WHERE stato = 'Completato'
+GROUP BY mese
+ORDER BY mese ASC;
+`,
+      [from, to]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Errore nel recupero degli andamenti mensili:", err);
+    res
+      .status(500)
+      .json({ message: "Errore nel recupero degli andamenti mensili" });
+  }
+};
