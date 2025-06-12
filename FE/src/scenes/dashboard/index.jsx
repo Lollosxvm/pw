@@ -158,16 +158,14 @@ function Dashboard() {
               increase={`${
                 mutuoData.in_scadenza.count + mutuoData.da_pagare.count
               } rate residue`}
-              x={mutuoData.pagata.count}
-              y={mutuoData.in_scadenza.count + mutuoData.da_pagare.count}
-              labelX={`Pagate (${Math.round(
+              labelX={`Pagato (${Math.round(
                 (mutuoData.pagata.count /
                   (mutuoData.pagata.count +
                     mutuoData.in_scadenza.count +
                     mutuoData.da_pagare.count)) *
                   100
               )}%)`}
-              labelY={`Residue (${Math.round(
+              labelY={`Residuo (${Math.round(
                 ((mutuoData.in_scadenza.count + mutuoData.da_pagare.count) /
                   (mutuoData.pagata.count +
                     mutuoData.in_scadenza.count +
