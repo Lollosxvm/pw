@@ -213,12 +213,7 @@ const SideBar = () => {
             colors={colors}
             icon={<BarChartOutlined />}
           />
-          <Item
-            title="Pie Chart"
-            path="/dashboard/pie"
-            colors={colors}
-            icon={<DonutLargeOutlined />}
-          />
+
           <Item
             title="Line Chart"
             path="/dashboard/line"
@@ -230,12 +225,6 @@ const SideBar = () => {
             path="/dashboard/geography"
             colors={colors}
             icon={<MapOutlined />}
-          />
-          <Item
-            title="Stream Chart"
-            path="/dashboard/stream"
-            colors={colors}
-            icon={<WavesOutlined />}
           />
         </Menu>
       </Box>

@@ -7,10 +7,8 @@ import {
   Form,
   Bar,
   Line,
-  Pie,
   FAQ,
   Geography,
-  Stream,
   LoginPage,
 } from "./scenes";
 
@@ -27,8 +25,6 @@ const AppRouter = () => {
           <Route path="/dashboard/movimenti" element={<Movimenti />} />
           <Route path="/dashboard/form" element={<Form />} />
           <Route path="/dashboard/bar" element={<Bar />} />
-          <Route path="/dashboard/pie" element={<Pie />} />
-          <Route path="/dashboard/stream" element={<Stream />} />
           <Route path="/dashboard/line" element={<Line />} />
           <Route path="/dashboard/faq" element={<FAQ />} />
           <Route path="/dashboard/geography" element={<Geography />} />

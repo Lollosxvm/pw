@@ -5,8 +5,6 @@ import Movimenti from "./movimenti";
 import Form from "./form";
 import Bar from "./bar";
 import Line from "./line";
-import Pie from "./pie";
-import Stream from "./stream";
 import FAQ from "./faq";
 import Geography from "./geography";
 import LoginPage from "./login";
@@ -20,8 +18,6 @@ export {
   Form,
   Bar,
   Line,
-  Pie,
-  Stream,
   FAQ,
   Geography,
   LoginPage,
