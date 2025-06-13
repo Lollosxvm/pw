@@ -1,6 +1,6 @@
 import { db } from "../config/db.js";
 
-export const aggiornaRateMutuo = async () => {
+export const aggiornaRatePrestiti = async () => {
   try {
     const now = new Date();
     const meseProssimo = new Date(now.setMonth(now.getMonth() + 1))
@@ -13,9 +13,9 @@ export const aggiornaRateMutuo = async () => {
       inScadenza: 0,
     };
 
-    // 1. Aggiungi data_pagamento se mancante
+    // 1. Aggiorna data_pagamento mancante
     const [updateDate] = await db.query(`
-      UPDATE rate_mutuo
+      UPDATE rate_prestito
       SET data_pagamento = CURDATE()
       WHERE stato = 'pagata'
         AND data_pagamento IS NULL
@@ -23,9 +23,9 @@ export const aggiornaRateMutuo = async () => {
     `);
     aggiornamenti.date = updateDate.affectedRows;
 
-    // 2. Paga le rate scadute
+    // 2. Paga rate scadute
     const [updatePagate] = await db.query(`
-      UPDATE rate_mutuo
+      UPDATE rate_prestito
       SET stato = 'pagata', data_pagamento = CURDATE()
       WHERE stato IN ('da_pagare', 'in_scadenza')
         AND data_scadenza <= CURDATE()
@@ -35,7 +35,7 @@ export const aggiornaRateMutuo = async () => {
     // 3. Imposta in scadenza la rata del mese prossimo
     const [updateScadenza] = await db.query(
       `
-      UPDATE rate_mutuo
+      UPDATE rate_prestito
       SET stato = 'in_scadenza'
       WHERE stato = 'da_pagare'
         AND DATE_FORMAT(data_scadenza, '%Y-%m') = ?
@@ -54,11 +54,11 @@ export const aggiornaRateMutuo = async () => {
       azioni.push(`${aggiornamenti.inScadenza} in scadenza`);
 
     if (azioni.length > 0) {
-      console.log(`[Mutuo] Aggiornate: ${azioni.join(" | ")}`);
+      console.log(`[Prestiti] Aggiornate: ${azioni.join(" | ")}`);
     } else {
-      console.log("[Mutuo] Nessun aggiornamento eseguito, tutto ok!");
+      console.log("[Prestiti] Nessun aggiornamento eseguito, tutto ok!");
     }
   } catch (err) {
-    console.error("[Mutuo] Errore aggiornamento automatico:", err);
+    console.error("[Prestiti] Errore aggiornamento automatico:", err);
   }
 };
