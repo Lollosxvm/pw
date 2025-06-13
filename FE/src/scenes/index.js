@@ -9,6 +9,7 @@ import FAQ from "./faq";
 import Geography from "./geography";
 import LoginPage from "./login";
 import LineChartWithFilter from "./LineChartWithFilter";
+import InvestmentsPage from "./InvestmentsPage";
 
 export {
   Navbar,
@@ -22,4 +23,5 @@ export {
   Geography,
   LoginPage,
   LineChartWithFilter,
+  InvestmentsPage,
 };

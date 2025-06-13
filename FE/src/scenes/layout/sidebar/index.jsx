@@ -188,6 +188,12 @@ const SideBar = () => {
             colors={colors}
             icon={<HelpOutlineOutlined />}
           />
+          <Item
+            title="Investimenti"
+            path="/dashboard/investimenti"
+            colors={colors}
+            icon={<HelpOutlineOutlined />}
+          />
         </Menu>
         <Typography
           variant="h6"

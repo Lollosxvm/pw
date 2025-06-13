@@ -129,10 +129,10 @@ function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="€48.352"
-            subtitle="Portafoglio investimenti"
+            title="€TODO"
+            subtitle="TODO"
             progress={0.4}
-            increase="+4.2% YTD"
+            increase="TODO"
             x={60}
             y={40}
             labelX="Azioni"

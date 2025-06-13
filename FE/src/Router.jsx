@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import App from "./App";
 import {
@@ -10,6 +9,7 @@ import {
   FAQ,
   Geography,
   LoginPage,
+  InvestmentsPage,
 } from "./scenes";
 
 const AppRouter = () => {
@@ -24,6 +24,7 @@ const AppRouter = () => {
           <Route index element={<Dashboard />} />
           <Route path="/dashboard/movimenti" element={<Movimenti />} />
           <Route path="/dashboard/form" element={<Form />} />
+          <Route path="/dashboard/investimenti" element={<InvestmentsPage />} />
           <Route path="/dashboard/bar" element={<Bar />} />
           <Route path="/dashboard/line" element={<Line />} />
           <Route path="/dashboard/faq" element={<FAQ />} />
