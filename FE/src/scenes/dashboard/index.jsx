@@ -22,9 +22,8 @@ import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
-import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined";
-
+import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import { Tooltip } from "@mui/material";
 
 import { tokens } from "../../theme";
@@ -64,6 +63,15 @@ function Dashboard() {
       .get("http://localhost:3000/api/mutuo/situazione")
       .then((res) => setMutuoData(res.data))
       .catch((err) => console.error("Errore nel caricamento mutuo:", err));
+  }, []);
+
+  const [prestitoData, setPrestitoData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/prestiti/situazione")
+      .then((res) => setPrestitoData(res.data))
+      .catch((err) => console.error("Errore prestito:", err));
   }, []);
 
   return (
@@ -187,21 +195,43 @@ function Dashboard() {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="€2.700"
-            subtitle="Prestito rimanente"
-            progress={0.75}
-            increase="25% da saldare"
-            x={75}
-            y={25}
-            labelX="Rimborsato"
-            labelY="Da rimborsare"
-            icon={
-              <CreditCardOutlinedIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          {prestitoData && (
+            <StatBox
+              title={`€${(
+                prestitoData.in_scadenza.totale + prestitoData.da_pagare.totale
+              ).toLocaleString()}`}
+              subtitle="Prestito residuo"
+              progress={
+                prestitoData.pagata.count /
+                (prestitoData.pagata.count +
+                  prestitoData.in_scadenza.count +
+                  prestitoData.da_pagare.count)
+              }
+              increase={`${
+                prestitoData.in_scadenza.count + prestitoData.da_pagare.count
+              } rate residue`}
+              labelX={`Pagato (${Math.round(
+                (prestitoData.pagata.count /
+                  (prestitoData.pagata.count +
+                    prestitoData.in_scadenza.count +
+                    prestitoData.da_pagare.count)) *
+                  100
+              )}%)`}
+              labelY={`Residuo (${Math.round(
+                ((prestitoData.in_scadenza.count +
+                  prestitoData.da_pagare.count) /
+                  (prestitoData.pagata.count +
+                    prestitoData.in_scadenza.count +
+                    prestitoData.da_pagare.count)) *
+                  100
+              )}%)`}
+              icon={
+                <PaymentsOutlinedIcon
+                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                />
+              }
+            />
+          )}
         </Box>
         <Box
           gridColumn="span 3"
