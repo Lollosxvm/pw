@@ -162,7 +162,7 @@ const SideBar = () => {
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
-          {!collapsed ? "Pages" : " "}
+          {!collapsed ? "Pagine" : " "}
         </Typography>
         <Menu
           menuItemStyles={{
@@ -194,7 +194,7 @@ const SideBar = () => {
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
-          {!collapsed ? "Charts" : " "}
+          {!collapsed ? "Grafici" : " "}
         </Typography>
         <Menu
           menuItemStyles={{

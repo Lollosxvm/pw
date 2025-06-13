@@ -41,7 +41,7 @@ const Movimenti = () => {
 
   return (
     <Box m="20px">
-      <Header title="Movimenti" subtitle="Lista ultime 20 transazioni" />
+      <Header title="Movimenti" subtitle="Lista filtrabile ultimi 60 mesi" />
       <Box
         mt="40px"
         height="75vh"
