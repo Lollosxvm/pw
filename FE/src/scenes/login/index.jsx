@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Snackbar, Alert } from "@mui/material";
+
 import {
   Box,
   Button,
@@ -18,6 +20,7 @@ import logo from "../../assets/images/logo.png";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PasswordRecovery from "./PasswordRecovery";
+import axios from "axios";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -32,13 +35,34 @@ const LoginPage = () => {
   const colors = tokens("dark");
   const [showPassword, setShowPassword] = React.useState(false);
   const [openRecovery, setOpenRecovery] = React.useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = () => {
-    navigate("/dashboard");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errore, setErrore] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/login", {
+        email,
+        password,
+      });
+
+      const { token, utente } = res.data;
+      console.log("Login:", { email, password });
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("utente", JSON.stringify(utente));
+
+      navigate("/dashboard");
+    } catch (err) {
+      setErrore("Credenziali non valide");
+      setOpenSnackbar(true);
+    }
   };
 
   return (
@@ -77,11 +101,13 @@ const LoginPage = () => {
 
           <TextField
             fullWidth
-            label="Username"
+            label="Email"
             variant="filled"
             sx={{ mb: 2 }}
             InputProps={{ disableUnderline: true }}
             autoComplete="username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             fullWidth
@@ -89,6 +115,8 @@ const LoginPage = () => {
             type={showPassword ? "text" : "password"}
             variant="filled"
             sx={{ mb: 2 }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             InputProps={{
               disableUnderline: true,
               endAdornment: (
@@ -131,7 +159,25 @@ const LoginPage = () => {
       </Box>
 
       {/* Modale per il recupero password */}
-      <PasswordRecovery open={openRecovery} onClose={() => setOpenRecovery(false)} />
+      <PasswordRecovery
+        open={openRecovery}
+        onClose={() => setOpenRecovery(false)}
+      />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          {errore}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 };

@@ -1,10 +1,4 @@
-import {
-  Box,
-  IconButton,
-  InputBase,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { tokens, ColorModeContext } from "../../../theme";
 import { useContext } from "react";
 import {
@@ -12,16 +6,14 @@ import {
   LightModeOutlined,
   MenuOutlined,
   NotificationsOutlined,
-  PersonOutlined,
-  SettingsOutlined,
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
+import UserMenu from "../../../components/UserMenu";
 const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const { toggled, setToggled } = useContext(ToggledContext);
   const isMdDevices = useMediaQuery("(max-width:768px)");
-  const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
   return (
     <Box
@@ -50,12 +42,8 @@ const Navbar = () => {
         <IconButton>
           <NotificationsOutlined />
         </IconButton>
-        <IconButton>
-          <SettingsOutlined />
-        </IconButton>
-        <IconButton>
-          <PersonOutlined />
-        </IconButton>
+
+        <UserMenu />
       </Box>
     </Box>
   );
