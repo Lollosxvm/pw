@@ -32,24 +32,36 @@ export const getInvestimentiUtente = async (req, res) => {
     res.status(500).json({ message: "Errore lato server" });
   }
 };
+
 export const getCryptoChart = async (req, res) => {
-  console.log("✅ Entrato in getCryptoChart"); // <-- IMPORTANTE
   const { asset = "bitcoin", days = "90", vs_currency = "usd" } = req.query;
+  const endpoint = `https://api.coingecko.com/api/v3/coins/${asset}/market_chart`;
+
+  console.log("Chiamo CoinGecko con:", { asset, days, vs_currency });
 
   try {
-    console.log("🔄 Chiamo CoinGecko con:", { asset, days, vs_currency });
+    const response = await axios.get(endpoint, {
+      params: { vs_currency, days },
+    });
 
-    const { data } = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/${asset}/market_chart`,
-      {
-        params: { vs_currency, days },
-      }
-    );
+    const prices = response.data?.prices;
 
-    console.log("✅ Risposta CoinGecko:", data?.prices?.length);
-    res.json(data);
+    if (!Array.isArray(prices)) {
+      console.warn("Risposta CoinGecko anomala:", response.data);
+      return res.status(502).json({ error: "Dati non validi da CoinGecko" });
+    }
+
+    console.log("CoinGecko OK:", prices.length, "valori");
+    res.json(response.data);
   } catch (error) {
-    console.error("❌ Errore CoinGecko:", error.message);
-    res.status(500).json({ error: "Errore interno dal backend" });
+    console.error("Errore CoinGecko:", error.message);
+
+    if (error.response?.status === 429) {
+      return res.status(429).json({
+        error: "Troppe richieste a CoinGecko. Riprova tra qualche secondo.",
+      });
+    }
+
+    return res.status(500).json({ error: "Errore interno dal backend" });
   }
 };
