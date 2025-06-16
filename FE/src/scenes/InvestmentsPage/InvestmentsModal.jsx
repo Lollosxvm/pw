@@ -13,7 +13,9 @@ import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useAsset } from "../../context/AssetContext";
 import useAuth from "../../hooks/useAuth";
-
+/**
+ * InvestmentsModal component for handling investments (buy/sell) of a specific asset.
+ */
 const InvestmentsModal = ({
   open,
   onClose,
