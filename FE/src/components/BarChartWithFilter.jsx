@@ -4,7 +4,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { it } from "date-fns/locale";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../api/axiosPrivate";
 import BarChart from "./BarChart";
 import TextField from "@mui/material/TextField";
 
@@ -47,7 +47,7 @@ const BarChartWithFilter = ({ isDashboard = false }) => {
     const from = fromDate.toISOString().split("T")[0];
     const to = oggi.toISOString().split("T")[0];
 
-    axios
+    axiosPrivate
       .get("http://localhost:3000/api/transactions/spese-categorie", {
         params: { from, to },
       })

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ResponsiveBar } from "@nivo/bar";
 import { useTheme, Box } from "@mui/material";
 import { tokens } from "../theme";
-import axios from "axios";
+import axiosPrivate from "../api/axiosPrivate";
 import { subMonths, format } from "date-fns";
 
 const BarChart = ({ isDashboard = false, data = null }) => {
@@ -16,14 +16,13 @@ const BarChart = ({ isDashboard = false, data = null }) => {
       return;
     }
 
-    // Fetch solo se non viene passato `data` da fuori (es. Dashboard)
     const today = new Date();
     const fromDate = subMonths(today, 1);
     const from = format(fromDate, "yyyy-MM-dd");
     const to = format(today, "yyyy-MM-dd");
 
-    axios
-      .get("http://localhost:3000/api/transactions/spese-categorie", {
+    axiosPrivate
+      .get("/transactions/spese-categorie", {
         params: { from, to },
       })
       .then((res) => {

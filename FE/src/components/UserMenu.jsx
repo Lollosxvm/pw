@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   Typography,
   Divider,
+  Grow,
 } from "@mui/material";
 import {
   Logout,
@@ -13,29 +14,33 @@ import {
   PersonOutline,
   HomeOutlined,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import avatarImg from "../assets/images/avatar.png";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const { logout, utente } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.clear(); // o token clear
-    navigate("/login");
+    logout();
+    navigate("/");
   };
 
   return (
     <>
       <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-        <Avatar alt="User" src="/assets/images/avatar.png" />
+        <Avatar alt="User" src={avatarImg} />
       </IconButton>
 
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
+        TransitionComponent={Grow} // <-- animazione qui
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
@@ -48,14 +53,15 @@ const UserMenu = () => {
           },
         }}
       >
-        <Typography px={2} fontWeight={600}>
-          Jaydon Frankie
-        </Typography>
-        <Typography px={2} variant="body2" color="text.secondary">
-          demo@minimals.cc
-        </Typography>
-
-        <Divider sx={{ my: 1 }} />
+        {utente && [
+          <Typography key="nome" px={2} fontWeight={600}>
+            {utente.nome}
+          </Typography>,
+          <Typography key="email" px={2} variant="body2" color="text.secondary">
+            {utente.email}
+          </Typography>,
+          <Divider key="divider" sx={{ my: 1 }} />,
+        ]}
 
         <MenuItem onClick={() => navigate("/dashboard")}>
           <ListItemIcon>

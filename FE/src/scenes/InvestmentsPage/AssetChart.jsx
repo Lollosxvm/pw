@@ -13,7 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { tokens } from "../../theme";
 import LineChart from "../../components/LineChart";
-
+import { axiosPrivate } from "../../api/axiosPrivate";
 const assetMap = {
   bitcoin: "Bitcoin",
   ethereum: "Ethereum",
@@ -51,10 +51,11 @@ const AssetChart = ({ asset, onAssetChange }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/investimenti/crypto?asset=${asset}&days=${period}&vs_currency=${currency}`
+        const res = await axiosPrivate.get(
+          `/investimenti/crypto?asset=${asset}&days=${period}&vs_currency=${currency}`
         );
-        const json = await res.json();
+
+        const json = res.data;
 
         if (res.status === 429) {
           setErrorMessage(

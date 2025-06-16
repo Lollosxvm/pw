@@ -5,7 +5,7 @@ import { geoFeatures } from "../data/mockGeoFeatures";
 import { tokens } from "../theme";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../api/axiosPrivate";
 
 const GeographyChart = ({ isDashboard = false }) => {
   const theme = useTheme();
@@ -13,8 +13,8 @@ const GeographyChart = ({ isDashboard = false }) => {
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/transactions/spese-paese")
+    axiosPrivate
+      .get("/transactions/spese-paese")
       .then((res) => setData(res.data))
       .catch((err) =>
         console.error("Errore nel caricamento dati geografici:", err)
