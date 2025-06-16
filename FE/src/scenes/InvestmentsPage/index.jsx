@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
 import NewsFeed from "./NewsFeed";
-
+import InvestmentsTable from "./InvestmentTable";
 const InvestmentsPage = () => {
   const [selectedAsset, setSelectedAsset] = useState("bitcoin");
   const [buyOpen, setBuyOpen] = useState(false);
@@ -55,36 +55,39 @@ const InvestmentsPage = () => {
         Investimenti
       </Typography>
 
-      <Grid container spacing={2}>
-        {/* Sezione sinistra - grafico + bottoni */}
-        <Grid item xs={12} md={8}>
-          <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} />
-          <Box mt={4} display="flex" gap={2}>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => setBuyOpen(true)}
-            >
-              Acquista {selectedAsset}
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => setSellOpen(true)}
-              disabled={!haAsset}
-            >
-              Vendi {selectedAsset}
-            </Button>
-          </Box>
-        </Grid>
+      {/* GRAFICO in alto */}
+      <Box mb={4}>
+        <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} />
+        <Box mt={3} display="flex" gap={2}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setBuyOpen(true)}
+          >
+            Acquista {selectedAsset}
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setSellOpen(true)}
+            disabled={!haAsset}
+          >
+            Vendi {selectedAsset}
+          </Button>
+        </Box>
+      </Box>
 
-        {/* Sezione destra - notizie */}
-        <Grid item xs={12} md={4}>
+      {/* SEZIONE BASSA: Tabella + Notizie */}
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <InvestmentsTable />
+        </Grid>
+        <Grid item xs={12} md={6}>
           <NewsFeed asset={selectedAsset} />
         </Grid>
       </Grid>
 
-      {/* Modale acquisto */}
+      {/* Modali */}
       <InvestmentsModal
         open={buyOpen}
         onClose={() => setBuyOpen(false)}
@@ -93,7 +96,6 @@ const InvestmentsPage = () => {
         onSuccess={() => setBuyOpen(false)}
       />
 
-      {/* Modale vendita */}
       <InvestmentsModal
         open={sellOpen}
         onClose={() => setSellOpen(false)}
