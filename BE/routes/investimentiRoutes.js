@@ -10,8 +10,7 @@ const router = express.Router();
 
 // Protegge solo le rotte sensibili
 router.post("/", verifyToken, aggiungiInvestimento);
-router.get("/:utenteId", verifyToken, getInvestimentiUtente);
-
+router.get("/", verifyToken, getInvestimentiUtente);
 // Rotta pubblica per i dati delle criptovalute
 router.get("/crypto", getCryptoChart);
 

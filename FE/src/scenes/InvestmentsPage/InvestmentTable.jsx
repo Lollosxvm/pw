@@ -61,7 +61,7 @@ const InvestmentsTable = () => {
 
   useEffect(() => {
     axiosPrivate
-      .get("/investimenti/1")
+      .get("/investimenti")
       .then((res) => {
         setRows(
           res.data.map((row, index) => ({

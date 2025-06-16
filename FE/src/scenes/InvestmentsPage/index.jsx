@@ -20,7 +20,7 @@ const InvestmentsPage = () => {
   useEffect(() => {
     const fetchUserAssets = async () => {
       try {
-        const res = await axiosPrivate.get("/investimenti/1"); //TODO da sostituire con ID utente dinamico
+        const res = await axiosPrivate.get("/investimenti");
         const data = res.data;
 
         const mappa = {};

@@ -57,15 +57,6 @@ const AssetChart = ({ asset, onAssetChange }) => {
 
         const json = res.data;
 
-        if (res.status === 429) {
-          setErrorMessage(
-            "Hai effettuato troppe richieste. Attendi qualche secondo e riprova."
-          );
-          setSnackbarOpen(true);
-          setChartData([]);
-          return;
-        }
-
         if (!json.prices) {
           setErrorMessage("Dati non disponibili per questo asset.");
           setSnackbarOpen(true);
@@ -88,7 +79,17 @@ const AssetChart = ({ asset, onAssetChange }) => {
         setErrorMessage("");
       } catch (err) {
         console.error("Errore nel fetch dal backend:", err);
-        setErrorMessage("Errore nel caricamento dei dati. Riprova più tardi.");
+
+        if (err.response?.status === 429) {
+          setErrorMessage(
+            "Hai effettuato troppe richieste. Attendi qualche secondo e riprova."
+          );
+        } else {
+          setErrorMessage(
+            "Errore nel caricamento dei dati. Riprova più tardi."
+          );
+        }
+
         setSnackbarOpen(true);
         setChartData([]);
       } finally {
