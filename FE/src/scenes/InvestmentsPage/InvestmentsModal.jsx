@@ -30,7 +30,7 @@ const InvestmentsModal = ({
     setEsito(null);
     try {
       await axios.post("http://localhost:3000/api/investimenti", {
-        utente_id: 1,
+        utente: 1, //TODO: sostituire con ID utente loggato
         asset,
         operazione: type,
         quantita: parseFloat(quantita),

@@ -2,13 +2,13 @@ import { db } from "../config/db.js";
 import axios from "axios";
 
 export const aggiungiInvestimento = async (req, res) => {
-  const { utente_id, asset, operazione, quantita, prezzo_unitario } = req.body;
+  const { utente, asset, operazione, quantita, prezzo_unitario } = req.body;
 
   try {
     await db.query(
-      `INSERT INTO investimenti (utente_id, asset, operazione, quantita, prezzo_unitario)
+      `INSERT INTO investimenti (utente, asset, operazione, quantita, prezzo_unitario)
        VALUES (?, ?, ?, ?, ?)`,
-      [utente_id, asset, operazione, quantita, prezzo_unitario]
+      [utente, asset, operazione, quantita, prezzo_unitario]
     );
 
     res.status(201).json({ message: "Operazione registrata con successo" });
@@ -23,7 +23,7 @@ export const getInvestimentiUtente = async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      `SELECT * FROM investimenti WHERE utente_id = ? ORDER BY data_operazione DESC`,
+      `SELECT * FROM investimenti WHERE utente = ? ORDER BY data_operazione DESC`,
       [utenteId]
     );
     res.json(rows);
