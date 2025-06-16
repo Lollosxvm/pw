@@ -2,7 +2,8 @@ import { db } from "../config/db.js";
 import axios from "axios";
 
 export const aggiungiInvestimento = async (req, res) => {
-  const { utente, asset, operazione, quantita, prezzo_unitario } = req.body;
+  const { asset, operazione, quantita, prezzo_unitario } = req.body;
+  const utente = req.utente.id;
 
   try {
     await db.query(
@@ -19,12 +20,12 @@ export const aggiungiInvestimento = async (req, res) => {
 };
 
 export const getInvestimentiUtente = async (req, res) => {
-  const { utenteId } = req.params;
+  const utente = req.utente.id;
 
   try {
     const [rows] = await db.query(
       `SELECT * FROM investimenti WHERE utente = ? ORDER BY data_operazione DESC`,
-      [utenteId]
+      [utente]
     );
     res.json(rows);
   } catch (err) {

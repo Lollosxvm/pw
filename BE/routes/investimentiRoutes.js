@@ -4,11 +4,15 @@ import {
   aggiungiInvestimento,
   getCryptoChart,
 } from "../controllers/investimentiController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-router.post("/", aggiungiInvestimento);
+// Protegge solo le rotte sensibili
+router.post("/", verifyToken, aggiungiInvestimento);
+router.get("/:utenteId", verifyToken, getInvestimentiUtente);
+
+// Rotta pubblica per i dati delle criptovalute
 router.get("/crypto", getCryptoChart);
-router.get("/:utenteId", getInvestimentiUtente);
 
 export default router;
