@@ -2,7 +2,6 @@ import { Box, Typography, Grid, Button } from "@mui/material";
 import { useState } from "react";
 import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
-import AiSuggestionBox from "./AiSuggestionBox";
 import NewsFeed from "./NewsFeed";
 
 const InvestmentsPage = () => {
@@ -10,8 +9,8 @@ const InvestmentsPage = () => {
   const [buyOpen, setBuyOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
 
-  const [currentPrice, setCurrentPrice] = useState(0); // da API future
-  const [haAsset, setHaAsset] = useState(true); // oppure in base a investimenti
+  const [currentPrice, setCurrentPrice] = useState(0);
+  const [haAsset, setHaAsset] = useState(true);
 
   return (
     <Box m={2}>
@@ -23,7 +22,7 @@ const InvestmentsPage = () => {
         {/* Sezione sinistra - grafico + bottoni */}
         <Grid item xs={12} md={8}>
           <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} />
-          <Box mt={2} display="flex" gap={2}>
+          <Box mt={5} display="flex" gap={2}>
             <Button
               variant="contained"
               color="success"
@@ -43,8 +42,7 @@ const InvestmentsPage = () => {
 
         {/* Sezione destra - AI + notizie */}
         <Grid item xs={12} md={4}>
-          {<AiSuggestionBox asset={selectedAsset} />}
-          <Box mt={2}> {<NewsFeed asset={selectedAsset} />} </Box>
+          {<NewsFeed asset={selectedAsset} />}
         </Grid>
       </Grid>
 
@@ -61,7 +59,7 @@ const InvestmentsPage = () => {
         asset={selectedAsset}
         type="vendita"
         defaultPrice={currentPrice}
-        disabled={!haAsset} // lo definisci a seconda della logica futura
+        disabled={!haAsset}
         onSuccess={() => setSellOpen(false)}
       />
     </Box>
