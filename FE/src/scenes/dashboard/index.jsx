@@ -28,7 +28,7 @@ import { Tooltip } from "@mui/material";
 
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../../api/axiosPrivate";
 
 function Dashboard() {
   const theme = useTheme();
@@ -48,28 +48,26 @@ function Dashboard() {
   };
 
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [mutuoData, setMutuoData] = useState(null);
+  const [prestitoData, setPrestitoData] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/transactions/spese-recenti")
+    axiosPrivate
+      .get("/transactions/spese-recenti")
       .then((res) => setRecentTransactions(res.data))
       .catch((err) => console.error("Errore nel caricamento:", err));
   }, []);
 
-  const [mutuoData, setMutuoData] = useState(null);
-
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/mutuo/situazione")
+    axiosPrivate
+      .get("/mutuo/situazione")
       .then((res) => setMutuoData(res.data))
       .catch((err) => console.error("Errore nel caricamento mutuo:", err));
   }, []);
 
-  const [prestitoData, setPrestitoData] = useState(null);
-
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/prestiti/situazione")
+    axiosPrivate
+      .get("/prestiti/situazione")
       .then((res) => setPrestitoData(res.data))
       .catch((err) => console.error("Errore prestito:", err));
   }, []);

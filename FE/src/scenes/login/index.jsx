@@ -20,7 +20,7 @@ import logo from "../../assets/images/logo.png";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PasswordRecovery from "./PasswordRecovery";
-import axios from "axios";
+import axios from "../../api/axiosPrivate";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/api/login", {
+      const res = await axios.post("/login", {
         email,
         password,
       });

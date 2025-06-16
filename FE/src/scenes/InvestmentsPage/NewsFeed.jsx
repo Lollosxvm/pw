@@ -2,6 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
+import axiosPrivate from "../../api/axiosPrivate";
 
 const NewsFeed = ({ asset }) => {
   const [news, setNews] = useState([]);
@@ -13,13 +14,17 @@ const NewsFeed = ({ asset }) => {
     const fetchNews = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/news?asset=${asset}`
-        );
-        const json = await res.json();
+        const res = await axiosPrivate.get("/news", {
+          params: { asset },
+        });
 
-        if (Array.isArray(json)) {
-          const withId = json.map((n, i) => ({ ...n, id: `${n.link}-${i}` }));
+        const newsData = res.data;
+
+        if (Array.isArray(newsData)) {
+          const withId = newsData.map((n, i) => ({
+            ...n,
+            id: `${n.link}-${i}`,
+          }));
           setNews(withId);
         } else {
           setNews([]);

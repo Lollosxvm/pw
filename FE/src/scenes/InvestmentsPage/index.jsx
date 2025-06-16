@@ -4,6 +4,8 @@ import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
 import NewsFeed from "./NewsFeed";
 import InvestmentsTable from "./InvestmentTable";
+import axiosPrivate from "../../api/axiosPrivate";
+
 const InvestmentsPage = () => {
   const [selectedAsset, setSelectedAsset] = useState("bitcoin");
   const [buyOpen, setBuyOpen] = useState(false);
@@ -17,8 +19,8 @@ const InvestmentsPage = () => {
   useEffect(() => {
     const fetchUserAssets = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/investimenti/1"); // TODO: sostituire ID con utente loggato
-        const data = await res.json();
+        const res = await axiosPrivate.get("/investimenti/1"); //TODO da sostituire con ID utente dinamico
+        const data = res.data;
 
         const mappa = {};
 

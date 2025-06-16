@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../../api/axiosPrivate";
 
 const InvestmentsModal = ({
   open,
@@ -29,17 +29,19 @@ const InvestmentsModal = ({
     setLoading(true);
     setEsito(null);
     try {
-      await axios.post("http://localhost:3000/api/investimenti", {
-        utente: 1, //TODO: sostituire con ID utente loggato
+      await axiosPrivate.post("/investimenti", {
+        utente: 1, // TODO: sostituire con ID utente loggato dinamico
         asset,
         operazione: type,
         quantita: parseFloat(quantita),
         prezzo_unitario: parseFloat(prezzo),
       });
+
       setEsito({
         tipo: "success",
         messaggio: `Operazione di ${type} registrata`,
       });
+
       setQuantita("");
       setPrezzo(defaultPrice || "");
       if (onSuccess) onSuccess();

@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../../api/axiosPrivate";
 import { tokens } from "../../theme";
 
 const InvestmentsTable = () => {
@@ -59,13 +59,13 @@ const InvestmentsTable = () => {
   ];
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/investimenti/1")
+    axiosPrivate
+      .get("/investimenti/1")
       .then((res) => {
         setRows(
           res.data.map((row, index) => ({
             ...row,
-            id: index + 1, // necessario per DataGrid
+            id: index + 1,
           }))
         );
       })

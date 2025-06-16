@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { Header } from "../../components";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosPrivate from "../../api/axiosPrivate";
 import { tokens } from "../../theme";
 
 const Movimenti = () => {
@@ -29,8 +29,8 @@ const Movimenti = () => {
   ];
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/transactions")
+    axiosPrivate
+      .get("/transactions")
       .then((res) => {
         setRows(res.data);
       })
