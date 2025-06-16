@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.use(verifyToken);
 router.get("/", getAllTransactions);
-router.get("/spese-paese", getSpesePerPaese);
+router.get("/spese-per-paese", getSpesePerPaese);
 router.get("/spese-recenti", getLastTransactions);
-router.get("/spese-categorie", getSpesePerCategoria);
-router.get("/andamento", getAndamentiMensili);
+router.get("/spese-per-categorie", getSpesePerCategoria);
+router.get("/andamento-trimestrale", getAndamentiMensili);
 
 export default router;

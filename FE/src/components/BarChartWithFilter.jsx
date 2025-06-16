@@ -49,7 +49,7 @@ const BarChartWithFilter = ({ isDashboard = false }) => {
     const to = oggi.toISOString().split("T")[0];
 
     axiosPrivate
-      .get("/transactions/spese-categorie", {
+      .get("/transazioni/spese-per-categorie", {
         params: { from, to },
       })
       .then((res) => {

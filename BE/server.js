@@ -17,7 +17,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/transactions", transactionsRoutes);
+app.use("/api/transazioni", transactionsRoutes);
 app.use("/api/mutuo", mutuoRoutes);
 app.use("/api", prestitiRoutes);
 app.use("/api/investimenti", investimentiRoutes);

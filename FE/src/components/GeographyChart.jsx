@@ -15,7 +15,7 @@ const GeographyChart = ({ isDashboard = false }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     axiosPrivate
-      .get("/transactions/spese-paese")
+      .get("/transazioni/spese-per-paese")
       .then((res) => setData(res.data))
       .catch((err) =>
         console.error("Errore nel caricamento dati geografici:", err)

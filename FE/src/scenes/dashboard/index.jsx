@@ -54,7 +54,7 @@ function Dashboard() {
 
   useEffect(() => {
     axiosPrivate
-      .get("/transactions/spese-recenti")
+      .get("/transazioni/spese-recenti")
       .then((res) => setRecentTransactions(res.data))
       .catch((err) => console.error("Errore nel caricamento:", err));
   }, []);

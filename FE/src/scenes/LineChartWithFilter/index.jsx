@@ -49,7 +49,7 @@ const LineChartWithFilter = ({ isDashboard = false }) => {
     const to = oggi.toISOString().split("T")[0];
 
     axiosPrivate
-      .get("/transactions/andamento", {
+      .get("/transazioni/andamento-trimestrale", {
         params: { from, to },
       })
       .then((res) => {

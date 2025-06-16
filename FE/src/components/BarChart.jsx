@@ -23,7 +23,7 @@ const BarChart = ({ isDashboard = false, data = null }) => {
     const to = format(today, "yyyy-MM-dd");
 
     axiosPrivate
-      .get("/transactions/spese-categorie", {
+      .get("/transazioni/spese-per-categorie", {
         params: { from, to },
       })
       .then((res) => {

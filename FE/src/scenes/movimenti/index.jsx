@@ -31,7 +31,7 @@ const Movimenti = () => {
 
   useEffect(() => {
     axiosPrivate
-      .get("/transactions")
+      .get("/transazioni")
       .then((res) => {
         setRows(res.data);
       })
