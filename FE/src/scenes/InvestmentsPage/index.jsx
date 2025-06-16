@@ -1,9 +1,9 @@
 import { Box, Typography, Grid, Button } from "@mui/material";
 import { useState } from "react";
-//import AssetChart from "./AssetChart";
+import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
-// import AiSuggestionBox from "./AiSuggestionBox";
-// import NewsFeed from "./NewsFeed";
+import AiSuggestionBox from "./AiSuggestionBox";
+import NewsFeed from "./NewsFeed";
 
 const InvestmentsPage = () => {
   const [selectedAsset, setSelectedAsset] = useState("bitcoin");
@@ -22,7 +22,7 @@ const InvestmentsPage = () => {
       <Grid container spacing={2}>
         {/* Sezione sinistra - grafico + bottoni */}
         <Grid item xs={12} md={8}>
-          {/* <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} /> */}
+          <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} />
           <Box mt={2} display="flex" gap={2}>
             <Button
               variant="contained"
@@ -43,8 +43,8 @@ const InvestmentsPage = () => {
 
         {/* Sezione destra - AI + notizie */}
         <Grid item xs={12} md={4}>
-          {/* <AiSuggestionBox asset={selectedAsset} /> */}
-          <Box mt={2}>{/* {<NewsFeed asset={selectedAsset} />} */}</Box>
+          {<AiSuggestionBox asset={selectedAsset} />}
+          <Box mt={2}> {<NewsFeed asset={selectedAsset} />} </Box>
         </Grid>
       </Grid>
 
