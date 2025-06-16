@@ -2,13 +2,14 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
-import axiosPrivate from "../../api/axiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const NewsFeed = ({ asset }) => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchNews = async () => {

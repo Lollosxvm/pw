@@ -2,13 +2,14 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { Header } from "../../components";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import axiosPrivate from "../../api/axiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { tokens } from "../../theme";
 
 const Movimenti = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   const columns = [
     { field: "tipo", headerName: "Tipo", flex: 1 },

@@ -11,27 +11,28 @@ import {
   LoginPage,
   InvestmentsPage,
 } from "./scenes";
+import RequireAuth from "./components/RequireAuth";
 
 const AppRouter = () => {
   return (
-    <Router>
-      <Routes>
-        {/* ROUTA PUBBLICA: LOGIN */}
-        <Route path="/" element={<LoginPage />} />
+    <Routes>
+      {/* ROUTE PUBBLICA */}
+      <Route path="/" element={<LoginPage />} />
 
-        {/* LAYOUT PROTETTO */}
+      {/* ROUTES PROTETTE */}
+      <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<App />}>
           <Route index element={<Dashboard />} />
-          <Route path="/dashboard/movimenti" element={<Movimenti />} />
-          <Route path="/dashboard/form" element={<Form />} />
-          <Route path="/dashboard/investimenti" element={<InvestmentsPage />} />
-          <Route path="/dashboard/bar" element={<Bar />} />
-          <Route path="/dashboard/line" element={<Line />} />
-          <Route path="/dashboard/faq" element={<FAQ />} />
-          <Route path="/dashboard/geography" element={<Geography />} />
+          <Route path="movimenti" element={<Movimenti />} />
+          <Route path="form" element={<Form />} />
+          <Route path="investimenti" element={<InvestmentsPage />} />
+          <Route path="bar" element={<Bar />} />
+          <Route path="line" element={<Line />} />
+          <Route path="faq" element={<FAQ />} />
+          <Route path="geography" element={<Geography />} />
         </Route>
-      </Routes>
-    </Router>
+      </Route>
+    </Routes>
   );
 };
 

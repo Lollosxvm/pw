@@ -5,11 +5,12 @@ import { geoFeatures } from "../data/mockGeoFeatures";
 import { tokens } from "../theme";
 
 import { useEffect, useState } from "react";
-import axiosPrivate from "../api/axiosPrivate";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const GeographyChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const axiosPrivate = useAxiosPrivate();
 
   const [data, setData] = useState([]);
   useEffect(() => {

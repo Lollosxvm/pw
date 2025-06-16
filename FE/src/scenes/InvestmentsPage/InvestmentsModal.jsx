@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import axiosPrivate from "../../api/axiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const InvestmentsModal = ({
   open,
@@ -24,6 +24,7 @@ const InvestmentsModal = ({
   const [prezzo, setPrezzo] = useState(defaultPrice || "");
   const [loading, setLoading] = useState(false);
   const [esito, setEsito] = useState(null);
+  const axiosPrivate = useAxiosPrivate();
 
   const handleSubmit = async () => {
     setLoading(true);

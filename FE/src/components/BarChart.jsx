@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { ResponsiveBar } from "@nivo/bar";
 import { useTheme, Box } from "@mui/material";
 import { tokens } from "../theme";
-import axiosPrivate from "../api/axiosPrivate";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { subMonths, format } from "date-fns";
 
 const BarChart = ({ isDashboard = false, data = null }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [dati, setDati] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     if (data) {

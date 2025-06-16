@@ -20,10 +20,12 @@ import logo from "../../assets/images/logo.png";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PasswordRecovery from "./PasswordRecovery";
-import axios from "../../api/axiosPrivate";
+import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const darkTheme = createTheme({
@@ -51,13 +53,8 @@ const LoginPage = () => {
         email,
         password,
       });
-
       const { token, utente } = res.data;
-      console.log("Login:", { email, password });
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("utente", JSON.stringify(utente));
-
+      login(utente, token);
       navigate("/dashboard");
     } catch (err) {
       setErrore("Credenziali non valide");

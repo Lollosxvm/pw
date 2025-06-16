@@ -28,7 +28,7 @@ import { Tooltip } from "@mui/material";
 
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
-import axiosPrivate from "../../api/axiosPrivate";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function Dashboard() {
   const theme = useTheme();
@@ -36,6 +36,7 @@ function Dashboard() {
   const isXlDevices = useMediaQuery("(min-width: 1260px)");
   const isMdDevices = useMediaQuery("(min-width: 724px)");
   const isXsDevices = useMediaQuery("(max-width: 436px)");
+  const axiosPrivate = useAxiosPrivate();
 
   const iconeCategoria = {
     Alimentari: <RestaurantMenuOutlinedIcon />,
