@@ -37,8 +37,6 @@ export const getCryptoChart = async (req, res) => {
   const { asset = "bitcoin", days = "90", vs_currency = "usd" } = req.query;
   const endpoint = `https://api.coingecko.com/api/v3/coins/${asset}/market_chart`;
 
-  console.log("Chiamo CoinGecko con:", { asset, days, vs_currency });
-
   try {
     const response = await axios.get(endpoint, {
       params: { vs_currency, days },
@@ -51,7 +49,6 @@ export const getCryptoChart = async (req, res) => {
       return res.status(502).json({ error: "Dati non validi da CoinGecko" });
     }
 
-    console.log("CoinGecko OK:", prices.length, "valori");
     res.json(response.data);
   } catch (error) {
     console.error("Errore CoinGecko:", error.message);
