@@ -14,6 +14,8 @@ import { useTheme } from "@mui/material/styles";
 import { tokens } from "../../theme";
 import LineChart from "../../components/LineChart";
 import { axiosPrivate } from "../../api/axiosPrivate";
+import { useAsset } from "../../context/AssetContext";
+
 const assetMap = {
   bitcoin: "Bitcoin",
   ethereum: "Ethereum",
@@ -40,6 +42,7 @@ const AssetChart = ({ asset, onAssetChange }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { selectedAsset, setSelectedAsset, setCurrentPrice } = useAsset();
 
   const assetColors = {
     bitcoin: colors.redAccent[400],
@@ -99,6 +102,15 @@ const AssetChart = ({ asset, onAssetChange }) => {
 
     fetchData();
   }, [asset, period, currency, theme.palette.mode]);
+
+  useEffect(() => {
+    if (chartData.length > 0 && chartData[0].data.length > 0) {
+      const ultimoPrezzo = chartData[0].data[chartData[0].data.length - 1]?.y;
+      if (ultimoPrezzo) {
+        setCurrentPrice(ultimoPrezzo);
+      }
+    }
+  }, [chartData]);
 
   return (
     <Box>
