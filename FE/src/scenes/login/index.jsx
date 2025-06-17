@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Snackbar, Alert } from "@mui/material";
-
 import {
   Box,
   Button,
@@ -13,6 +11,8 @@ import {
   CssBaseline,
   InputAdornment,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useNavigate } from "react-router-dom";
@@ -21,11 +21,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PasswordRecovery from "./PasswordRecovery";
 import axios from "../../api/axios";
-import useAuth from "../../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../../redux/slices/authSlice";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { login } = useAuth();
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const darkTheme = createTheme({
@@ -35,8 +36,8 @@ const LoginPage = () => {
   });
 
   const colors = tokens("dark");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [openRecovery, setOpenRecovery] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [openRecovery, setOpenRecovery] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleTogglePassword = () => {
@@ -53,8 +54,16 @@ const LoginPage = () => {
         email,
         password,
       });
+
       const { token, utente } = res.data;
-      login(utente, token);
+
+      dispatch(
+        setAuth({
+          utente,
+          token,
+        })
+      );
+
       navigate("/dashboard");
     } catch (err) {
       setErrore("Credenziali non valide");
@@ -106,6 +115,7 @@ const LoginPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
           <TextField
             fullWidth
             label="Password"
@@ -155,11 +165,11 @@ const LoginPage = () => {
         </Box>
       </Box>
 
-      {/* Modale per il recupero password */}
       <PasswordRecovery
         open={openRecovery}
         onClose={() => setOpenRecovery(false)}
       />
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={4000}

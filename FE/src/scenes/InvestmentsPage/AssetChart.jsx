@@ -13,7 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { tokens } from "../../theme";
 import LineChart from "../../components/LineChart";
-import { axiosPrivate } from "../../api/axiosPrivate";
+import axiosPrivate from "../../api/axiosPrivate";
 import { useAsset } from "../../context/AssetContext";
 
 const assetMap = {

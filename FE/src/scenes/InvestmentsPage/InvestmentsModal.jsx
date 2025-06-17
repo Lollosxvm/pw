@@ -7,12 +7,10 @@ import {
   TextField,
   Alert,
   CircularProgress,
-  Typography,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import axiosPrivate from "../../api/axiosPrivate";
 import { useAsset } from "../../context/AssetContext";
-import useAuth from "../../hooks/useAuth";
 
 const InvestmentsModal = ({
   open,
@@ -26,13 +24,12 @@ const InvestmentsModal = ({
   const [importo, setImporto] = useState("");
   const [loading, setLoading] = useState(false);
   const [esito, setEsito] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
   const { currentPrice } = useAsset();
   const [prezzo, setPrezzo] = useState("");
   const [prezzoRaw, setPrezzoRaw] = useState(null);
+
   const quantitaCalcolata =
     importo && prezzoRaw ? (parseFloat(importo) / prezzoRaw).toFixed(8) : "";
-  const { auth } = useAuth();
 
   useEffect(() => {
     if (open && currentPrice) {
@@ -41,21 +38,22 @@ const InvestmentsModal = ({
         maximumFractionDigits: 6,
       }).format(currentPrice);
 
-      setPrezzo(prezzoFormattato); // visivo
-      setPrezzoRaw(currentPrice); // numerico reale
+      setPrezzo(prezzoFormattato);
+      setPrezzoRaw(currentPrice);
     }
   }, [open, currentPrice]);
 
   const handleSubmit = async () => {
     setLoading(true);
     setEsito(null);
+
     try {
-      const quantitaCalcolata = parseFloat(importo) / prezzoRaw;
+      const quantita = parseFloat(importo) / prezzoRaw;
 
       await axiosPrivate.post("/investimenti", {
         asset,
         operazione: type,
-        quantita: quantitaCalcolata,
+        quantita,
         prezzo_unitario: prezzoRaw,
       });
 
@@ -71,7 +69,10 @@ const InvestmentsModal = ({
         }, 2500);
       }
     } catch (err) {
-      setEsito({ tipo: "error", messaggio: "Errore durante l'invio" });
+      setEsito({
+        tipo: "error",
+        messaggio: "Errore durante l'invio",
+      });
     } finally {
       setLoading(false);
     }
@@ -113,7 +114,6 @@ const InvestmentsModal = ({
           py: 3,
         }}
       >
-        {/* Prezzo unitario */}
         <TextField
           label="Prezzo unitario"
           type="text"
@@ -124,7 +124,6 @@ const InvestmentsModal = ({
           sx={{ mt: 2 }}
         />
 
-        {/* Quantità calcolata */}
         <TextField
           label="Quantità"
           type="text"
@@ -133,7 +132,6 @@ const InvestmentsModal = ({
           InputProps={{ readOnly: true }}
         />
 
-        {/* Importo in euro */}
         <TextField
           label="Totale in euro"
           type="number"
@@ -142,11 +140,12 @@ const InvestmentsModal = ({
           fullWidth
           onChange={(e) => {
             const val = parseFloat(e.target.value);
-            if (val >= 0 || e.target.value === "") setImporto(e.target.value);
+            if (val >= 0 || e.target.value === "") {
+              setImporto(e.target.value);
+            }
           }}
         />
 
-        {/* Messaggio esito */}
         {esito && <Alert severity={esito.tipo}>{esito.messaggio}</Alert>}
       </DialogContent>
 

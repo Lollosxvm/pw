@@ -11,10 +11,23 @@ import newsRoutes from "./routes/newsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 dotenv.config();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const ALLOWED_ORIGINS = ["http://localhost:5173"];
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 app.use("/api/transazioni", transactionsRoutes);

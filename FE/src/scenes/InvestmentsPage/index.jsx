@@ -4,7 +4,7 @@ import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
 import NewsFeed from "./NewsFeed";
 import InvestmentsTable from "./InvestmentTable";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import axiosPrivate from "../../api/axiosPrivate";
 
 const InvestmentsPage = () => {
   const [selectedAsset, setSelectedAsset] = useState("bitcoin");
@@ -14,7 +14,6 @@ const InvestmentsPage = () => {
   const [currentPrice, setCurrentPrice] = useState(0);
   const [haAsset, setHaAsset] = useState(false);
   const [assetDisponibili, setAssetDisponibili] = useState({});
-  const axiosPrivate = useAxiosPrivate();
 
   // Carica investimenti utente una sola volta
   useEffect(() => {

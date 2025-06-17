@@ -1,45 +1,21 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNews } from "../../redux/slices/newsSlice";
 
 const NewsFeed = ({ asset }) => {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const axiosPrivate = useAxiosPrivate();
+
+  const dispatch = useDispatch();
+  const news = useSelector((state) => state.news.cache[asset] || []);
+  const loading = useSelector((state) => state.news.loading);
 
   useEffect(() => {
-    const fetchNews = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosPrivate.get("/news", {
-          params: { asset },
-        });
-
-        const newsData = res.data;
-
-        if (Array.isArray(newsData)) {
-          const withId = newsData.map((n, i) => ({
-            ...n,
-            id: `${n.link}-${i}`,
-          }));
-          setNews(withId);
-        } else {
-          setNews([]);
-        }
-      } catch (err) {
-        console.error("Errore news:", err);
-        setNews([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNews();
-  }, [asset]);
+    dispatch(fetchNews(asset));
+  }, [asset, dispatch]);
 
   const columns = [
     {
@@ -98,9 +74,10 @@ const NewsFeed = ({ asset }) => {
         }}
       >
         <DataGrid
-          rows={news}
+          rows={news.map((n, i) => ({ ...n, id: `${n.link}-${i}` }))}
           columns={columns}
           loading={loading}
+          pageSizeOptions={[5, 10, 20]}
           initialState={{
             pagination: { paginationModel: { pageSize: 10, page: 0 } },
           }}

@@ -28,7 +28,12 @@ import { Tooltip } from "@mui/material";
 
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchMutuo,
+  fetchPrestito,
+  fetchTransazioni,
+} from "../../redux/slices/dashboardSlice";
 
 function Dashboard() {
   const theme = useTheme();
@@ -36,7 +41,6 @@ function Dashboard() {
   const isXlDevices = useMediaQuery("(min-width: 1260px)");
   const isMdDevices = useMediaQuery("(min-width: 724px)");
   const isXsDevices = useMediaQuery("(max-width: 436px)");
-  const axiosPrivate = useAxiosPrivate();
 
   const iconeCategoria = {
     Alimentari: <RestaurantMenuOutlinedIcon />,
@@ -48,30 +52,18 @@ function Dashboard() {
     Mutuo: <AccountBalanceOutlinedIcon />,
   };
 
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [mutuoData, setMutuoData] = useState(null);
-  const [prestitoData, setPrestitoData] = useState(null);
+  const dispatch = useDispatch();
+  const mutuoData = useSelector((state) => state.dashboard.mutuo);
+  const prestitoData = useSelector((state) => state.dashboard.prestito);
+  const recentTransactions = useSelector(
+    (state) => state.dashboard.transazioni
+  );
 
   useEffect(() => {
-    axiosPrivate
-      .get("/transazioni/spese-recenti")
-      .then((res) => setRecentTransactions(res.data))
-      .catch((err) => console.error("Errore nel caricamento:", err));
-  }, []);
-
-  useEffect(() => {
-    axiosPrivate
-      .get("/mutuo/situazione")
-      .then((res) => setMutuoData(res.data))
-      .catch((err) => console.error("Errore nel caricamento mutuo:", err));
-  }, []);
-
-  useEffect(() => {
-    axiosPrivate
-      .get("/prestiti/situazione")
-      .then((res) => setPrestitoData(res.data))
-      .catch((err) => console.error("Errore prestito:", err));
-  }, []);
+    dispatch(fetchMutuo());
+    dispatch(fetchPrestito());
+    dispatch(fetchTransazioni());
+  }, [dispatch]);
 
   return (
     <Box m="20px">

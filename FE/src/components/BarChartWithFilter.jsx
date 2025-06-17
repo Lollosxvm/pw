@@ -4,7 +4,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { it } from "date-fns/locale";
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axiosPrivate from "../api/axiosPrivate";
 import BarChart from "./BarChart";
 import TextField from "@mui/material/TextField";
 
@@ -13,7 +13,6 @@ const BarChartWithFilter = ({ isDashboard = false }) => {
   const [filtro, setFiltro] = useState("3mesi");
   const [da, setDa] = useState(null);
   const [a, setA] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const oggi = new Date();

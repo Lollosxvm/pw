@@ -14,19 +14,26 @@ import {
   PersonOutline,
   HomeOutlined,
 } from "@mui/icons-material";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import avatarImg from "../assets/images/avatar.png";
+
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
+import { persistor } from "../redux/store";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const { logout, utente } = useContext(AuthContext);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const utente = useSelector((state) => state.auth.utente); // 🛠️ corretto key
+
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
+    persistor.purge();
     navigate("/");
   };
 
@@ -40,7 +47,7 @@ const UserMenu = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
-        TransitionComponent={Grow} // <-- animazione qui
+        TransitionComponent={Grow}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{

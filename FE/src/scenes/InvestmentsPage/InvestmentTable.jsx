@@ -1,14 +1,13 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import axiosPrivate from "../../api/axiosPrivate"; // ✅ nuova importazione
 import { tokens } from "../../theme";
 
 const InvestmentsTable = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const axiosPrivate = useAxiosPrivate();
 
   const columns = [
     {
