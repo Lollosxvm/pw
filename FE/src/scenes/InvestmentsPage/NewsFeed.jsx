@@ -101,7 +101,6 @@ const NewsFeed = ({ asset }) => {
           rows={news}
           columns={columns}
           loading={loading}
-          pageSizeOptions={[5, 10]}
           initialState={{
             pagination: { paginationModel: { pageSize: 10, page: 0 } },
           }}

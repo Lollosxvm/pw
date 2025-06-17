@@ -16,7 +16,7 @@ export const getCryptoNews = async (req, res) => {
       params: {
         auth_token: process.env.CRYPTOPANIC_API_KEY,
         currencies: symbol,
-        kind: "news", // opzionale: news, media, all
+        kind: "news",
         public: true,
       },
     });
@@ -30,7 +30,7 @@ export const getCryptoNews = async (req, res) => {
 
     const filtered = results
       .filter((item) => item.title && item.slug)
-      .slice(0, 5)
+      .slice(0, 20)
       .map((item) => ({
         title: item.title,
         link: `https://cryptopanic.com/news/${item.slug}`,

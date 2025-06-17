@@ -110,7 +110,7 @@ const InvestmentsTable = () => {
           rows={rows}
           columns={columns}
           initialState={{
-            pagination: { paginationModel: { pageSize: 10 } },
+            pagination: { paginationModel: { pageSize: 10, page: 0 } },
           }}
         />
       </Box>
