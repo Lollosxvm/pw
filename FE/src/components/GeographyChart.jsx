@@ -17,7 +17,6 @@ const GeographyChart = ({ isDashboard = false }) => {
       .get("/transazioni/spese-per-paese")
       .then((res) => {
         setData(res.data);
-        console.log("Dati geografici ricevuti:", res.data);
       })
       .catch((err) =>
         console.error("Errore nel caricamento dati geografici:", err)
