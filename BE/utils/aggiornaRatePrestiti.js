@@ -17,7 +17,7 @@ export const aggiornaRatePrestiti = async () => {
     const [updateDate] = await db.query(`
       UPDATE rate_prestito
       SET data_pagamento = CURDATE()
-      WHERE stato_pagamento = 'pagata'
+      WHERE stato = 'pagata'
         AND data_pagamento IS NULL
         AND DATE_FORMAT(data_scadenza, '%Y-%m') = DATE_FORMAT(CURDATE(), '%Y-%m')
     `);
@@ -26,8 +26,8 @@ export const aggiornaRatePrestiti = async () => {
     // 2. Paga rate scadute
     const [updatePagate] = await db.query(`
       UPDATE rate_prestito
-      SET stato_pagamento = 'pagata', data_pagamento = CURDATE()
-      WHERE stato_pagamento IN ('da_pagare', 'in_scadenza')
+      SET stato = 'pagata', data_pagamento = CURDATE()
+      WHERE stato IN ('da_pagare', 'in_scadenza')
         AND data_scadenza <= CURDATE()
     `);
     aggiornamenti.pagate = updatePagate.affectedRows;
@@ -36,8 +36,8 @@ export const aggiornaRatePrestiti = async () => {
     const [updateScadenza] = await db.query(
       `
       UPDATE rate_prestito
-      SET stato_pagamento = 'in_scadenza'
-      WHERE stato_pagamento = 'da_pagare'
+      SET stato = 'in_scadenza'
+      WHERE stato = 'da_pagare'
         AND DATE_FORMAT(data_scadenza, '%Y-%m') = ?
     `,
       [meseProssimo]
