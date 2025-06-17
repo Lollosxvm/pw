@@ -1,108 +1,97 @@
 import { useEffect } from "react";
-import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@mui/material";
-import { tokens } from "../../theme";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGrafici } from "../../redux/slices/graficiSlice";
-import { subMonths, format } from "date-fns";
+import { ResponsiveChoropleth } from "@nivo/geo";
+import { geoFeatures } from "../../data/mockGeoFeatures";
+import { tokens } from "../../theme";
+import { fetchSpeseGeografiche } from "../../redux/slices/geoSlice";
 
-const BarChart = ({ isDashboard = false, data = null }) => {
+const GeographyChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch();
 
-  const dati = useSelector((state) => state.grafici.dataset);
-  const loading = useSelector((state) => state.grafici.loading);
+  const dati = useSelector((state) => state.geografia.dati);
+  const loading = useSelector((state) => state.geografia.loading);
 
   useEffect(() => {
-    if (!data) {
-      const today = new Date();
-      const fromDate = subMonths(today, 1);
-      const from = format(fromDate, "yyyy-MM-dd");
-      const to = format(today, "yyyy-MM-dd");
+    dispatch(fetchSpeseGeografiche());
+  }, [dispatch]);
 
-      dispatch(fetchGrafici({ from, to }));
-    }
-  }, [data, dispatch]);
-
-  const graficoData = data || dati;
-
-  if (loading) return <div>Caricamento grafico...</div>;
+  if (loading) return <div>Caricamento mappa...</div>;
 
   return (
-    <ResponsiveBar
-      data={graficoData}
-      keys={[
-        "Affitto",
-        "Alimentari",
-        "Trasporti",
-        "Svago",
-        "Assicurazioni",
-        "Utenze",
-        "Mutuo",
-      ]}
-      indexBy="mese"
+    <ResponsiveChoropleth
+      data={dati}
+      features={geoFeatures.features}
       theme={{
-        tooltip: {
-          container: {
-            background: "#fff",
-            color: colors.gray[900],
-            fontSize: "13px",
-          },
-        },
         axis: {
-          domain: {
-            line: { stroke: colors.gray[100] },
-          },
+          domain: { line: { stroke: colors.gray[100] } },
           legend: { text: { fill: colors.gray[100] } },
           ticks: {
-            line: { stroke: colors.gray[100] },
+            line: { stroke: colors.gray[100], strokeWidth: 1 },
             text: { fill: colors.gray[100] },
           },
         },
-        legends: { text: { fill: colors.gray[100] } },
-      }}
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
-      valueScale={{ type: "linear" }}
-      indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
-      borderColor={{ from: "color", modifiers: [["darker", "1.6"]] }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        legend: isDashboard ? undefined : "Mese",
-        legendPosition: "middle",
-        legendOffset: 32,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        legend: isDashboard ? undefined : "Spese (€)",
-        legendPosition: "middle",
-        legendOffset: -40,
-      }}
-      enableLabel={false}
-      legends={[
-        {
-          dataFrom: "keys",
-          anchor: "bottom-right",
-          direction: "column",
-          translateX: 120,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 20,
-          itemOpacity: 0.85,
-          symbolSize: 20,
-          effects: [{ on: "hover", style: { itemOpacity: 1 } }],
+        legends: {
+          text: { fill: colors.gray[100] },
         },
-      ]}
-      role="application"
-      barAriaLabel={(e) => `${e.id}: ${e.formattedValue} in ${e.indexValue}`}
+      }}
+      margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+      domain={[0, 8000]}
+      unknownColor="#666666"
+      label="properties.name"
+      valueFormat=".2s"
+      projectionScale={isDashboard ? 40 : 150}
+      projectionTranslation={isDashboard ? [0.49, 0.6] : [0.5, 0.5]}
+      projectionRotation={[0, 0, 0]}
+      borderWidth={1.5}
+      borderColor="#ffffff"
+      legends={
+        !isDashboard
+          ? [
+              {
+                anchor: "bottom-left",
+                direction: "column",
+                justify: true,
+                translateX: 20,
+                translateY: -100,
+                itemsSpacing: 0,
+                itemWidth: 94,
+                itemHeight: 18,
+                itemDirection: "left-to-right",
+                itemTextColor: colors.gray[100],
+                itemOpacity: 0.85,
+                symbolSize: 18,
+                effects: [
+                  {
+                    on: "hover",
+                    style: {
+                      itemTextColor: "#ffffff",
+                      itemOpacity: 1,
+                    },
+                  },
+                ],
+              },
+            ]
+          : undefined
+      }
+      tooltip={({ feature }) =>
+        feature.value ? (
+          <div
+            style={{
+              color: "#fff",
+              background: "#333",
+              padding: "6px",
+              borderRadius: "4px",
+            }}
+          >
+            {feature.properties.name}: {feature.value.toLocaleString()}
+          </div>
+        ) : null
+      }
     />
   );
 };
 
-export default BarChart;
+export default GeographyChart;

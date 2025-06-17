@@ -6,13 +6,11 @@ import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import {
   BarChartOutlined,
-  DonutLargeOutlined,
   HelpOutlineOutlined,
   MapOutlined,
   MenuOutlined,
   PersonOutlined,
   TimelineOutlined,
-  WavesOutlined,
   HomeOutlined,
 } from "@mui/icons-material";
 import avatar from "../../../assets/images/avatar.png";

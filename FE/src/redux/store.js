@@ -10,6 +10,7 @@ import mutuoReducer from "./slices/mutuoSlice";
 import prestitiReducer from "./slices/prestitiSlice";
 import investimentiReducer from "./slices/investimentiSlice";
 import graficiReducer from "./slices/graficiSlice";
+import geoReducer from "./slices/geoSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   prestiti: prestitiReducer,
   investimenti: investimentiReducer,
   grafici: graficiReducer,
+  geografia: geoReducer,
 });
 
 const persistConfig = {
