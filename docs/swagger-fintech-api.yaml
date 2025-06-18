@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: API Fintech Dashboard
+  version: 1.0.0
+  description: Documentazione delle API per la gestione finanziaria personale
+
+servers:
+  - url: http://localhost:3001/api
+    description: Server locale di sviluppo
+
+paths:
+  /login:
+    post:
+      summary: Login utente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [email, password]
+      responses:
+        '200':
+          description: Login avvenuto con successo
+        '401':
+          description: Credenziali non valide
+
+  /mutuo:
+    get:
+      summary: Elenco delle rate del mutuo
+      responses:
+        '200':
+          description: Lista delle rate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rata'
+        '401':
+          description: Non autorizzato
+
+  /prestiti:
+    get:
+      summary: Elenco delle rate dei prestiti
+      responses:
+        '200':
+          description: Lista delle rate dei prestiti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rata'
+        '401':
+          description: Non autorizzato
+
+  /investimenti:
+    get:
+      summary: Elenco degli investimenti attivi
+      responses:
+        '200':
+          description: Lista degli investimenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Investimento'
+        '401':
+          description: Non autorizzato
+
+  /news:
+    get:
+      summary: Recupera notizie economico-finanziarie
+      responses:
+        '200':
+          description: Elenco delle notizie
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notizia'
+
+components:
+  schemas:
+    Rata:
+      type: object
+      properties:
+        id:
+          type: integer
+        importo:
+          type: number
+        data_scadenza:
+          type: string
+          format: date
+        stato:
+          type: string
+
+    Investimento:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset:
+          type: string
+        quantita:
+          type: number
+        valore_attuale:
+          type: number
+
+    Notizia:
+      type: object
+      properties:
+        titolo:
+          type: string
+        fonte:
+          type: string
+        url:
+          type: string
