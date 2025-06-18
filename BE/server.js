@@ -39,9 +39,20 @@ app.use("/api/investimenti", investimentiRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api", authRoutes);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server attivo su http://localhost:${PORT} \n`);
-  //setupServerEvents(db);
-  aggiornaRateMutuo();
-  aggiornaRatePrestiti();
+
+  setupServerEvents(db);
+
+  try {
+    await aggiornaRateMutuo();
+  } catch (error) {
+    console.error("[Mutuo] Errore aggiornamento automatico:", error.message);
+  }
+
+  try {
+    await aggiornaRatePrestiti();
+  } catch (error) {
+    console.error("[Prestiti] Errore aggiornamento automatico:", error.message);
+  }
 });
