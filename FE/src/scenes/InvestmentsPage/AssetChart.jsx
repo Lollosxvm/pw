@@ -14,7 +14,11 @@ import { useTheme } from "@mui/material/styles";
 import { tokens } from "../../theme";
 import LineChart from "../../components/LineChart";
 import axiosPrivate from "../../api/axiosPrivate";
-import { useAsset } from "../../context/AssetContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSelectedAsset,
+  setCurrentPrice,
+} from "../../redux/slices/assetSlice";
 
 const assetMap = {
   bitcoin: "Bitcoin",
@@ -42,7 +46,9 @@ const AssetChart = ({ asset, onAssetChange }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { selectedAsset, setSelectedAsset, setCurrentPrice } = useAsset();
+
+  const dispatch = useDispatch();
+  const selectedAsset = useSelector((state) => state.asset.selectedAsset);
 
   const assetColors = {
     bitcoin: colors.redAccent[400],
@@ -107,10 +113,10 @@ const AssetChart = ({ asset, onAssetChange }) => {
     if (chartData.length > 0 && chartData[0].data.length > 0) {
       const ultimoPrezzo = chartData[0].data[chartData[0].data.length - 1]?.y;
       if (ultimoPrezzo) {
-        setCurrentPrice(ultimoPrezzo);
+        dispatch(setCurrentPrice(ultimoPrezzo));
       }
     }
-  }, [chartData]);
+  }, [chartData, dispatch]);
 
   return (
     <Box>
@@ -129,7 +135,10 @@ const AssetChart = ({ asset, onAssetChange }) => {
         <Box display="flex" gap={2}>
           <Select
             value={asset}
-            onChange={(e) => onAssetChange(e.target.value)}
+            onChange={(e) => {
+              onAssetChange(e.target.value);
+              dispatch(setSelectedAsset(e.target.value));
+            }}
             size="small"
           >
             {Object.entries(assetMap).map(([key, label]) => (

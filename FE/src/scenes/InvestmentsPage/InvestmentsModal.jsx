@@ -9,8 +9,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axiosPrivate from "../../api/axiosPrivate";
-import { useAsset } from "../../context/AssetContext";
 
 const InvestmentsModal = ({
   open,
@@ -24,9 +24,11 @@ const InvestmentsModal = ({
   const [importo, setImporto] = useState("");
   const [loading, setLoading] = useState(false);
   const [esito, setEsito] = useState(null);
-  const { currentPrice } = useAsset();
   const [prezzo, setPrezzo] = useState("");
   const [prezzoRaw, setPrezzoRaw] = useState(null);
+
+  const currentPrice = useSelector((state) => state.asset.currentPrice);
+  const utente = useSelector((state) => state.auth.utente);
 
   const quantitaCalcolata =
     importo && prezzoRaw ? (parseFloat(importo) / prezzoRaw).toFixed(8) : "";

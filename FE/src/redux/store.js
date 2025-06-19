@@ -11,6 +11,7 @@ import prestitiReducer from "./slices/prestitiSlice";
 import investimentiReducer from "./slices/investimentiSlice";
 import graficiReducer from "./slices/graficiSlice";
 import geoReducer from "./slices/geoSlice";
+import assetReducer from "./slices/assetSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   investimenti: investimentiReducer,
   grafici: graficiReducer,
   geografia: geoReducer,
+  asset: assetReducer,
 });
 
 const persistConfig = {
