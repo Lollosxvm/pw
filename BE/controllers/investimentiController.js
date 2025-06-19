@@ -6,6 +6,7 @@ export const aggiungiInvestimento = async (req, res) => {
   const utente = req.utente.id;
 
   const conn = await db.getConnection(); // se usi pool di mysql2
+
   try {
     await conn.beginTransaction();
 
@@ -20,7 +21,7 @@ export const aggiungiInvestimento = async (req, res) => {
     const importo = quantita * prezzo_unitario;
     const tipo = operazione === "acquisto" ? "Uscita" : "Entrata";
 
-    // 3. Inserimento anche in transazioni
+    // 3. Inserimento in transazioni
     await conn.query(
       `INSERT INTO transazioni (utente, tipo, importo, categoria, data, indirizzo, metodo, stato, paese)
        VALUES (?, ?, ?, ?, NOW(), ?, ?, 'Completato', ?)`,
@@ -35,31 +36,18 @@ export const aggiungiInvestimento = async (req, res) => {
       ]
     );
 
-    // 4. Calcolo nuovo saldo
+    // 4. Calcolo nuovo saldo SOLO da transazioni
     const [[{ saldoTransazioni }]] = await conn.query(
       `
-      SELECT SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE -importo END) AS saldoTransazioni
-      FROM transazioni WHERE stato = 'Completato' AND utente = ?
+      SELECT 
+        SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE -importo END) AS saldoTransazioni
+      FROM transazioni 
+      WHERE stato = 'Completato' AND utente = ?
     `,
       [utente]
     );
 
-    const [[{ saldoInvestimenti }]] = await conn.query(
-      `
-      SELECT SUM(CASE 
-        WHEN operazione = 'acquisto' THEN -quantita * prezzo_unitario
-        WHEN operazione = 'vendita' THEN  quantita * prezzo_unitario
-        ELSE 0
-      END) AS saldoInvestimenti
-      FROM investimenti WHERE utente = ?
-    `,
-      [utente]
-    );
-
-    const saldoTrans = parseFloat(saldoTransazioni) || 0;
-    const saldoInvest = parseFloat(saldoInvestimenti) || 0;
-
-    const saldo = parseFloat((saldoTrans + saldoInvest).toFixed(2));
+    const saldo = Number(saldoTransazioni) || 0;
 
     await conn.commit();
 

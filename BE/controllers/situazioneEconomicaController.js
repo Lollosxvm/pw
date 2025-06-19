@@ -1,6 +1,8 @@
+import { db } from "../config/db.js";
+
 export const getSaldoAggiornato = async (req, res) => {
   try {
-    const utenteId = req.user.id;
+    const utenteId = req.utente.id;
 
     const [[{ saldoTransazioni }]] = await db.query(
       `
@@ -12,23 +14,7 @@ export const getSaldoAggiornato = async (req, res) => {
       [utenteId]
     );
 
-    const [[{ saldoInvestimenti }]] = await db.query(
-      `
-      SELECT 
-        SUM(CASE 
-          WHEN operazione = 'acquisto' THEN -quantita * prezzo_unitario
-          WHEN operazione = 'vendita' THEN  quantita * prezzo_unitario
-          ELSE 0
-        END) AS saldoInvestimenti
-      FROM investimenti
-      WHERE utente = ?
-    `,
-      [utenteId]
-    );
-
-    const saldo = parseFloat(
-      ((saldoTransazioni || 0) + (saldoInvestimenti || 0)).toFixed(2)
-    );
+    const saldo = parseFloat(Number(saldoTransazioni || 0).toFixed(2));
 
     res.json({ saldo });
   } catch (err) {

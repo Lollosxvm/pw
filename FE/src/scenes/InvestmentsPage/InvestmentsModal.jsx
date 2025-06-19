@@ -9,15 +9,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axiosPrivate from "../../api/axiosPrivate";
+import { useDispatch } from "react-redux";
 import { aggiornaSaldo } from "../../redux/slices/authSlice";
+import { useSelector } from "react-redux";
+import axiosPrivate from "../../api/axiosPrivate";
 
 const InvestmentsModal = ({
   open,
   onClose,
   asset,
   type,
+  defaultPrice,
   disabled,
   onSuccess,
 }) => {
@@ -59,10 +61,8 @@ const InvestmentsModal = ({
         prezzo_unitario: prezzoRaw,
       });
 
-      // Aggiorna Redux con il nuovo saldo
-      if (res.data?.saldoAggiornato !== undefined) {
-        dispatch(aggiornaSaldo(res.data.saldoAggiornato));
-      }
+      // ✅ aggiorna saldo globale Redux
+      dispatch(aggiornaSaldo(res.data.saldoAggiornato));
 
       setEsito({
         tipo: "success",
@@ -70,7 +70,6 @@ const InvestmentsModal = ({
       });
 
       setImporto("");
-
       if (onSuccess) {
         setTimeout(() => {
           onSuccess();

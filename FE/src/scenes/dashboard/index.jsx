@@ -25,7 +25,6 @@ import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import { Tooltip } from "@mui/material";
-
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,6 +33,8 @@ import {
   fetchPrestito,
   fetchTransazioni,
 } from "../../redux/slices/dashboardSlice";
+import { aggiornaSaldo } from "../../redux/slices/authSlice";
+import axiosPrivate from "../../api/axiosPrivate";
 
 function Dashboard() {
   const theme = useTheme();
@@ -64,6 +65,19 @@ function Dashboard() {
     dispatch(fetchMutuo());
     dispatch(fetchPrestito());
     dispatch(fetchTransazioni());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchSaldo = async () => {
+      try {
+        const res = await axiosPrivate.get("/saldo");
+        dispatch(aggiornaSaldo(res.data.saldo));
+      } catch (err) {
+        console.error("Errore nel recupero del saldo:", err);
+      }
+    };
+
+    fetchSaldo();
   }, [dispatch]);
 
   return (

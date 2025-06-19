@@ -1,13 +1,42 @@
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
 import axiosPrivate from "../../api/axiosPrivate";
 import { tokens } from "../../theme";
 
-const InvestmentsTable = () => {
+const InvestmentsTable = forwardRef((props, ref) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
+
+  const fetchInvestimenti = () => {
+    axiosPrivate
+      .get("/investimenti")
+      .then((res) => {
+        setRows(
+          res.data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }))
+        );
+      })
+      .catch((err) => {
+        console.error("Errore nel caricamento investimenti:", err);
+      });
+  };
+
+  useImperativeHandle(ref, () => ({
+    refresh: () => fetchInvestimenti(),
+  }));
+
+  useEffect(() => {
+    fetchInvestimenti();
+  }, []);
 
   const columns = [
     {
@@ -58,22 +87,6 @@ const InvestmentsTable = () => {
     },
   ];
 
-  useEffect(() => {
-    axiosPrivate
-      .get("/investimenti")
-      .then((res) => {
-        setRows(
-          res.data.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }))
-        );
-      })
-      .catch((err) => {
-        console.error("Errore nel caricamento investimenti:", err);
-      });
-  }, []);
-
   return (
     <Box mt={4}>
       <Typography variant="h6" mb={2}>
@@ -115,6 +128,6 @@ const InvestmentsTable = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default InvestmentsTable;

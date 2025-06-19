@@ -1,5 +1,5 @@
 import { Box, Typography, Grid, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AssetChart from "./AssetChart";
 import InvestmentsModal from "./InvestmentsModal";
 import NewsFeed from "./NewsFeed";
@@ -10,46 +10,51 @@ const InvestmentsPage = () => {
   const [selectedAsset, setSelectedAsset] = useState("bitcoin");
   const [buyOpen, setBuyOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
-
   const [currentPrice, setCurrentPrice] = useState(0);
   const [haAsset, setHaAsset] = useState(false);
   const [assetDisponibili, setAssetDisponibili] = useState({});
+  const tableRef = useRef();
 
-  // Carica investimenti utente una sola volta
+  const fetchUserAssets = async () => {
+    try {
+      const res = await axiosPrivate.get("/investimenti");
+      const data = res.data;
+
+      const mappa = {};
+
+      data.forEach((item) => {
+        const assetKey = item.asset.toLowerCase();
+        const quantita = parseFloat(item.quantita);
+
+        if (item.operazione === "acquisto") {
+          mappa[assetKey] = (mappa[assetKey] || 0) + quantita;
+        } else if (item.operazione === "vendita") {
+          mappa[assetKey] = (mappa[assetKey] || 0) - quantita;
+        }
+      });
+
+      setAssetDisponibili(mappa);
+    } catch (err) {
+      console.error("Errore nel caricamento degli investimenti:", err);
+      setAssetDisponibili({});
+    }
+  };
+
   useEffect(() => {
-    const fetchUserAssets = async () => {
-      try {
-        const res = await axiosPrivate.get("/investimenti");
-        const data = res.data;
-
-        const mappa = {};
-
-        data.forEach((item) => {
-          const assetKey = item.asset.toLowerCase();
-          const quantita = parseFloat(item.quantita);
-
-          if (item.operazione === "acquisto") {
-            mappa[assetKey] = (mappa[assetKey] || 0) + quantita;
-          } else if (item.operazione === "vendita") {
-            mappa[assetKey] = (mappa[assetKey] || 0) - quantita;
-          }
-        });
-
-        setAssetDisponibili(mappa);
-      } catch (err) {
-        console.error("Errore nel caricamento degli investimenti:", err);
-        setAssetDisponibili({});
-      }
-    };
-
     fetchUserAssets();
   }, []);
 
-  // Aggiorna lo stato haAsset ogni volta che cambia asset selezionato o disponibilità
   useEffect(() => {
     const quantitaPosseduta = assetDisponibili[selectedAsset] || 0;
     setHaAsset(quantitaPosseduta > 0);
   }, [selectedAsset, assetDisponibili]);
+
+  const handleOperazioneSuccess = () => {
+    setBuyOpen(false);
+    setSellOpen(false);
+    fetchUserAssets();
+    tableRef.current?.refresh();
+  };
 
   return (
     <Box m={2}>
@@ -57,7 +62,6 @@ const InvestmentsPage = () => {
         Investimenti
       </Typography>
 
-      {/* GRAFICO in alto */}
       <Box mb={4}>
         <AssetChart asset={selectedAsset} onAssetChange={setSelectedAsset} />
         <Box mt={3} display="flex" gap={2}>
@@ -79,23 +83,21 @@ const InvestmentsPage = () => {
         </Box>
       </Box>
 
-      {/* SEZIONE BASSA: Tabella + Notizie */}
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <InvestmentsTable />
+          <InvestmentsTable ref={tableRef} />
         </Grid>
         <Grid item xs={12} md={6}>
           <NewsFeed asset={selectedAsset} />
         </Grid>
       </Grid>
 
-      {/* Modali */}
       <InvestmentsModal
         open={buyOpen}
         onClose={() => setBuyOpen(false)}
         asset={selectedAsset}
         type="acquisto"
-        onSuccess={() => setBuyOpen(false)}
+        onSuccess={handleOperazioneSuccess}
       />
 
       <InvestmentsModal
@@ -105,7 +107,7 @@ const InvestmentsPage = () => {
         type="vendita"
         defaultPrice={currentPrice}
         disabled={!haAsset}
-        onSuccess={() => setSellOpen(false)}
+        onSuccess={handleOperazioneSuccess}
       />
     </Box>
   );
