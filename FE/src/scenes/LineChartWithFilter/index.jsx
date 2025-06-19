@@ -17,35 +17,42 @@ const LineChartWithFilter = ({ isDashboard = false }) => {
   useEffect(() => {
     const oggi = new Date();
     let fromDate = null;
+    let toDate = null;
 
     switch (filtro) {
       case "30giorni":
         fromDate = new Date();
         fromDate.setDate(fromDate.getDate() - 30);
+        toDate = oggi;
         break;
+
       case "3mesi":
-        fromDate = new Date();
-        fromDate.setMonth(fromDate.getMonth() - 3);
+        fromDate = new Date(oggi.getFullYear(), oggi.getMonth() - 2, 1);
+        toDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0);
         break;
+
       case "6mesi":
-        fromDate = new Date();
-        fromDate.setMonth(fromDate.getMonth() - 6);
+        fromDate = new Date(oggi.getFullYear(), oggi.getMonth() - 5, 1);
+        toDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0);
         break;
+
       case "12mesi":
-        fromDate = new Date();
-        fromDate.setFullYear(fromDate.getFullYear() - 1);
+        fromDate = new Date(oggi.getFullYear() - 1, oggi.getMonth(), 1);
+        toDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0);
         break;
+
       case "personalizzato":
         if (!da || !a) return;
         fromDate = da;
-        oggi.setTime(a.getTime());
+        toDate = a;
         break;
+
       default:
         return;
     }
 
     const from = fromDate.toISOString().split("T")[0];
-    const to = oggi.toISOString().split("T")[0];
+    const to = toDate.toISOString().split("T")[0];
 
     axiosPrivate
       .get("/transazioni/andamento-trimestrale", {
