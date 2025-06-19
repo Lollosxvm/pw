@@ -41,6 +41,7 @@ function Dashboard() {
   const isXlDevices = useMediaQuery("(min-width: 1260px)");
   const isMdDevices = useMediaQuery("(min-width: 724px)");
   const isXsDevices = useMediaQuery("(max-width: 436px)");
+  const saldo = useSelector((state) => state.auth.saldo);
 
   const iconeCategoria = {
     Alimentari: <RestaurantMenuOutlinedIcon />,
@@ -258,23 +259,17 @@ function Dashboard() {
           gridRow="span 2"
           bgcolor={colors.primary[400]}
         >
-          <Box
-            mt="25px"
-            px="30px"
-            display="flex"
-            justifyContent="space-between"
+          <Typography variant="h5" fontWeight="600" color={colors.gray[100]}>
+            Andamento ultimi 3 mesi
+          </Typography>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color={colors.greenAccent[500]}
           >
-            <Typography variant="h5" fontWeight="600" color={colors.gray[100]}>
-              Andamento ultimi 3 mesi
-            </Typography>
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              color={colors.greenAccent[500]}
-            >
-              Saldo $59,342.32
-            </Typography>
-          </Box>
+            Saldo €
+            {saldo?.toLocaleString("it-IT", { minimumFractionDigits: 2 })}
+          </Typography>
           <Box height="250px" mt="-20px">
             <LineChartWithFilter isDashboard={true} />
           </Box>

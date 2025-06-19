@@ -5,17 +5,74 @@ export const aggiungiInvestimento = async (req, res) => {
   const { asset, operazione, quantita, prezzo_unitario } = req.body;
   const utente = req.utente.id;
 
+  const conn = await db.getConnection(); // se usi pool di mysql2
   try {
-    await db.query(
+    await conn.beginTransaction();
+
+    // 1. Inserimento in investimenti
+    await conn.query(
       `INSERT INTO investimenti (utente, asset, operazione, quantita, prezzo_unitario)
        VALUES (?, ?, ?, ?, ?)`,
       [utente, asset, operazione, quantita, prezzo_unitario]
     );
 
-    res.status(201).json({ message: "Operazione registrata con successo" });
+    // 2. Calcolo importo totale
+    const importo = quantita * prezzo_unitario;
+    const tipo = operazione === "acquisto" ? "Uscita" : "Entrata";
+
+    // 3. Inserimento anche in transazioni
+    await conn.query(
+      `INSERT INTO transazioni (utente, tipo, importo, categoria, data, indirizzo, metodo, stato, paese)
+       VALUES (?, ?, ?, ?, NOW(), ?, ?, 'Completato', ?)`,
+      [
+        utente,
+        tipo,
+        importo,
+        "Investimenti",
+        "Operazione asset",
+        "Criptovaluta",
+        "INT",
+      ]
+    );
+
+    // 4. Calcolo nuovo saldo
+    const [[{ saldoTransazioni }]] = await conn.query(
+      `
+      SELECT SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE -importo END) AS saldoTransazioni
+      FROM transazioni WHERE stato = 'Completato' AND utente = ?
+    `,
+      [utente]
+    );
+
+    const [[{ saldoInvestimenti }]] = await conn.query(
+      `
+      SELECT SUM(CASE 
+        WHEN operazione = 'acquisto' THEN -quantita * prezzo_unitario
+        WHEN operazione = 'vendita' THEN  quantita * prezzo_unitario
+        ELSE 0
+      END) AS saldoInvestimenti
+      FROM investimenti WHERE utente = ?
+    `,
+      [utente]
+    );
+
+    const saldoTrans = parseFloat(saldoTransazioni) || 0;
+    const saldoInvest = parseFloat(saldoInvestimenti) || 0;
+
+    const saldo = parseFloat((saldoTrans + saldoInvest).toFixed(2));
+
+    await conn.commit();
+
+    res.status(201).json({
+      message: "Operazione registrata con successo",
+      saldoAggiornato: saldo,
+    });
   } catch (err) {
+    await conn.rollback();
     console.error("Errore inserimento investimento:", err);
     res.status(500).json({ message: "Errore lato server" });
+  } finally {
+    conn.release();
   }
 };
 

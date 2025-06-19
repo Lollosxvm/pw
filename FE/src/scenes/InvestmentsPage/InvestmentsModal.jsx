@@ -9,15 +9,15 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axiosPrivate from "../../api/axiosPrivate";
+import { aggiornaSaldo } from "../../redux/slices/authSlice";
 
 const InvestmentsModal = ({
   open,
   onClose,
   asset,
   type,
-  defaultPrice,
   disabled,
   onSuccess,
 }) => {
@@ -28,7 +28,7 @@ const InvestmentsModal = ({
   const [prezzoRaw, setPrezzoRaw] = useState(null);
 
   const currentPrice = useSelector((state) => state.asset.currentPrice);
-  const utente = useSelector((state) => state.auth.utente);
+  const dispatch = useDispatch();
 
   const quantitaCalcolata =
     importo && prezzoRaw ? (parseFloat(importo) / prezzoRaw).toFixed(8) : "";
@@ -52,12 +52,17 @@ const InvestmentsModal = ({
     try {
       const quantita = parseFloat(importo) / prezzoRaw;
 
-      await axiosPrivate.post("/investimenti", {
+      const res = await axiosPrivate.post("/investimenti", {
         asset,
         operazione: type,
         quantita,
         prezzo_unitario: prezzoRaw,
       });
+
+      // Aggiorna Redux con il nuovo saldo
+      if (res.data?.saldoAggiornato !== undefined) {
+        dispatch(aggiornaSaldo(res.data.saldoAggiornato));
+      }
 
       setEsito({
         tipo: "success",
@@ -65,6 +70,7 @@ const InvestmentsModal = ({
       });
 
       setImporto("");
+
       if (onSuccess) {
         setTimeout(() => {
           onSuccess();

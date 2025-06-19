@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import axiosPrivate from "../../api/axiosPrivate"; // ✅ nuova importazione
+import axiosPrivate from "../../api/axiosPrivate";
 import { tokens } from "../../theme";
 
 const InvestmentsTable = () => {
