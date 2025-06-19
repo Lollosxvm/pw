@@ -45,7 +45,8 @@ const InvestmentsPage = () => {
   }, []);
 
   useEffect(() => {
-    const quantitaPosseduta = assetDisponibili[selectedAsset] || 0;
+    const quantitaPosseduta =
+      assetDisponibili[selectedAsset.toLowerCase()] || 0;
     setHaAsset(quantitaPosseduta > 0);
   }, [selectedAsset, assetDisponibili]);
 

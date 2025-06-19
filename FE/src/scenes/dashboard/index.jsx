@@ -272,18 +272,26 @@ function Dashboard() {
           }
           gridRow="span 2"
           bgcolor={colors.primary[400]}
+          p={2}
         >
-          <Typography variant="h5" fontWeight="600" color={colors.gray[100]}>
-            Andamento ultimi 3 mesi
-          </Typography>
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            color={colors.greenAccent[500]}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Saldo €
-            {saldo?.toLocaleString("it-IT", { minimumFractionDigits: 2 })}
-          </Typography>
+            <Typography variant="h5" fontWeight="600" color={colors.gray[100]}>
+              Andamento ultimi 3 mesi
+            </Typography>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              color={colors.greenAccent[500]}
+            >
+              Saldo €
+              {saldo?.toLocaleString("it-IT", { minimumFractionDigits: 2 })}
+            </Typography>
+          </Box>
+
           <Box height="250px" mt="-20px">
             <LineChartWithFilter isDashboard={true} />
           </Box>

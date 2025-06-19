@@ -61,7 +61,6 @@ const InvestmentsModal = ({
         prezzo_unitario: prezzoRaw,
       });
 
-      // ✅ aggiorna saldo globale Redux
       dispatch(aggiornaSaldo(res.data.saldoAggiornato));
 
       setEsito({

@@ -1,9 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axiosPrivate from "../../api/axiosPrivate";
@@ -61,7 +56,14 @@ const InvestmentsTable = forwardRef((props, ref) => {
       headerName: "Operazione",
       flex: 1,
       renderCell: (params) => (
-        <Typography color={params.value === "acquisto" ? "green" : "red"}>
+        <Typography
+          fontWeight="bold"
+          color={
+            params.value === "acquisto"
+              ? colors.greenAccent[500]
+              : colors.redAccent[500]
+          }
+        >
           {params.value}
         </Typography>
       ),
@@ -70,20 +72,35 @@ const InvestmentsTable = forwardRef((props, ref) => {
       field: "quantita",
       headerName: "Quantità",
       flex: 1,
-      valueFormatter: (params) => parseFloat(params.value).toFixed(4),
+      valueFormatter: (params) =>
+        parseFloat(params.value).toLocaleString("it-IT", {
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4,
+        }),
     },
+
     {
       field: "prezzo_unitario",
       headerName: "Prezzo Unitario (€)",
       flex: 1,
-      valueFormatter: (params) => `€${parseFloat(params.value).toFixed(2)}`,
+      valueFormatter: (params) =>
+        parseFloat(params.value).toLocaleString("it-IT", {
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        }),
     },
     {
       field: "totale",
       headerName: "Totale (€)",
       flex: 1,
-      valueGetter: (params) => params.row.quantita * params.row.prezzo_unitario,
-      valueFormatter: (params) => `€${parseFloat(params.value).toFixed(2)}`,
+      valueGetter: (params) =>
+        parseFloat(params.row.quantita) *
+        parseFloat(params.row.prezzo_unitario),
+      valueFormatter: (params) =>
+        parseFloat(params.value).toLocaleString("it-IT", {
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        }),
     },
   ];
 
@@ -121,6 +138,7 @@ const InvestmentsTable = forwardRef((props, ref) => {
         <DataGrid
           rows={rows}
           columns={columns}
+          pageSizeOptions={[5, 10, 20]}
           initialState={{
             pagination: { paginationModel: { pageSize: 10, page: 0 } },
           }}
