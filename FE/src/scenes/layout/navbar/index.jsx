@@ -5,7 +5,6 @@ import {
   DarkModeOutlined,
   LightModeOutlined,
   MenuOutlined,
-  NotificationsOutlined,
 } from "@mui/icons-material";
 import { ToggledContext } from "../../../App";
 import UserMenu from "../../../components/UserMenu";
@@ -39,10 +38,6 @@ const Navbar = () => {
             <DarkModeOutlined />
           )}
         </IconButton>
-        <IconButton>
-          <NotificationsOutlined />
-        </IconButton>
-
         <UserMenu />
       </Box>
     </Box>
