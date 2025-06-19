@@ -25,7 +25,11 @@ const LineChart = ({ isDashboard = false, data = [] }) => {
           },
         },
         legends: { text: { fill: colors.gray[100] } },
-        tooltip: { container: { color: colors.primary[500] } },
+        tooltip: {
+          container: {
+            color: "#000000",
+          },
+        },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
