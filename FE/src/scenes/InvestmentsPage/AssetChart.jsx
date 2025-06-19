@@ -107,7 +107,7 @@ const AssetChart = ({ asset, onAssetChange }) => {
     };
 
     fetchData();
-  }, [asset, period, currency, theme.palette.mode]);
+  }, [asset, period, currency]);
 
   useEffect(() => {
     if (chartData.length > 0 && chartData[0].data.length > 0) {
