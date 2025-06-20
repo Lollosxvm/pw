@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useContext, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
@@ -13,16 +13,19 @@ import {
   TimelineOutlined,
   HomeOutlined,
 } from "@mui/icons-material";
-import avatar from "../../../assets/images/avatar.png";
 import logo from "../../../assets/images/logo.png";
 import Item from "./Item";
 import { ToggledContext } from "../../../App";
+import { useSelector } from "react-redux";
 
 const SideBar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const { toggled, setToggled } = useContext(ToggledContext);
+  const { collapsed, setCollapsed, toggled, setToggled } =
+    useContext(ToggledContext);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const saldo = useSelector((state) => state.auth.saldo);
+
   return (
     <Sidebar
       backgroundColor={colors.primary[400]}
@@ -81,36 +84,42 @@ const SideBar = () => {
           </Box>
         </MenuItem>
       </Menu>
+
+      {/* Box saldo attuale */}
       {!collapsed && (
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "10px",
-            mb: "25px",
-          }}
+          px={1}
+          py={1}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap={0.5}
+          mb={2}
+          bgcolor={colors.primary[500]}
+          borderRadius="18px"
+          maxWidth="120px"
+          mx="auto"
         >
-          <Avatar
-            alt="avatar"
-            src={avatar}
-            sx={{ width: "100px", height: "100px" }}
-          />
-          <Box sx={{ textAlign: "center" }}>
-            <Typography variant="h3" fontWeight="bold" color={colors.gray[100]}>
-              Tony Stark
-            </Typography>
-            <Typography
-              variant="h6"
-              fontWeight="500"
-              color={colors.greenAccent[500]}
-            >
-              VP Fancy Admin
-            </Typography>
-          </Box>
+          <Typography variant="body2" color={colors.gray[300]}>
+            Saldo attuale
+          </Typography>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            color={colors.greenAccent[500]}
+          >
+            {saldo !== null
+              ? saldo.toLocaleString("it-IT", {
+                  style: "currency",
+                  currency: "EUR",
+                })
+              : "€0,00"}
+          </Typography>
         </Box>
       )}
 
+      {/* Sezioni menu */}
       <Box mb={5} pl={collapsed ? undefined : "5%"}>
         <Menu
           menuItemStyles={{
@@ -130,13 +139,14 @@ const SideBar = () => {
             icon={<HomeOutlined />}
           />
         </Menu>
+
         <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Data" : " "}
-        </Typography>{" "}
+        </Typography>
         <Menu
           menuItemStyles={{
             button: {
@@ -155,6 +165,7 @@ const SideBar = () => {
             icon={<AccountBalanceOutlinedIcon />}
           />
         </Menu>
+
         <Typography
           variant="h6"
           color={colors.gray[300]}
@@ -192,6 +203,7 @@ const SideBar = () => {
             icon={<HelpOutlineOutlined />}
           />
         </Menu>
+
         <Typography
           variant="h6"
           color={colors.gray[300]}
@@ -216,7 +228,6 @@ const SideBar = () => {
             colors={colors}
             icon={<BarChartOutlined />}
           />
-
           <Item
             title="Line Chart"
             path="/dashboard/line"

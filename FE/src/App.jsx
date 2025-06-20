@@ -8,8 +8,9 @@ export const ToggledContext = createContext(null);
 
 function App() {
   const [theme, colorMode] = useMode();
+  const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
-  const values = { toggled, setToggled };
+  const values = { collapsed, setCollapsed, toggled, setToggled };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
