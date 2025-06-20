@@ -4,6 +4,7 @@ import {
   aggiungiInvestimento,
   getCryptoChart,
   getAndamentoInvestimenti,
+  getComposizioneInvestimenti,
 } from "../controllers/investimentiController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
@@ -13,6 +14,8 @@ const router = express.Router();
 router.post("/", verifyToken, aggiungiInvestimento);
 router.get("/", verifyToken, getInvestimentiUtente);
 router.get("/andamento", verifyToken, getAndamentoInvestimenti);
+router.get("/composizione", verifyToken, getComposizioneInvestimenti);
+
 // Rotta pubblica per i dati delle criptovalute
 router.get("/crypto", getCryptoChart);
 

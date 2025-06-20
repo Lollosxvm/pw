@@ -46,7 +46,16 @@ function Dashboard() {
   const isMdDevices = useMediaQuery("(min-width: 724px)");
   const isXsDevices = useMediaQuery("(max-width: 436px)");
   const saldo = useSelector((state) => state.auth.saldo);
-
+  const [composizione, setComposizione] = useState(null);
+  const dispatch = useDispatch();
+  const mutuoData = useSelector((state) => state.dashboard.mutuo);
+  const prestitoData = useSelector((state) => state.dashboard.prestito);
+  const { andamento, loadingAndamento } = useSelector(
+    (state) => state.investimenti
+  );
+  const recentTransactions = useSelector(
+    (state) => state.dashboard.transazioni
+  );
   const iconeCategoria = {
     Alimentari: <RestaurantMenuOutlinedIcon />,
     Affitto: <HomeOutlinedIcon />,
@@ -57,16 +66,23 @@ function Dashboard() {
     Mutuo: <AccountBalanceOutlinedIcon />,
   };
 
-  const dispatch = useDispatch();
-  const mutuoData = useSelector((state) => state.dashboard.mutuo);
-  const prestitoData = useSelector((state) => state.dashboard.prestito);
-  const { andamento, loadingAndamento } = useSelector(
-    (state) => state.investimenti
-  );
+  useEffect(() => {
+    const fetchComposizione = async () => {
+      const res = await axiosPrivate.get("/investimenti/composizione");
+      setComposizione(res.data);
+    };
 
-  const recentTransactions = useSelector(
-    (state) => state.dashboard.transazioni
-  );
+    fetchComposizione();
+  }, []);
+
+  useEffect(() => {
+    const fetchComposizione = async () => {
+      const res = await axiosPrivate.get("/investimenti/composizione");
+      setComposizione(res.data);
+    };
+
+    fetchComposizione();
+  }, []);
 
   useEffect(() => {
     dispatch(fetchAndamentoInvestimenti());
@@ -145,10 +161,10 @@ function Dashboard() {
           alignItems="center"
           justifyContent="center"
         >
-          {!loadingAndamento && andamento && (
+          {!loadingAndamento && andamento && composizione && (
             <StatBox
               title={`€${andamento.valoreAttuale.toFixed(2)}`}
-              subtitle="Valore attuale investimenti"
+              subtitle="Valore asset"
               progress={
                 andamento.variazione === null
                   ? 0
@@ -184,10 +200,10 @@ function Dashboard() {
                   </Box>
                 )
               }
-              x={60}
-              y={40}
-              labelX="Azioni"
-              labelY="Obbligazioni"
+              x={parseInt(composizione.x)}
+              y={parseInt(composizione.y)}
+              labelX={composizione.labelX}
+              labelY={composizione.labelY}
               icon={
                 <TrendingUpOutlinedIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

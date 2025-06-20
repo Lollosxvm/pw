@@ -158,3 +158,43 @@ export const getAndamentoInvestimenti = async (req, res) => {
       .json({ messaggio: "Errore nel calcolo andamento investimenti." });
   }
 };
+
+export const getComposizioneInvestimenti = async (req, res) => {
+  try {
+    const utente = req.utente.id;
+
+    const [[result]] = await db.query(
+      `
+      SELECT
+        SUM(CASE WHEN asset = 'bitcoin' THEN quantita * prezzo_unitario ELSE 0 END) AS btc,
+        SUM(CASE WHEN asset IN ('ethereum', 'solana') THEN quantita * prezzo_unitario ELSE 0 END) AS altri
+      FROM investimenti
+      WHERE utente = ?
+    `,
+      [utente]
+    );
+
+    const btc = Number(result.btc) || 0;
+    const altri = Number(result.altri) || 0;
+    const totale = btc + altri;
+
+    if (totale === 0) {
+      return res.json({
+        x: 0,
+        y: 0,
+        labelX: "Bitcoin",
+        labelY: "Altri asset",
+      });
+    }
+
+    res.json({
+      x: ((btc / totale) * 100).toFixed(0),
+      y: ((altri / totale) * 100).toFixed(0),
+      labelX: "Bitcoin",
+      labelY: "Altri asset",
+    });
+  } catch (error) {
+    console.error("Errore composizione investimenti:", error);
+    res.status(500).json({ message: "Errore lato server" });
+  }
+};
