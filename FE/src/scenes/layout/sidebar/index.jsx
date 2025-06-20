@@ -13,6 +13,9 @@ import {
   TimelineOutlined,
   HomeOutlined,
 } from "@mui/icons-material";
+import EuroIcon from "@mui/icons-material/Euro";
+import { Tooltip, Avatar } from "@mui/material";
+
 import logo from "../../../assets/images/logo.png";
 import Item from "./Item";
 import { ToggledContext } from "../../../App";
@@ -86,7 +89,38 @@ const SideBar = () => {
       </Menu>
 
       {/* Box saldo attuale */}
-      {!collapsed && (
+      {collapsed ? (
+        <Tooltip
+          title={
+            saldo !== null
+              ? saldo.toLocaleString("it-IT", {
+                  style: "currency",
+                  currency: "EUR",
+                })
+              : "€0,00"
+          }
+          placement="right"
+          arrow
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mb={2}
+          >
+            <Avatar
+              sx={{
+                bgcolor: colors.greenAccent[600],
+                width: 40,
+                height: 40,
+                cursor: "default",
+              }}
+            >
+              <EuroIcon />
+            </Avatar>
+          </Box>
+        </Tooltip>
+      ) : (
         <Box
           px={1}
           py={1}
