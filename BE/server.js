@@ -12,6 +12,7 @@ import investimentiRoutes from "./routes/investimentiRoutes.js";
 import newsRoutes from "./routes/newsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import situazioneEconomicaRoutes from "./routes/situazioneEconomicaRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 const app = express();
 const PORT = 3001;
@@ -40,6 +41,7 @@ app.use("/api/investimenti", investimentiRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api", authRoutes);
 app.use("/api", situazioneEconomicaRoutes);
+app.use("/api/utente", userRoute);
 
 app.listen(PORT, async () => {
   console.log(`Server attivo su http://localhost:${PORT} \n`);
