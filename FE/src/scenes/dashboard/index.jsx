@@ -34,6 +34,9 @@ import {
   fetchTransazioni,
 } from "../../redux/slices/dashboardSlice";
 import { aggiornaSaldo } from "../../redux/slices/authSlice";
+import { fetchAndamentoInvestimenti } from "../../redux/slices/investimentiSlice";
+import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
+import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import axiosPrivate from "../../api/axiosPrivate";
 
 function Dashboard() {
@@ -57,9 +60,17 @@ function Dashboard() {
   const dispatch = useDispatch();
   const mutuoData = useSelector((state) => state.dashboard.mutuo);
   const prestitoData = useSelector((state) => state.dashboard.prestito);
+  const { andamento, loadingAndamento } = useSelector(
+    (state) => state.investimenti
+  );
+
   const recentTransactions = useSelector(
     (state) => state.dashboard.transazioni
   );
+
+  useEffect(() => {
+    dispatch(fetchAndamentoInvestimenti());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchMutuo());
@@ -134,21 +145,56 @@ function Dashboard() {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="€TODO"
-            subtitle="TODO"
-            progress={0.4}
-            increase="TODO"
-            x={60}
-            y={40}
-            labelX="Azioni"
-            labelY="Obbligazioni"
-            icon={
-              <TrendingUpOutlinedIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          {!loadingAndamento && andamento && (
+            <StatBox
+              title={`€${andamento.valoreAttuale.toFixed(2)}`}
+              subtitle="Valore attuale investimenti"
+              progress={
+                andamento.variazione === null
+                  ? 0
+                  : Math.min(Math.abs(andamento.variazione) / 100, 1)
+              }
+              increase={
+                andamento.variazione === null ? (
+                  "N/A"
+                ) : (
+                  <Box display="flex" alignItems="center" gap={0.5}>
+                    {andamento.variazione > 0 ? (
+                      <ArrowDropUpOutlinedIcon
+                        sx={{ color: colors.greenAccent[500] }}
+                      />
+                    ) : (
+                      <ArrowDropDownOutlinedIcon
+                        sx={{ color: theme.palette.error.main }}
+                      />
+                    )}
+                    <Typography
+                      component="span"
+                      color={
+                        andamento.variazione > 0
+                          ? colors.greenAccent[500]
+                          : theme.palette.error.main
+                      }
+                      fontWeight="bold"
+                    >
+                      {`${andamento.variazione > 0 ? "+" : ""}${
+                        andamento.variazione
+                      }%`}
+                    </Typography>
+                  </Box>
+                )
+              }
+              x={60}
+              y={40}
+              labelX="Azioni"
+              labelY="Obbligazioni"
+              icon={
+                <TrendingUpOutlinedIcon
+                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                />
+              }
+            />
+          )}
         </Box>
         <Box
           gridColumn="span 3"

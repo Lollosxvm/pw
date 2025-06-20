@@ -108,3 +108,53 @@ export const getCryptoChart = async (req, res) => {
     return res.status(500).json({ error: "Errore interno dal backend" });
   }
 };
+
+export const getAndamentoInvestimenti = async (req, res) => {
+  try {
+    const utenteId = req.utente.id;
+
+    const [attuale] = await db.query(
+      `
+      SELECT SUM(quantita * prezzo_unitario) AS totale
+      FROM investimenti
+      WHERE utente = ? 
+        AND MONTH(data_operazione) = MONTH(CURDATE())
+        AND YEAR(data_operazione) = YEAR(CURDATE())
+    `,
+      [utenteId]
+    );
+
+    const [precedente] = await db.query(
+      `
+      SELECT SUM(quantita * prezzo_unitario) AS totale
+      FROM investimenti
+      WHERE utente = ? 
+        AND MONTH(data_operazione) = MONTH(CURDATE() - INTERVAL 1 MONTH)
+        AND YEAR(data_operazione) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+    `,
+      [utenteId]
+    );
+
+    const valoreAttuale = Number(attuale[0].totale) || 0;
+    const valorePrecedente = Number(precedente[0].totale) || 0;
+
+    const variazione =
+      valorePrecedente === 0
+        ? null
+        : (
+            ((valoreAttuale - valorePrecedente) / valorePrecedente) *
+            100
+          ).toFixed(2);
+
+    res.json({
+      valoreAttuale,
+      valorePrecedente,
+      variazione,
+    });
+  } catch (error) {
+    console.error("Errore nel calcolo andamento investimenti:", error);
+    res
+      .status(500)
+      .json({ messaggio: "Errore nel calcolo andamento investimenti." });
+  }
+};
