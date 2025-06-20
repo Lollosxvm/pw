@@ -76,6 +76,16 @@ const Form = () => {
       : {};
   };
 
+  const readonlyFieldProps = {
+    InputProps: {
+      readOnly: true,
+      sx: {
+        cursor: "default",
+        "& .MuiInputBase-input": { cursor: "default" },
+      },
+    },
+  };
+
   return (
     <Box m="20px">
       <Header
@@ -117,7 +127,7 @@ const Form = () => {
                   label="Nome"
                   name="nome"
                   value={values.nome}
-                  InputProps={{ readOnly: true, sx: { cursor: "default" } }}
+                  {...readonlyFieldProps}
                   sx={{ gridColumn: "span 2" }}
                 />
 
@@ -128,7 +138,7 @@ const Form = () => {
                   label="Cognome"
                   name="cognome"
                   value={values.cognome}
-                  InputProps={{ readOnly: true, sx: { cursor: "default" } }}
+                  {...readonlyFieldProps}
                   sx={{ gridColumn: "span 2" }}
                 />
 
@@ -139,7 +149,7 @@ const Form = () => {
                   label="Email"
                   name="email"
                   value={values.email}
-                  InputProps={{ readOnly: true, sx: { cursor: "default" } }}
+                  {...readonlyFieldProps}
                   sx={{ gridColumn: "span 4" }}
                 />
 
