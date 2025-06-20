@@ -174,21 +174,20 @@ const SideBar = () => {
           }}
         >
           <Item
-            title="Profile Form"
+            title="Modifica Profilo"
             path="/dashboard/form"
             colors={colors}
             icon={<PersonOutlined />}
           />
-
           <Item
-            title="FAQ Page"
-            path="/dashboard/faq"
+            title="Investimenti"
+            path="/dashboard/investimenti"
             colors={colors}
             icon={<HelpOutlineOutlined />}
           />
           <Item
-            title="Investimenti"
-            path="/dashboard/investimenti"
+            title="FAQ"
+            path="/dashboard/faq"
             colors={colors}
             icon={<HelpOutlineOutlined />}
           />
