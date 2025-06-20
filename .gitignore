@@ -4,3 +4,5 @@ node_modules/
 # Altri file/directory da ignorare
 dist/
 .env
+PW.code-workspace
+TODO.txt
