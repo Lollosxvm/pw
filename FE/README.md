@@ -75,4 +75,4 @@ L’app sarà visibile su `http://localhost:5173`.
 
 ---
 
-*Autore: Lorenzo Sijinardi – Corso di Laurea L-31 – Pegaso*
+_Autore: Lorenzo Sijinardi – Corso di Laurea L-31 – Pegaso_
