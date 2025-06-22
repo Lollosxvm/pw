@@ -92,12 +92,10 @@ const SideBar = () => {
       {collapsed ? (
         <Tooltip
           title={
-            saldo !== null
-              ? saldo.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "EUR",
-                })
-              : "€0,00"
+            saldo?.toLocaleString("it-IT", {
+              style: "currency",
+              currency: "EUR",
+            }) ?? "€0,00"
           }
           placement="right"
           arrow
@@ -143,12 +141,10 @@ const SideBar = () => {
             fontWeight="bold"
             color={colors.greenAccent[500]}
           >
-            {saldo !== null
-              ? saldo.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "EUR",
-                })
-              : "€0,00"}
+            {saldo?.toLocaleString("it-IT", {
+              style: "currency",
+              currency: "EUR",
+            }) ?? "€0,00"}
           </Typography>
         </Box>
       )}
