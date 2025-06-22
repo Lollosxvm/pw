@@ -88,6 +88,23 @@ La comunicazione tra le due parti avviene tramite chiamate HTTP protette da aute
 - Log semplificati per debugging (`console.warn`, `console.error`)
 - Gestione centralizzata degli errori per tutte le API
 
+## 📊 Screenshot dell'applicativo live
+
+<em>Figura 1 – Form di accesso protetto con validazione lato client e tema scuro attivo.</em>
+<img src="./FE/public/login.png" alt="Login utente" width="500"/>
+
+<em>Figura 2 – Elenco completo dei movimenti filtrabili: importo, categoria, data e indirizzo.</em>
+<img src="./FE/public/movimenti.png" alt="Movimenti finanziari" width="500"/>
+
+<em>Figura 3 – Grafico a barre mensili: suddivisione delle spese per categoria negli ultimi tre mesi.</em>
+<img src="./FE/public/bar-chart.png" alt="Bar Chart" width="500"/>
+
+<em>Figura 4 – Versione desktop della dashboard con grafici, saldo e riepilogo completo degli indicatori.</em>
+<img src="./FE/public/dashboard-lg-screen.png" alt="Dashboard grande schermo" width="500"/>
+
+<em>Figura 5 – Adattamento responsive su schermi medi: layout ottimizzato e leggibilità mantenuta.</em>
+<img src="./FE/public/dashboard-medium-screen.png" alt="Dashboard media risoluzione" width="500"/>
+
 
 ## 👤 Autore
 
