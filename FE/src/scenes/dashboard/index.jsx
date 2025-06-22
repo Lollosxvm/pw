@@ -116,28 +116,6 @@ function Dashboard() {
             "it-IT"
           )}`}
         />
-        {!isXsDevices && (
-          <Box>
-            <Button
-              variant="contained"
-              sx={{
-                bgcolor: colors.blueAccent[700],
-                color: "#fcfcfc",
-                fontSize: isMdDevices ? "14px" : "10px",
-                fontWeight: "bold",
-                p: "10px 20px",
-                mt: "18px",
-                transition: ".3s ease",
-                ":hover": {
-                  bgcolor: colors.blueAccent[800],
-                },
-              }}
-              startIcon={<DownloadOutlined />}
-            >
-              DOWNLOAD REPORTS
-            </Button>
-          </Box>
-        )}
       </Box>
 
       {/* GRID & CHARTS */}
