@@ -8,9 +8,34 @@ export const fetchAndamentoInvestimenti = createAsyncThunk(
       const res = await axiosPrivate.get("/investimenti/andamento");
       return res.data;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.messaggio || "Errore durante il recupero andamento"
-      );
+      const status = err.response?.status;
+      const message = err.response?.data?.messaggio || err.message;
+
+      if (status === 401) {
+        return rejectWithValue(
+          "[TODO] Utente non autenticato: Passcode api cambiata!"
+        );
+      }
+
+      if (status === 403) {
+        return rejectWithValue(
+          "[TODO] Accesso negato: Quota mensile raggiunta"
+        );
+      }
+
+      if (status === 404) {
+        return rejectWithValue(
+          "[TODO] Dati non trovati per l’intervallo richiesto."
+        );
+      }
+
+      if (status === 500) {
+        return rejectWithValue(
+          "[TODO] Errore interno del server. Riprova più tardi."
+        );
+      }
+
+      return rejectWithValue(`[TODO] Errore imprevisto: ${message}`);
     }
   }
 );

@@ -91,21 +91,58 @@ export const getCryptoChart = async (req, res) => {
     const prices = response.data?.prices;
 
     if (!Array.isArray(prices)) {
-      console.warn("Risposta CoinGecko anomala:", response.data);
-      return res.status(502).json({ error: "Dati non validi da CoinGecko" });
+      console.warn("[CoinGecko] Risposta anomala:", response.data);
+      return res
+        .status(502)
+        .json({ error: "Dati non validi ricevuti da CoinGecko." });
     }
 
     res.json(response.data);
   } catch (error) {
-    console.error("Errore CoinGecko:", error.message);
+    const status = error.response?.status;
+    const message = error.response?.data?.error || error.message;
 
-    if (error.response?.status === 429) {
-      return res.status(429).json({
-        error: "Troppe richieste a CoinGecko. Riprova tra qualche secondo.",
-      });
+    switch (status) {
+      case 400:
+        console.warn("[CoinGecko] Errore 400 – richiesta malformata");
+        return res.status(400).json({
+          error:
+            "Richiesta non valida. Verifica i parametri 'asset', 'days' o 'vs_currency'.",
+        });
+
+      case 403:
+        console.warn("[CoinGecko] Errore 403 – accesso negato all'endpoint");
+        return res.status(403).json({
+          error:
+            "Accesso negato da CoinGecko. Verifica se l'endpoint richiede autorizzazione.",
+        });
+
+      case 404:
+        console.warn(`[CoinGecko] Errore 404 – asset '${asset}' non trovato`);
+        return res.status(404).json({
+          error: `Asset '${asset}' non trovato su CoinGecko.`,
+        });
+
+      case 429:
+        console.warn("[CoinGecko] Errore 429 – troppe richieste");
+        return res.status(429).json({
+          error:
+            "Hai superato il limite di richieste a CoinGecko. Riprova tra qualche istante.",
+        });
+
+      case 500:
+        console.error("[CoinGecko] Errore 500 – problema interno CoinGecko");
+        return res.status(502).json({
+          error:
+            "Errore interno da CoinGecko. Servizio momentaneamente non disponibile.",
+        });
+
+      default:
+        console.error("[CoinGecko] Errore generico:", message);
+        return res.status(500).json({
+          error: `Errore imprevisto durante il recupero dei dati: ${message}`,
+        });
     }
-
-    return res.status(500).json({ error: "Errore interno dal backend" });
   }
 };
 
