@@ -40,7 +40,50 @@ export const getCryptoNews = async (req, res) => {
 
     res.json(filtered);
   } catch (error) {
-    console.error("Errore CryptoPanic:", error.message);
-    res.status(500).json({ error: "Errore nel caricamento delle notizie" });
+    const status = error.response?.status;
+    const info = error.response?.data?.info;
+
+    switch (status) {
+      case 401:
+        console.warn(
+          "[CryptoPanic] Errore 401 – auth_token mancante o non valido"
+        );
+        return res.status(401).json({
+          error:
+            "Autenticazione fallita. Verifica il tuo auth_token di CryptoPanic.",
+        });
+
+      case 403:
+        if (info?.includes("quota exceeded")) {
+          console.warn("[CryptoPanic] Errore 403 – quota mensile superata");
+          return res.status(429).json({
+            error:
+              "Hai superato il limite mensile di richieste previsto dal piano gratuito di CryptoPanic.",
+          });
+        } else {
+          console.warn(
+            "[CryptoPanic] Errore 403 – accesso negato all'endpoint o rate limit backend"
+          );
+          return res.status(403).json({
+            error:
+              "Accesso non autorizzato a questo endpoint. Verifica il piano API di CryptoPanic.",
+          });
+        }
+
+      case 429:
+        console.warn(
+          "[CryptoPanic] Errore 429 – sei stato temporaneamente rate-limitato"
+        );
+        return res.status(429).json({
+          error:
+            "Hai effettuato troppe richieste in poco tempo. Riprova tra qualche minuto.",
+        });
+
+      default:
+        console.error("Errore generico CryptoPanic:", error.message);
+        return res.status(500).json({
+          error: "Errore interno durante il caricamento delle notizie.",
+        });
+    }
   }
 };
