@@ -1,111 +1,106 @@
-# 💼 Project Work — Dashboard Amministrativa
+# 💼 PW Bank – Project Work Universitario
 
-Questo repository contiene un'applicazione full-stack suddivisa in due moduli distinti:
+Questo progetto rappresenta il lavoro di fine corso per la laurea triennale in Informatica per le Aziende Digitali (L-31). Si tratta di un'applicazione web full-stack per la gestione finanziaria personale, progettata secondo principi moderni di ingegneria del software, sicurezza, modularità e ottimizzazione del dato.
 
-- **`FE/` (Frontend)** – Interfaccia utente per la visualizzazione e gestione dei dati.
-- **`BE/` (Backend)** – API server per la gestione e persistenza dei dati (in fase di sviluppo).
+## 🧩 Architettura del progetto
 
----
+L’applicativo è strutturato in due macro-componenti principali:
 
-## 📁 Struttura del progetto
+- **Frontend**: realizzato in React, responsabile dell’interfaccia utente e della logica client-side.
+- **Backend**: costruito con Express.js, espone le API REST e gestisce l’accesso al database MySQL.
+  
+La comunicazione tra le due parti avviene tramite chiamate HTTP protette da autenticazione JWT.
+
+## 🗂️ Struttura delle cartelle
 
 ```
-PW/
+/
+├── backend/           # Server Node.js con Express
+│   ├── controllers/   # Logica delle API
+│   ├── routes/        # Routing API REST
+│   ├── config/        # Connessione DB e middleware
+│   └── utils/         # Funzioni di supporto (es. aggiornamento rate)
 │
-├── FE/            # Frontend React + MUI
-│   ├── public/
+├── frontend/          # Applicazione React
 │   ├── src/
-│   │   ├── components/   # Componenti riutilizzabili (Header, Sidebar, ecc.)
-│   │   ├── pages/        # Schermate principali (Movimenti, Contatti, ecc.)
-│   │   ├── data/         # Dati fittizi (mock) per sviluppo
-│   │   └── theme.js      # Tema personalizzato (light/dark)
-│   └── package.json
+│   │   ├── components/  # Componenti riutilizzabili
+│   │   ├── scenes/      # Pagine principali (dashboard, investimenti, ecc.)
+│   │   ├── redux/       # Slice Redux centralizzate
+│   │   └── theme/       # Gestione dark/light mode
 │
-├── BE/            # Backend Node.js / Express (in costruzione)
-│   ├── controllers/
-│   ├── routes/
-│   ├── models/
-│   └── server.js
-│
-└── README.md
+├── public/           # Assets pubblici
+├── .env              # Variabili d’ambiente
+└── README.md         # Documentazione principale
 ```
 
----
+## ⚙️ Tecnologie e librerie principali
 
-## 🧠 Obiettivo del progetto
+### 🖥️ Frontend (React + MUI)
 
-Creare una **dashboard amministrativa moderna**, responsive e accessibile, con funzionalità tipiche di un gestionale:
+- **React 18** – libreria SPA per la UI
+- **Material UI (MUI)** – componenti e tema dark/light personalizzato
+- **Redux Toolkit** – store centralizzato, slice modulari
+- **Redux Persist** – persistenza automatica del token JWT
+- **React Router DOM** – routing client-side
+- **Axios** – comunicazione con il backend
+- **Nivo** – grafici interattivi (line chart)
+- **FullCalendar** – gestione eventi (rate mutuo/prestito)
+- **Formik + Yup** – gestione e validazione dei form
+- **Recharts / MUI DataGrid** – visualizzazione tabellare e interattiva
 
-- Visualizzazione movimenti/transazioni
-- Filtri, ricerca e esportazione dati
-- Modalità chiaro/scuro
-- Struttura scalabile per una futura integrazione con API REST reali
+### 🧠 Backend (Node.js + Express)
 
----
+- **Express.js** – framework leggero per API REST
+- **MySQL** – database relazionale per dati persistenti
+- **JWT (jsonwebtoken)** – autenticazione sicura tramite token
+- **dotenv** – gestione configurazione ambienti
+- **bcryptjs** – hashing delle password
+- **axios** – chiamate verso API esterne (CoinGecko, CryptoPanic)
+- **cors / helmet** – sicurezza e accessi controllati
 
-## 🧪 Tecnologie e librerie utilizzate
+### 🌍 API esterne
 
-### 🔷 Frontend (React)
+- **CoinGecko API** – prezzi asset digitali e storico andamento
+- **CryptoPanic API** – notizie aggiornate sul mondo crypto
 
-- **React + Vite** – Setup veloce e ottimizzato per SPA moderne
-- **MUI (Material UI)** – UI kit completo per componenti reattivi e accessibili
-  - `@mui/material` – Componenti di base
-  - `@mui/icons-material` – Icone moderne
-  - `@mui/x-data-grid` – DataGrid con sorting, filtering, esportazione e paginazione
-- **React Router DOM** – Navigazione client-side
-- **Context API** – Gestione globale del tema (light/dark)
-- **CSS-in-JS (sx/styled)** – Stile flessibile e dinamico
+## 🔐 Sicurezza
 
-🟩 Il tema (palette, colori, font) è definito in `theme.js`, adattivo a light/dark mode e orientato all'accessibilità.
+- Login protetto da JWT, con refresh persistente via Redux
+- Middleware Express per proteggere le rotte (`verifyToken`)
+- Salvataggio password con hash (bcrypt)
+- CORS e headers impostati per accesso controllato
 
-### 🔷 Backend (Node.js / Express)
+## 📊 Database
 
-> In fase di sviluppo – predisposto per collegare il frontend a un’API REST con CRUD, autenticazione e validazione.
+- **Schema relazionale** progettato in DBML
+- Tabelle: `utenti`, `transazioni`, `rate_mutuo`, `rate_prestito`, `investimenti`
+- Aggiornamento automatico delle rate gestito al boot del backend
+- Documentazione disponibile su [dbdiagram.io]([https://dbdiagram.io/](https://dbdiagram.io/d/6857fa93f039ec6d365250f3)
 
----
+## 📄 Documentazione API
 
-## 📈 Funzionalità implementate
+- ✅ Disponibile in formato Swagger (`/api-docs`)
+- ✅ Versione Redoc online su GitHub Pages
 
-- Sidebar dinamica con routing e icone
-- Header contestuale per ogni pagina
-- Pagine: **Movimenti**, **Contatti**, ecc.
-- Tabella interattiva con:
-  - Filtro per colonna
-  - Esportazione CSV
-  - Ricerca rapida
-  - Selezione multipla
-- Tema chiaro/scuro con toggle integrato
+## 🧪 Test & Dev
 
----
+- Modalità development con `.env`
+- Log semplificati per debugging (`console.warn`, `console.error`)
+- Gestione centralizzata degli errori per tutte le API
 
-## 🛠️ Setup locale
 
-1. Clona il repository:
+## 👤 Autore
 
-   ```bash
-   git clone https://github.com/<tuo-username>/pw.git
-   ```
-
-2. Avvia il frontend:
-
-   ```bash
-   cd FE
-   npm install
-   npm run dev
-   ```
-
-3. (Facoltativo) Avvia il backend:
-
-   ```bash
-   cd ../BE
-   npm install
-   npm run dev
-   ```
+Lorenzo Sijinardi  
+Corso di Laurea L-31 – Informatica per le Aziende Digitali  
+Università Telematica Pegaso  
+Anno Accademico 2025/2026
 
 ---
 
-## 📌 Note finali
+## ⚖️ Licenza e diritti
 
-- Attualmente i dati sono mockati (`mockData.js`)
-- La struttura è pronta per integrazione con database e autenticazione
-- L'interfaccia è modulare e facilmente estendibile
+Questo progetto è destinato esclusivamente a fini didattici e accademici, in conformità con le norme del Corso di Laurea.  
+Tutti i contenuti originali (codice, schema DB, documentazione) sono protetti da diritto d'autore e non possono essere copiati, distribuiti o riutilizzati senza autorizzazione esplicita.
+
+© 2025 – Lorenzo Sijinardi. Tutti i diritti riservati.
