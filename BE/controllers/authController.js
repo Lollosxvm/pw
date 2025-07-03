@@ -5,23 +5,33 @@ import jwt from "jsonwebtoken";
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  // 1. Controllo campi obbligatori (400 Bad Request)
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email e password sono obbligatorie" });
+  }
+
   try {
+    // 2. Query utente
     const [rows] = await db.query("SELECT * FROM utenti WHERE email = ?", [
       email,
     ]);
 
+    // 3. Email non registrata (401 Unauthorized)
     if (rows.length === 0) {
       return res.status(401).json({ message: "Email non registrata" });
     }
 
     const utente = rows[0];
 
+    // 4. Password errata (401 Unauthorized)
     const match = await bcrypt.compare(password.trim(), utente.password);
-
     if (!match) {
       return res.status(401).json({ message: "Password errata" });
     }
 
+    // 5. Successo (200 OK)
     const token = jwt.sign({ id: utente.id }, process.env.JWT_SECRET, {
       expiresIn: "8h",
     });
