@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Docs Api</title>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      #redoc-container {
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="redoc-container"></div>
+    <script>
+      const spec = {
+        openapi: "3.0.0",
+        info: {
+          title: "PW Bank",
+          version: "3.4.0",
+          description: "Documentazione completa delle API implementate",
+          contact: {
+            name: "Lorenzo Sijinardi",
+            email: "lorenzosijinardi@libero.it",
+            linkedin: "https://www.linkedin.com/in/lorenzo-sijinardi",
+          },
+        },
+        tags: [
+          {
+            name: "Autenticazione",
+            description:
+              "L’autenticazione è basata su token JWT conforme alle best practice OWASP e garantisce la sicurezza delle credenziali utente. Tutte le richieste devono essere effettuate tramite HTTPS, nel rispetto della normativa GDPR sulla tutela dei dati personali.",
+          },
+          {
+            name: "Utente",
+            description:
+              "La sezione Utente contiene gli endpoint per la gestione del profilo personale, consentendo all’utente autenticato di visualizzare e aggiornare le proprie informazioni anagrafiche e di contatto. Le operazioni incluse permettono di mantenere i dati sempre aggiornati e sicuri, favorendo una migliore personalizzazione dell’esperienza e il rispetto della normativa in materia di protezione dei dati GDPR (Regolamento UE 2016/679).",
+          },
+          {
+            name: "Mutuo e Prestiti",
+            description:
+              "La sezione Mutuo e Prestiti offre all’utente un quadro completo della propria posizione finanziaria relativamente a mutui e prestiti attivi. Gli endpoint permettono di monitorare l’andamento delle rate, distinguendo tra pagate, in scadenza e residue, e forniscono strumenti utili per una corretta pianificazione finanziaria personale.Tutti i dati finanziari e le operazioni sono accessibili esclusivamente tramite autenticazione JWT, in linea con la Direttiva PSD2 e il GDPR.",
+          },
+          {
+            name: "Investimenti",
+            description:
+              "Nella sezione Investimenti sono raccolte tutte le API relative alla gestione e al monitoraggio del portafoglio investimenti dell’utente. Gli endpoint disponibili consentono di registrare nuove operazioni di investimento, visualizzare la composizione e l’andamento storico del portafoglio, nonché di integrare dati di mercato aggiornati tramite provider esterni. L’obiettivo è fornire una visione dettagliata e sempre aggiornata della propria strategia di investimento.",
+          },
+          {
+            name: "Transazioni",
+            description:
+              "La sezione Transazioni mette a disposizione endpoint per la consultazione e l’analisi di tutti i movimenti economici dell’utente, siano essi entrate o uscite. La reportistica avanzata permette di aggregare le spese per categorie, paese o intervallo temporale, supportando l’utente nell’attività di budgeting e controllo finanziario. È inoltre possibile recuperare rapidamente le ultime operazioni effettuate e visualizzare l’andamento finanziario mensile.",
+          },
+          {
+            name: "News",
+            description:
+              "La sezione News integra nell’applicazione un servizio di aggiornamento sulle ultime notizie economiche e sull’andamento dei principali asset e criptovalute, grazie a fonti specializzate come CryptoPanic. In questo modo l’utente può restare informato sulle dinamiche di mercato direttamente dall’interfaccia della dashboard, con la massima rapidità e semplicità.Le informazioni provenienti da provider esterni sono soggette a rate limiting per garantire la qualità del servizio e prevenire abusi. L’integrazione rispetta le condizioni d’uso e la protezione dei dati prevista dai servizi terzi.",
+          },
+        ],
+        servers: [
+          {
+            url: "http://localhost:3001/api",
+            description: "Ambiente di sviluppo locale",
+          },
+        ],
+        paths: {
+          "/api/login": {
+            post: {
+              summary: "api/login",
+              description:
+                "Effettua il login dell’utente tramite email e password. Se le credenziali sono corrette, restituisce un token JWT e i dati essenziali dell’utente. Questo endpoint è pubblico e non richiede autenticazione preventiva.",
+              tags: ["Autenticazione"],
+              security: [],
+              requestBody: {
+                required: true,
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        email: { type: "string", example: "mario@esempio.it" },
+                        password: { type: "string", example: "superpassword" },
+                      },
+                      required: ["email", "password"],
+                    },
+                    example: {
+                      email: "mario@esempio.it",
+                      password: "superpassword",
+                    },
+                  },
+                },
+              },
+              responses: {
+                200: {
+                  description: "Login effettuato con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        utente: {
+                          id: 1,
+                          nome: "Mario Rossi",
+                          email: "mario@esempio.it",
+                        },
+                      },
+                    },
+                  },
+                },
+                400: {
+                  description: "Email e/o password mancanti",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: {
+                        message: "Email e password sono obbligatorie",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Email non registrata o password errata",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      examples: {
+                        "Email non registrata": {
+                          value: { message: "Email non registrata" },
+                        },
+                        "Password errata": {
+                          value: { message: "Password errata" },
+                        },
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore interno del server",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: { message: "Errore server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/utente/me": {
+            get: {
+              summary: "api/utente/me",
+              description:
+                "Restituisce tutte le informazioni del profilo utente autenticato: nome, cognome, email, telefono e indirizzi. L’utente deve essere autenticato tramite token JWT.",
+              tags: ["Utente"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Profilo recuperato con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        nome: "Mario",
+                        cognome: "Rossi",
+                        email: "mario.rossi@email.it",
+                        telefono: "3491234567",
+                        indirizzo1: "Via Verdi 21",
+                        indirizzo2: "Scala B, Int. 5",
+                        citta: "Torino",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Utente non trovato",
+                  content: {
+                    "application/json": {
+                      example: { message: "Utente non trovato" },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore durante il recupero del profilo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore durante il recupero del profilo",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/utente/update": {
+            put: {
+              summary: "api/utente/update",
+              description:
+                "Aggiorna le informazioni del profilo utente (nome, cognome, email, telefono, indirizzo, città). È necessario essere autenticati e fornire tutti i campi obbligatori.",
+              tags: ["Utente"],
+              security: [{ bearerAuth: [] }],
+              requestBody: {
+                required: true,
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        nome: { type: "string", example: "Mario" },
+                        cognome: { type: "string", example: "Rossi" },
+                        email: {
+                          type: "string",
+                          example: "mario.rossi@email.it",
+                        },
+                        telefono: { type: "string", example: "3491234567" },
+                        indirizzo1: { type: "string", example: "Via Verdi 21" },
+                        indirizzo2: {
+                          type: "string",
+                          example: "Scala B, Int. 5",
+                        },
+                        citta: { type: "string", example: "Torino" },
+                      },
+                      required: ["nome", "cognome", "email"],
+                    },
+                    example: {
+                      nome: "Mario",
+                      cognome: "Rossi",
+                      email: "mario.rossi@email.it",
+                      telefono: "3491234567",
+                      indirizzo1: "Via Verdi 21",
+                      indirizzo2: "Scala B, Int. 5",
+                      citta: "Torino",
+                    },
+                  },
+                },
+              },
+              responses: {
+                200: {
+                  description: "Profilo aggiornato con successo",
+                  content: {
+                    "application/json": {
+                      example: { message: "Profilo aggiornato con successo" },
+                    },
+                  },
+                },
+                400: {
+                  description: "Campi obbligatori mancanti",
+                  content: {
+                    "application/json": {
+                      example: { message: "Campi obbligatori mancanti" },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore durante l'aggiornamento del profilo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore durante l'aggiornamento del profilo",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/mutuo": {
+            get: {
+              summary: "api/mutuo",
+              description:
+                "Restituisce la situazione dettagliata delle rate del mutuo dell’utente autenticato, suddivise tra pagate, in scadenza e da pagare. Richiede autenticazione JWT.",
+              tags: ["Mutuo e Prestiti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Situazione mutuo recuperata con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        pagata: { count: 12, totale: 4500 },
+                        in_scadenza: { count: 1, totale: 370 },
+                        da_pagare: { count: 10, totale: 3700 },
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessuna rata mutuo trovata per questo utente",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: {
+                        message: "Nessuna rata mutuo trovata per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore interno del server",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: { message: "Errore nel server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/prestiti": {
+            get: {
+              summary: "api/prestiti",
+              description:
+                "Restituisce la situazione dettagliata delle rate dei prestiti dell’utente autenticato, suddivise tra pagate, in scadenza e da pagare. Richiede autenticazione JWT.",
+              tags: ["Mutuo e Prestiti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Situazione prestiti recuperata con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        pagata: { count: 5, totale: 1250 },
+                        in_scadenza: { count: 1, totale: 230 },
+                        da_pagare: { count: 7, totale: 1610 },
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description:
+                    "Nessuna rata prestito trovata per questo utente",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: {
+                        message:
+                          "Nessuna rata prestito trovata per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore interno del server",
+                  content: {
+                    "application/json": {
+                      schema: { $ref: "#/components/schemas/ErrorResponse" },
+                      example: { message: "Errore nel server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/investimenti": {
+            get: {
+              summary: "api/investimenti",
+              description:
+                "Restituisce la lista completa di tutti gli investimenti effettuati dall’utente autenticato, ordinati dalla più recente alla più vecchia. È necessario autenticarsi tramite token JWT nell'header Authorization.",
+              tags: ["Investimenti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description:
+                    "Lista degli investimenti recuperata con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          id: 1,
+                          utente: 5,
+                          asset: "bitcoin",
+                          operazione: "acquisto",
+                          quantita: 0.5,
+                          prezzo_unitario: 27000,
+                          data_operazione: "2024-06-11T09:21:17.000Z",
+                        },
+                        {
+                          id: 2,
+                          utente: 5,
+                          asset: "ethereum",
+                          operazione: "acquisto",
+                          quantita: 2,
+                          prezzo_unitario: 2100,
+                          data_operazione: "2024-05-25T14:42:00.000Z",
+                        },
+                      ],
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessun investimento trovato per questo utente",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessun investimento trovato per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore lato server",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore lato server" },
+                    },
+                  },
+                },
+              },
+            },
+            post: {
+              summary: "api/investimenti",
+              description:
+                "Registra un nuovo investimento per l’utente autenticato e aggiorna il saldo. Richiede autenticazione JWT. Tutti i campi sono obbligatori.",
+              tags: ["Investimenti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              requestBody: {
+                required: true,
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        asset: { type: "string", example: "bitcoin" },
+                        operazione: { type: "string", example: "acquisto" },
+                        quantita: { type: "number", example: 0.1 },
+                        prezzo_unitario: { type: "number", example: 26000 },
+                      },
+                      required: [
+                        "asset",
+                        "operazione",
+                        "quantita",
+                        "prezzo_unitario",
+                      ],
+                    },
+                    example: {
+                      asset: "bitcoin",
+                      operazione: "acquisto",
+                      quantita: 0.5,
+                      prezzo_unitario: 28000,
+                    },
+                  },
+                },
+              },
+              responses: {
+                201: {
+                  description: "Operazione registrata con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Operazione registrata con successo",
+                        saldoAggiornato: 12450,
+                      },
+                    },
+                  },
+                },
+                400: {
+                  description: "Dati mancanti o non validi",
+                  content: {
+                    "application/json": {
+                      example: { message: "Tutti i campi sono obbligatori" },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore lato server",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore lato server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/investimenti/composizione": {
+            get: {
+              summary: "api/investimenti/composizione",
+              description:
+                "Restituisce la composizione percentuale del portafoglio investimenti dell’utente autenticato, mostrando il peso relativo dei diversi asset (es. Bitcoin vs altri). È necessario il token JWT.",
+              tags: ["Investimenti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Composizione calcolata con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        x: "66",
+                        y: "34",
+                        labelX: "Bitcoin",
+                        labelY: "Altri asset",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessun investimento trovato per questo utente",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessun investimento trovato per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore lato server",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore lato server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/investimenti/andamento": {
+            get: {
+              summary: "api/investimenti/andamento",
+              description:
+                "Restituisce l’andamento degli investimenti negli ultimi due mesi, calcolando la variazione percentuale tra il valore attuale e quello del mese precedente. È necessario essere autenticati tramite token JWT.",
+              tags: ["Investimenti"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Andamento calcolato con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        valoreAttuale: 15000,
+                        valorePrecedente: 12000,
+                        variazione: "25.00",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessun investimento per i periodi richiesti",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Nessun investimento per i periodi richiesti",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore nel calcolo andamento investimenti",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore nel calcolo andamento investimenti.",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/investimenti/crypto": {
+            get: {
+              summary: "api/investimenti/crypto",
+              description:
+                "Restituisce dati aggiornati di mercato su una specifica criptovaluta (prezzi, volumi, andamento) tramite integrazione con CoinGecko. Questo endpoint è pubblico e non richiede autenticazione.",
+              tags: ["Investimenti"],
+              security: [],
+              parameters: [
+                {
+                  name: "asset",
+                  in: "query",
+                  description:
+                    "Il nome della criptovaluta da ricercare (esempio: bitcoin, ethereum, solana, ecc.)",
+                  required: false,
+                  schema: { type: "string" },
+                  example: "bitcoin",
+                },
+                {
+                  name: "days",
+                  in: "query",
+                  description:
+                    "Numero di giorni di storico richiesto (esempio: 1, 7, 30, 90, 180, 365, max).",
+                  required: false,
+                  schema: { type: "string" },
+                  example: "90",
+                },
+                {
+                  name: "vs_currency",
+                  in: "query",
+                  description:
+                    "Valuta in cui visualizzare il prezzo (esempio: usd, eur, gbp, ecc.)",
+                  required: false,
+                  schema: { type: "string" },
+                  example: "usd",
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Dati storico prezzi asset",
+                  content: {
+                    "application/json": {
+                      example: {
+                        prices: [
+                          [1719729600000, 26000],
+                          [1719733200000, 26100],
+                        ],
+                        market_caps: [[1719729600000, 510000000000]],
+                        total_volumes: [[1719729600000, 3100000000]],
+                      },
+                    },
+                  },
+                },
+                400: {
+                  description: "Richiesta non valida",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Richiesta non valida. Verifica i parametri 'asset', 'days' o 'vs_currency'.",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                403: {
+                  description: "Accesso negato da CoinGecko",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Accesso negato da CoinGecko. Verifica se l'endpoint richiede autorizzazione.",
+                      },
+                    },
+                  },
+                },
+                404: {
+                  description: "Asset non trovato",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error: "Asset 'bitcoin' non trovato su CoinGecko.",
+                      },
+                    },
+                  },
+                },
+                429: {
+                  description: "Troppe richieste",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Hai superato il limite di richieste a CoinGecko. Riprova tra qualche istante.",
+                      },
+                    },
+                  },
+                },
+                502: {
+                  description: "Errore CoinGecko",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Errore interno da CoinGecko. Servizio momentaneamente non disponibile.",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore generico",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Errore imprevisto durante il recupero dei dati: ...",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/news": {
+            get: {
+              summary: "api/news",
+              description:
+                "Restituisce una lista delle ultime notizie economiche e aggiornamenti sulle criptovalute per l’asset selezionato, tramite integrazione con il provider CryptoPanic.  **Attenzione:** l’API ha un limite di 100 richieste mensili per ciascun utente. Se il limite viene superato, verrà restituito errore 429 (Too Many Requests).",
+              tags: ["News"],
+              parameters: [
+                {
+                  name: "asset",
+                  in: "query",
+                  description:
+                    "Asset di cui visualizzare le notizie (bitcoin, ethereum, solana)",
+                  required: false,
+                  schema: {
+                    type: "string",
+                    example: "bitcoin",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Notizie recuperate con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          title: "ETF spot su Bitcoin approvati: cosa cambia?",
+                          link: "https://cryptopanic.com/news/12345",
+                          published_at: "2024-07-01T11:04:30Z",
+                          description:
+                            "I nuovi ETF potrebbero rivoluzionare il settore degli investimenti crypto...",
+                        },
+                        {
+                          title: "Solana supera Ethereum in volumi",
+                          link: "https://cryptopanic.com/news/12346",
+                          published_at: "2024-07-01T09:11:12Z",
+                          description:
+                            "L'impennata di Solana fa discutere analisti e investitori.",
+                        },
+                      ],
+                    },
+                  },
+                },
+                400: {
+                  description: "Richiesta non valida",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Richiesta non valida. Verifica i parametri della query.",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Autenticazione fallita verso CryptoPanic",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Autenticazione fallita. Verifica il tuo auth_token di CryptoPanic.",
+                      },
+                    },
+                  },
+                },
+                403: {
+                  description: "Accesso non autorizzato a CryptoPanic",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Accesso non autorizzato a questo endpoint. Verifica il piano API di CryptoPanic.",
+                      },
+                    },
+                  },
+                },
+                429: {
+                  description: "Troppe richieste o quota mensile superata",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Hai superato il limite mensile di richieste previsto dal piano gratuito di CryptoPanic.",
+                      },
+                    },
+                  },
+                },
+                502: {
+                  description: "Dati non validi da CryptoPanic",
+                  content: {
+                    "application/json": {
+                      example: { error: "Dati non validi da CryptoPanic" },
+                    },
+                  },
+                },
+                500: {
+                  description:
+                    "Errore interno durante il caricamento delle notizie",
+                  content: {
+                    "application/json": {
+                      example: {
+                        error:
+                          "Errore interno durante il caricamento delle notizie.",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/transazioni": {
+            get: {
+              summary: "api/transazioni",
+              description:
+                "Restituisce la lista di tutte le transazioni (entrate e uscite) dell’utente autenticato, ordinate dalla più recente alla più vecchia.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Lista transazioni recuperata con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          id: 13,
+                          utente: 5,
+                          importo: 250,
+                          tipo: "Uscita",
+                          categoria: "Alimentari",
+                          data: "2024-07-01T09:11:12.000Z",
+                          indirizzo: "Via Roma 12, Torino",
+                          metodo: "Carta",
+                          stato: "Completato",
+                          paese: "IT",
+                        },
+                      ],
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessuna transazione trovata per questo utente",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessuna transazione trovata per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore nel recupero delle transazioni",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore nel recupero delle transazioni",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/transazioni/spese-per-paese": {
+            get: {
+              summary: "api/transazioni/spese-per-paese",
+              description:
+                "Restituisce le spese totali sostenute dall’utente, suddivise per paese di destinazione. Utile per analizzare la distribuzione geografica delle uscite.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Spese per paese recuperate con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        { id: "IT", value: 1430.5 },
+                        { id: "DE", value: 250.0 },
+                      ],
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description:
+                    "Nessuna spesa trovata per paese per questo utente",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessuna spesa trovata per paese per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore server",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/transazioni/spese-recenti": {
+            get: {
+              summary: "api/transazioni/spese-recenti",
+              description:
+                "Restituisce le ultime 10 transazioni completate dall’utente, mostrando categoria, importo, data e metodo di pagamento.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Transazioni recenti recuperate con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          categoria: "Utenze",
+                          indirizzo: "Via Garibaldi 45, Torino",
+                          data: "2024-07-02T13:20:00.000Z",
+                          importo: 80,
+                          stato: "Completato",
+                          metodo: "Bonifico",
+                        },
+                      ],
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description:
+                    "Nessuna transazione recente trovata per questo utente",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessuna transazione recente trovata per questo utente",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore nel server",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore nel server" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/transazioni/spese-per-categorie": {
+            get: {
+              summary: "api/transazioni/spese-per-categorie",
+              description:
+                "Restituisce il totale delle spese raggruppate per categoria e mese, filtrando per un intervallo di date specificato tramite i parametri `from` e `to`.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "from",
+                  in: "query",
+                  description: "Data di inizio (formato YYYY-MM-DD)",
+                  required: true,
+                  schema: { type: "string", example: "2024-06-01" },
+                },
+                {
+                  name: "to",
+                  in: "query",
+                  description: "Data di fine (formato YYYY-MM-DD)",
+                  required: true,
+                  schema: { type: "string", example: "2024-07-01" },
+                },
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Spese per categoria recuperate con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          mese: "2024-06",
+                          categoria: "Alimentari",
+                          totale: 320.0,
+                        },
+                        {
+                          mese: "2024-06",
+                          categoria: "Affitto",
+                          totale: 500.0,
+                        },
+                      ],
+                    },
+                  },
+                },
+                400: {
+                  description: "Parametri 'from' e 'to' obbligatori",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Parametri 'from' e 'to' obbligatori",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description: "Nessuna spesa trovata per questo intervallo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Nessuna spesa trovata per questo intervallo",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore nel recupero delle spese",
+                  content: {
+                    "application/json": {
+                      example: { message: "Errore nel recupero delle spese" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/transazioni/andamento": {
+            get: {
+              summary: "api/transazioni/andamento-trimestrale",
+              description:
+                "Restituisce, per ciascun mese dell’intervallo specificato, il totale di entrate, uscite e saldo. Utile per visualizzare l’andamento finanziario mensile.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "from",
+                  in: "query",
+                  description: "Data di inizio (formato YYYY-MM-DD)",
+                  required: true,
+                  schema: { type: "string", example: "2024-04-01" },
+                },
+                {
+                  name: "to",
+                  in: "query",
+                  description: "Data di fine (formato YYYY-MM-DD)",
+                  required: true,
+                  schema: { type: "string", example: "2024-07-01" },
+                },
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Andamenti mensili recuperati con successo",
+                  content: {
+                    "application/json": {
+                      example: [
+                        {
+                          mese: "2024-05",
+                          entrate: 2300,
+                          uscite: -1500,
+                          saldo: 800,
+                        },
+                        {
+                          mese: "2024-06",
+                          entrate: 2500,
+                          uscite: -1200,
+                          saldo: 1300,
+                        },
+                      ],
+                    },
+                  },
+                },
+                400: {
+                  description: "Parametri 'from' e 'to' obbligatori",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Parametri 'from' e 'to' obbligatori",
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                404: {
+                  description:
+                    "Nessun andamento mensile trovato per questo intervallo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message:
+                          "Nessun andamento mensile trovato per questo intervallo",
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore nel recupero degli andamenti mensili",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore nel recupero degli andamenti mensili",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "/api/saldo": {
+            get: {
+              summary: "api/saldo",
+              description:
+                "Restituisce il saldo corrente calcolato su tutte le transazioni completate dell’utente autenticato. Richiede autenticazione JWT tramite header Authorization.",
+              tags: ["Transazioni"],
+              security: [{ bearerAuth: [] }],
+              parameters: [
+                {
+                  name: "Authorization",
+                  in: "header",
+                  description:
+                    "Token JWT per l'autenticazione (es: Bearer <token>)",
+                  required: true,
+                  schema: {
+                    type: "string",
+                    example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Saldo recuperato con successo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        saldo: 3425.5,
+                      },
+                    },
+                  },
+                },
+                401: {
+                  description: "Token non valido o mancante",
+                  content: {
+                    "application/json": {
+                      example: { message: "Token non valido o mancante" },
+                    },
+                  },
+                },
+                500: {
+                  description: "Errore durante il calcolo del saldo",
+                  content: {
+                    "application/json": {
+                      example: {
+                        message: "Errore durante il calcolo del saldo",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        components: {
+          schemas: {
+            ErrorResponse: {
+              type: "object",
+              properties: {
+                error: {
+                  type: "string",
+                },
+              },
+            },
+          },
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
+            },
+          },
+        },
+        security: [{ bearerAuth: [] }],
+      };
+      Redoc.init(
+        spec,
+        {
+          scrollYOffset: 50,
+          hideDownloadButton: false,
+          nativeScrollbars: true,
+          theme: {
+            colors: {
+              primary: {
+                main: "#0052cc",
+              },
+            },
+          },
+        },
+        document.getElementById("redoc-container")
+      );
+    </script>
+  </body>
+</html>
