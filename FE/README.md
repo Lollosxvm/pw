@@ -40,16 +40,8 @@ FE/
   - `/transazioni`, `/investimenti`, `/mutuo`, `/prestiti`, `/news`, `/utente`, `/situazione-economica`
 - I token JWT vengono mantenuti tramite Redux Persist e aggiunti a tutte le richieste di autenticazione
 
-## 🧪 Ambiente di sviluppo
 
-Crea un file `.env` nella cartella `FE/` con:
-
-```
-VITE_API_URL=http://localhost:3001/api
-REACT_APP_API_URL=https://backend-pw.onrender.com/api
-```
-
-## 🚀 Avvio del frontend
+## 🌐 Avvio del frontend
 
 Per avviare il frontend sono disponibili due opzioni:
 
