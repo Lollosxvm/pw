@@ -1,6 +1,10 @@
 import { db } from "../config/db.js";
 
 export const getSaldoAggiornato = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   try {
     const utenteId = req.utente.id;
 

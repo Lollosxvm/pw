@@ -22,7 +22,7 @@ export const getCryptoNews = async (req, res) => {
     });
 
     const results = response.data?.results;
-    console.log("[CryptoPanic] Notizie inviate con successo");
+    console.log("[CryptoPanic] Notizie ricevute con successo");
 
     if (!Array.isArray(results)) {
       return res.status(502).json({ error: "Dati non validi da CryptoPanic" });
