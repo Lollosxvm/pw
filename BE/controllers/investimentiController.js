@@ -2,26 +2,32 @@ import { db } from "../config/db.js";
 import axios from "axios";
 
 export const aggiungiInvestimento = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   const { asset, operazione, quantita, prezzo_unitario } = req.body;
   const utente = req.utente.id;
 
-  const conn = await db.getConnection(); // se usi pool di mysql2
+  // 400 - campi obbligatori
+  if (!asset || !operazione || !quantita || !prezzo_unitario) {
+    return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
+  }
+
+  const conn = await db.getConnection();
 
   try {
     await conn.beginTransaction();
 
-    // 1. Inserimento in investimenti
     await conn.query(
       `INSERT INTO investimenti (utente, asset, operazione, quantita, prezzo_unitario)
        VALUES (?, ?, ?, ?, ?)`,
       [utente, asset, operazione, quantita, prezzo_unitario]
     );
 
-    // 2. Calcolo importo totale
     const importo = quantita * prezzo_unitario;
     const tipo = operazione === "acquisto" ? "Uscita" : "Entrata";
 
-    // 3. Inserimento in transazioni
     await conn.query(
       `INSERT INTO transazioni (utente, tipo, importo, categoria, data, indirizzo, metodo, stato, paese)
        VALUES (?, ?, ?, ?, NOW(), ?, ?, 'Completato', ?)`,
@@ -36,19 +42,13 @@ export const aggiungiInvestimento = async (req, res) => {
       ]
     );
 
-    // 4. Calcolo nuovo saldo SOLO da transazioni
     const [[{ saldoTransazioni }]] = await conn.query(
-      `
-      SELECT 
-        SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE -importo END) AS saldoTransazioni
-      FROM transazioni 
-      WHERE stato = 'Completato' AND utente = ?
-    `,
+      `SELECT SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE -importo END) AS saldoTransazioni
+       FROM transazioni WHERE stato = 'Completato' AND utente = ?`,
       [utente]
     );
 
     const saldo = Number(saldoTransazioni) || 0;
-
     await conn.commit();
 
     res.status(201).json({
@@ -65,6 +65,10 @@ export const aggiungiInvestimento = async (req, res) => {
 };
 
 export const getInvestimentiUtente = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   const utente = req.utente.id;
 
   try {
@@ -72,6 +76,13 @@ export const getInvestimentiUtente = async (req, res) => {
       `SELECT * FROM investimenti WHERE utente = ? ORDER BY data_operazione DESC`,
       [utente]
     );
+
+    if (!rows || rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Nessun investimento trovato per questo utente" });
+    }
+
     res.json(rows);
   } catch (err) {
     console.error("Errore recupero investimenti:", err);
@@ -80,6 +91,10 @@ export const getInvestimentiUtente = async (req, res) => {
 };
 
 export const getCryptoChart = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   const { asset = "bitcoin", days = "90", vs_currency = "usd" } = req.query;
   const endpoint = `https://api.coingecko.com/api/v3/coins/${asset}/market_chart`;
 
@@ -147,33 +162,31 @@ export const getCryptoChart = async (req, res) => {
 };
 
 export const getAndamentoInvestimenti = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   try {
     const utenteId = req.utente.id;
 
     const [attuale] = await db.query(
-      `
-      SELECT SUM(quantita * prezzo_unitario) AS totale
-      FROM investimenti
-      WHERE utente = ? 
-        AND MONTH(data_operazione) = MONTH(CURDATE())
-        AND YEAR(data_operazione) = YEAR(CURDATE())
-    `,
+      `SELECT SUM(quantita * prezzo_unitario) AS totale FROM investimenti WHERE utente = ? AND MONTH(data_operazione) = MONTH(CURDATE()) AND YEAR(data_operazione) = YEAR(CURDATE())`,
       [utenteId]
     );
 
     const [precedente] = await db.query(
-      `
-      SELECT SUM(quantita * prezzo_unitario) AS totale
-      FROM investimenti
-      WHERE utente = ? 
-        AND MONTH(data_operazione) = MONTH(CURDATE() - INTERVAL 1 MONTH)
-        AND YEAR(data_operazione) = YEAR(CURDATE() - INTERVAL 1 MONTH)
-    `,
+      `SELECT SUM(quantita * prezzo_unitario) AS totale FROM investimenti WHERE utente = ? AND MONTH(data_operazione) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(data_operazione) = YEAR(CURDATE() - INTERVAL 1 MONTH)`,
       [utenteId]
     );
 
     const valoreAttuale = Number(attuale[0].totale) || 0;
     const valorePrecedente = Number(precedente[0].totale) || 0;
+
+    if (valoreAttuale === 0 && valorePrecedente === 0) {
+      return res
+        .status(404)
+        .json({ message: "Nessun investimento per i periodi richiesti" });
+    }
 
     const variazione =
       valorePrecedente === 0
@@ -192,22 +205,24 @@ export const getAndamentoInvestimenti = async (req, res) => {
     console.error("Errore nel calcolo andamento investimenti:", error);
     res
       .status(500)
-      .json({ messaggio: "Errore nel calcolo andamento investimenti." });
+      .json({ message: "Errore nel calcolo andamento investimenti." });
   }
 };
 
 export const getComposizioneInvestimenti = async (req, res) => {
+  if (!req.utente || !req.utente.id) {
+    return res.status(401).json({ message: "Token non valido o mancante" });
+  }
+
   try {
     const utente = req.utente.id;
 
     const [[result]] = await db.query(
-      `
-      SELECT
+      `SELECT
         SUM(CASE WHEN asset = 'bitcoin' THEN quantita * prezzo_unitario ELSE 0 END) AS btc,
         SUM(CASE WHEN asset IN ('ethereum', 'solana') THEN quantita * prezzo_unitario ELSE 0 END) AS altri
       FROM investimenti
-      WHERE utente = ?
-    `,
+      WHERE utente = ?`,
       [utente]
     );
 
@@ -216,12 +231,9 @@ export const getComposizioneInvestimenti = async (req, res) => {
     const totale = btc + altri;
 
     if (totale === 0) {
-      return res.json({
-        x: 0,
-        y: 0,
-        labelX: "Bitcoin",
-        labelY: "Altri asset",
-      });
+      return res
+        .status(404)
+        .json({ message: "Nessun investimento trovato per questo utente" });
     }
 
     res.json({

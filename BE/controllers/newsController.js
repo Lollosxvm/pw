@@ -44,6 +44,14 @@ export const getCryptoNews = async (req, res) => {
     const info = error.response?.data?.info;
 
     switch (status) {
+      case 400:
+        console.warn(
+          "[CryptoPanic] Errore 400 – Verifica i parametri della query"
+        );
+        return res.status(400).json({
+          error: "Richiesta non valida. Verifica i parametri della query.",
+        });
+
       case 401:
         console.warn(
           "[CryptoPanic] Errore 401 – auth_token mancante o non valido"
@@ -77,6 +85,14 @@ export const getCryptoNews = async (req, res) => {
         return res.status(429).json({
           error:
             "Hai effettuato troppe richieste in poco tempo. Riprova tra qualche minuto.",
+        });
+
+      case 502:
+        console.warn(
+          "[CryptoPanic] Errore 502– CryptoPanic restituisce dati non validi"
+        );
+        return res.status(502).json({
+          error: "Dati non validi da CryptoPanic",
         });
 
       default:
