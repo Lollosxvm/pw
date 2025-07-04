@@ -85,7 +85,7 @@ La comunicazione tra le due parti avviene tramite chiamate HTTP protette da aute
 ## 📄 Documentazione API
 
 - ✅ Disponibile in formato Swagger (`/api-docs`)
-- ✅ Versione Redoc online su GitHub Pages
+- ✅ Versione Redoc online su GitHub Pages: [https://lollosxvm.github.io/pw/](https://lollosxvm.github.io/pw/)
 
 ## 🧪 Test & Dev
 
