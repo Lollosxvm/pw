@@ -18,9 +18,13 @@ export const login = async (req, res) => {
       email,
     ]);
 
-    // 3. Email non registrata (401 Unauthorized)
+    // 3. Utenza non riconosciuta: email e/o password errate (401 Unauthorized)
     if (rows.length === 0) {
-      return res.status(401).json({ message: "Email non registrata" });
+      return res
+        .status(401)
+        .json({
+          message: "Utenza non riconosciuta: email e/o password errate",
+        });
     }
 
     const utente = rows[0];

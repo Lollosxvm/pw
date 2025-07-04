@@ -83,6 +83,11 @@ const LoginPage = () => {
         bgcolor={colors.primary[500]}
       >
         <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault(); // evita refresh pagina
+            handleLogin();
+          }}
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -108,6 +113,7 @@ const LoginPage = () => {
           <TextField
             fullWidth
             label="Email"
+            placeholder="lorenzo@email.it"
             variant="filled"
             sx={{ mb: 2 }}
             InputProps={{ disableUnderline: true }}
@@ -120,6 +126,7 @@ const LoginPage = () => {
             fullWidth
             label="Password"
             type={showPassword ? "text" : "password"}
+            placeholder="pippo123"
             variant="filled"
             sx={{ mb: 2 }}
             value={password}
@@ -139,6 +146,7 @@ const LoginPage = () => {
 
           <Box width="100%" textAlign="right" mb={2}>
             <Link
+              type="button"
               component="button"
               underline="hover"
               color={colors.greenAccent[500]}
@@ -149,6 +157,7 @@ const LoginPage = () => {
           </Box>
 
           <Button
+            type="submit"
             variant="contained"
             fullWidth
             onClick={handleLogin}
@@ -162,6 +171,16 @@ const LoginPage = () => {
           >
             Accedi
           </Button>
+          <Typography
+            variant="body2"
+            color={colors.blueAccent[100]}
+            mb={2}
+            textAlign="center"
+          >
+            <br></br>
+            <strong>Credenziali demo</strong> <br></br>lorenzo@email.it /
+            pippo123
+          </Typography>
         </Box>
       </Box>
 

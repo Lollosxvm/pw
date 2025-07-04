@@ -123,13 +123,17 @@
                   },
                 },
                 401: {
-                  description: "Email non registrata o password errata",
+                  description:
+                    "Utenza non riconosciuta: email e/o password errate o password errata",
                   content: {
                     "application/json": {
                       schema: { $ref: "#/components/schemas/ErrorResponse" },
                       examples: {
-                        "Email non registrata": {
-                          value: { message: "Email non registrata" },
+                        "Utenza non riconosciuta: email e/o password errate": {
+                          value: {
+                            message:
+                              "Utenza non riconosciuta: email e/o password errate",
+                          },
                         },
                         "Password errata": {
                           value: { message: "Password errata" },
