@@ -91,10 +91,6 @@ export const getInvestimentiUtente = async (req, res) => {
 };
 
 export const getCryptoChart = async (req, res) => {
-  if (!req.utente || !req.utente.id) {
-    return res.status(401).json({ message: "Token non valido o mancante" });
-  }
-
   const { asset = "bitcoin", days = "90", vs_currency = "usd" } = req.query;
   const endpoint = `https://api.coingecko.com/api/v3/coins/${asset}/market_chart`;
 
