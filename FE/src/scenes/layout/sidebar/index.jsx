@@ -12,6 +12,7 @@ import {
   PersonOutlined,
   TimelineOutlined,
   HomeOutlined,
+  AttachMoney,
 } from "@mui/icons-material";
 import EuroIcon from "@mui/icons-material/Euro";
 import { Tooltip, Avatar } from "@mui/material";
@@ -224,7 +225,7 @@ const SideBar = () => {
             title="Investimenti"
             path="/dashboard/investimenti"
             colors={colors}
-            icon={<HelpOutlineOutlined />}
+            icon={<AttachMoney />}
           />
           <Item
             title="FAQ"
