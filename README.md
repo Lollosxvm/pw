@@ -8,29 +8,34 @@ L’applicativo è strutturato in due macro-componenti principali:
 
 - **Frontend**: realizzato in React, responsabile dell’interfaccia utente e della logica client-side.
 - **Backend**: costruito con Express.js, espone le API REST e gestisce l’accesso al database MySQL.
-  
+
 La comunicazione tra le due parti avviene tramite chiamate HTTP protette da autenticazione JWT.
 
 ## 🗂️ Struttura delle cartelle
 
 ```
-/
-├── backend/           # Server Node.js con Express
-│   ├── controllers/   # Logica delle API
-│   ├── routes/        # Routing API REST
-│   ├── config/        # Connessione DB e middleware
-│   └── utils/         # Funzioni di supporto (es. aggiornamento rate)
+├── backend/                # Server Node.js con Express
+│   ├── controllers/        # Logica delle API
+│   ├── middleware/         # Middleware (gestione autenticazione, errori)
+│   ├── routes/             # Routing API REST
+│   ├── config/             # Connessione DB e middleware
+│   ├── utils/              # Funzioni di supporto (es. aggiornamento rate)
+│   └── README.md           # Documentazione backend
 │
-├── frontend/          # Applicazione React
+├── frontend/               # Applicazione React
+│   ├── public/             # Assets pubblici (es. screenshot app)
 │   ├── src/
-│   │   ├── components/  # Componenti riutilizzabili
-│   │   ├── scenes/      # Pagine principali (dashboard, investimenti, ecc.)
-│   │   ├── redux/       # Slice Redux centralizzate
-│   │   └── theme/       # Gestione dark/light mode
+│   │   ├── api/            # Client HTTP axios
+│   │   ├── assets/         # Logo, avatar utente, immagini varie
+│   │   ├── components/     # Componenti riutilizzabili
+│   │   ├── scenes/         # Pagine principali
+│   │   ├── redux/          # Slice Redux centralizzate
+│   │   └── theme/          # Gestione dark/light mode
+│   └── README.md           # Documentazione frontend
 │
-├── public/           # Assets pubblici
-├── .env              # Variabili d’ambiente
-└── README.md         # Documentazione principale
+├── docs/                   # Documentazione API (Redocly)
+├── .env                    # Variabili d’ambiente
+├── README.md               # Documentazione generale del progetto
 ```
 
 ## ⚙️ Tecnologie e librerie principali
@@ -104,7 +109,6 @@ La comunicazione tra le due parti avviene tramite chiamate HTTP protette da aute
 
 <em>Figura 5 – Adattamento responsive su schermi medi: layout ottimizzato e leggibilità mantenuta.</em>
 <img src="./FE/public/dashboard-medium-screen.png" alt="Dashboard media risoluzione" width="500"/>
-
 
 ## 👤 Autore
 
