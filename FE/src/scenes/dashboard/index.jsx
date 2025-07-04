@@ -13,7 +13,6 @@ import {
   GeographyChart,
 } from "../../components";
 import LineChartWithFilter from "../../scenes/LineChartWithFilter";
-import { DownloadOutlined } from "@mui/icons-material";
 import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined";
@@ -65,6 +64,56 @@ function Dashboard() {
     Assicurazioni: <SecurityOutlinedIcon />,
     Mutuo: <AccountBalanceOutlinedIcon />,
   };
+
+  const oggi = new Date();
+  const to = oggi.toISOString().split("T")[0];
+
+  const quattordiciGiorniFa = new Date();
+  quattordiciGiorniFa.setDate(oggi.getDate() - 14);
+  const from = quattordiciGiorniFa.toISOString().split("T")[0];
+  const [progressCircle, setProgressCircle] = useState(0);
+  const [entrate, setEntrate] = useState(0);
+  const [uscite, setUscite] = useState(0);
+
+  const fetchAndamento = async () => {
+    try {
+      const res = await axiosPrivate.get(
+        `/transazioni/andamento-trimestrale?from=${from}&to=${to}`
+      );
+
+      let entrateTotali = 0;
+      let usciteTotali = 0;
+      let progress = 0;
+
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(({ entrate, uscite }) => {
+          entrateTotali += parseFloat(entrate) || 0;
+          usciteTotali += Math.abs(parseFloat(uscite)) || 0;
+        });
+
+        const totale = entrateTotali + usciteTotali;
+        progress = totale > 0 ? entrateTotali / totale : 0;
+
+        setEntrate(entrateTotali);
+        setUscite(usciteTotali);
+        setProgressCircle(progress);
+      } else {
+        setEntrate(0);
+        setUscite(0);
+        setProgressCircle(0);
+      }
+    } catch (error) {
+      console.error("Errore nel fetch andamento:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndamento();
+  }, []);
+
+  useEffect(() => {
+    console.log("progressCircle aggiornato:", progressCircle);
+  }, [progressCircle]);
 
   useEffect(() => {
     const fetchComposizione = async () => {
@@ -413,7 +462,7 @@ function Dashboard() {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Suddivisione attuale del portafoglio
+            Overview ultimi 14 giorni
           </Typography>
           <Box
             display="flex"
@@ -422,12 +471,12 @@ function Dashboard() {
             mt="25px"
           >
             <ProgressCircle
-              progress={0.6}
+              progress={progressCircle}
               size={125}
-              x={55}
-              y={45}
-              labelX="Azioni"
-              labelY="ETF"
+              x={Math.round(progressCircle * 100)}
+              y={100 - Math.round(progressCircle * 100)}
+              labelX="Entrate"
+              labelY="Uscite"
             />
             <Typography
               textAlign="center"
@@ -435,9 +484,9 @@ function Dashboard() {
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              €48.352 investiti
+              €{(entrate + uscite).toFixed(2)} movimentati
             </Typography>
-            <Typography textAlign="center">% per categoria</Typography>
+            <Typography textAlign="center">% entrate vs uscite</Typography>
           </Box>
         </Box>
 
