@@ -13,6 +13,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Tooltip,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useNavigate } from "react-router-dom";
@@ -69,6 +70,14 @@ const LoginPage = () => {
       setErrore("Credenziali non valide");
       setOpenSnackbar(true);
     }
+  };
+
+  const [copied, setCopied] = useState({ email: false, password: false });
+
+  const handleCopy = (text, field) => {
+    navigator.clipboard.writeText(text);
+    setCopied((prev) => ({ ...prev, [field]: true }));
+    setTimeout(() => setCopied((prev) => ({ ...prev, [field]: false })), 1500);
   };
 
   return (
@@ -177,9 +186,39 @@ const LoginPage = () => {
             mb={2}
             textAlign="center"
           >
-            <br></br>
-            <strong>Credenziali demo</strong> <br></br>lorenzo@email.it /
-            pippo123
+            <br />
+            <strong>Credenziali demo:</strong> <br />
+            <Tooltip
+              title={copied.email ? "Email copiata!" : "Clicca per copiare"}
+            >
+              <span
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  marginRight: 4,
+                }}
+                onClick={() => handleCopy("lorenzo@email.it", "email")}
+              >
+                lorenzo@email.it
+              </span>
+            </Tooltip>
+            /
+            <Tooltip
+              title={
+                copied.password ? "Password copiata!" : "Clicca per copiare"
+              }
+            >
+              <span
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  marginLeft: 4,
+                }}
+                onClick={() => handleCopy("pippo123", "password")}
+              >
+                pippo123
+              </span>
+            </Tooltip>
           </Typography>
         </Box>
       </Box>
