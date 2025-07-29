@@ -111,9 +111,7 @@ function Dashboard() {
     fetchAndamento();
   }, []);
 
-  useEffect(() => {
-    console.log("progressCircle aggiornato:", progressCircle);
-  }, [progressCircle]);
+  useEffect(() => {}, [progressCircle]);
 
   useEffect(() => {
     const fetchComposizione = async () => {
