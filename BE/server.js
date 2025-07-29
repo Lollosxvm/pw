@@ -15,13 +15,16 @@ import situazioneEconomicaRoutes from "./routes/situazioneEconomicaRoute.js";
 import userRoute from "./routes/userRoute.js";
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 dotenv.config();
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      const ALLOWED_ORIGINS = ["http://localhost:5173"];
+      const ALLOWED_ORIGINS = [
+        "http://localhost:5173",
+        "https://lorenzo-sijinardi-git-main-lollosxvms-projects.vercel.app/",
+      ];
       if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         callback(null, true);
       } else {
