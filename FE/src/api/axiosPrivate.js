@@ -2,7 +2,7 @@ import axios from "axios";
 import { store } from "../redux/store";
 
 const axiosPrivate = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
