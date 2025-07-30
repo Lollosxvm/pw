@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { Header } from "../../components";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
@@ -10,7 +10,18 @@ const Movimenti = () => {
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
 
-  const columns = [
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(max-width:960px)");
+
+  const formatData = (isoString) => {
+    const d = new Date(isoString);
+    const giorno = String(d.getDate()).padStart(2, "0");
+    const mese = String(d.getMonth() + 1).padStart(2, "0");
+    const anno = d.getFullYear();
+    return `${giorno}/${mese}/${anno}`;
+  };
+
+  const baseColumns = [
     { field: "tipo", headerName: "Tipo", flex: 1 },
     {
       field: "importo",
@@ -22,16 +33,26 @@ const Movimenti = () => {
         </Typography>
       ),
     },
-    { field: "stato", headerName: "Stato", flex: 1 },
-    { field: "metodo", headerName: "Metodo di Pagamento", flex: 1 },
     {
       field: "data",
       headerName: "Data",
       flex: 1,
       valueGetter: (params) => formatData(params.row.data),
     },
+  ];
+
+  const extraColumnsTablet = [{ field: "stato", headerName: "Stato", flex: 1 }];
+
+  const extraColumnsDesktop = [
+    { field: "metodo", headerName: "Metodo di Pagamento", flex: 1 },
     { field: "indirizzo", headerName: "Indirizzo", flex: 1 },
   ];
+
+  const columns = isMobile
+    ? baseColumns
+    : isTablet
+    ? [...baseColumns, ...extraColumnsTablet]
+    : [...baseColumns, ...extraColumnsTablet, ...extraColumnsDesktop];
 
   useEffect(() => {
     axiosPrivate
@@ -44,14 +65,6 @@ const Movimenti = () => {
       });
   }, []);
 
-  const formatData = (isoString) => {
-    const d = new Date(isoString);
-    const giorno = String(d.getDate()).padStart(2, "0");
-    const mese = String(d.getMonth() + 1).padStart(2, "0");
-    const anno = d.getFullYear();
-    return `${giorno}/${mese}/${anno}`;
-  };
-
   return (
     <Box m="20px">
       <Header title="Movimenti" subtitle="Lista filtrabile ultimi 60 mesi" />
@@ -60,12 +73,8 @@ const Movimenti = () => {
         height="75vh"
         maxWidth="100%"
         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            border: "none",
-          },
+          "& .MuiDataGrid-root": { border: "none" },
+          "& .MuiDataGrid-cell": { border: "none" },
           "& .name-column--cell": {
             color: colors.greenAccent[300],
           },
@@ -96,14 +105,12 @@ const Movimenti = () => {
           columns={columns}
           getRowId={(row) => row.id}
           components={{ Toolbar: GridToolbar }}
+          checkboxSelection={!isMobile}
           initialState={{
             pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
+              paginationModel: { pageSize: 10 },
             },
           }}
-          checkboxSelection
         />
       </Box>
     </Box>
