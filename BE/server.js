@@ -23,7 +23,7 @@ app.use(
     origin: (origin, callback) => {
       const ALLOWED_ORIGINS = [
         "http://localhost:5173",
-        "https://lorenzo-sijinardi-git-main-lollosxvms-projects.vercel.app/",
+        "https://lorenzo-sijinardi-git-main-lollosxvms-projects.vercel.app",
       ];
       if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         callback(null, true);
