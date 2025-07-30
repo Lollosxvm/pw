@@ -109,6 +109,7 @@ const InvestmentsPage = () => {
         defaultPrice={currentPrice}
         disabled={!haAsset}
         onSuccess={handleOperazioneSuccess}
+        quantitaPosseduta={assetDisponibili[selectedAsset.toLowerCase()] || 0}
       />
     </Box>
   );

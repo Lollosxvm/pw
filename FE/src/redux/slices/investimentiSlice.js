@@ -13,29 +13,29 @@ export const fetchAndamentoInvestimenti = createAsyncThunk(
 
       if (status === 401) {
         return rejectWithValue(
-          "[TODO] Utente non autenticato: Passcode api cambiata!"
+          "Utente non autenticato. Effettua nuovamente il login."
         );
       }
 
       if (status === 403) {
         return rejectWithValue(
-          "[TODO] Accesso negato: Quota mensile raggiunta"
+          "Accesso negato. Limite mensile delle operazioni raggiunto."
         );
       }
 
       if (status === 404) {
         return rejectWithValue(
-          "[TODO] Dati non trovati per l’intervallo richiesto."
+          "Nessun dato disponibile per l’intervallo richiesto."
         );
       }
 
       if (status === 500) {
         return rejectWithValue(
-          "[TODO] Errore interno del server. Riprova più tardi."
+          "Errore interno del server. Ti invitiamo a riprovare più tardi."
         );
       }
 
-      return rejectWithValue(`[TODO] Errore imprevisto: ${message}`);
+      return rejectWithValue(`Errore imprevisto: ${message}`);
     }
   }
 );
@@ -47,7 +47,9 @@ export const fetchInvestimenti = createAsyncThunk(
       const res = await axiosPrivate.get("/investimenti");
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(
+        `Errore durante il caricamento degli investimenti: ${err.message}`
+      );
     }
   }
 );
@@ -68,6 +70,7 @@ const investimentiSlice = createSlice({
     builder
       .addCase(fetchInvestimenti.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchInvestimenti.fulfilled, (state, action) => {
         state.dati = action.payload;
