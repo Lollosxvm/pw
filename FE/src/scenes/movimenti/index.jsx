@@ -24,7 +24,12 @@ const Movimenti = () => {
     },
     { field: "stato", headerName: "Stato", flex: 1 },
     { field: "metodo", headerName: "Metodo di Pagamento", flex: 1 },
-    { field: "data", headerName: "Data", flex: 1 },
+    {
+      field: "data",
+      headerName: "Data",
+      flex: 1,
+      valueGetter: (params) => formatData(params.row.data),
+    },
     { field: "indirizzo", headerName: "Indirizzo", flex: 1 },
   ];
 
@@ -38,6 +43,14 @@ const Movimenti = () => {
         console.error("Errore nel recupero dati:", err);
       });
   }, []);
+
+  const formatData = (isoString) => {
+    const d = new Date(isoString);
+    const giorno = String(d.getDate()).padStart(2, "0");
+    const mese = String(d.getMonth() + 1).padStart(2, "0");
+    const anno = d.getFullYear();
+    return `${giorno}/${mese}/${anno}`;
+  };
 
   return (
     <Box m="20px">
