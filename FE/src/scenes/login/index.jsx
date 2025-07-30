@@ -75,7 +75,6 @@ const LoginPage = () => {
   const [copied, setCopied] = useState({ email: false, password: false });
 
   const handleCopy = (text, field) => {
-    navigator.clipboard.writeText(text);
     setCopied((prev) => ({ ...prev, [field]: true }));
 
     if (field === "email") setEmail(text);
@@ -98,7 +97,7 @@ const LoginPage = () => {
         <Box
           component="form"
           onSubmit={(e) => {
-            e.preventDefault(); // evita refresh pagina
+            e.preventDefault();
             handleLogin();
           }}
           display="flex"
@@ -193,7 +192,7 @@ const LoginPage = () => {
             <br />
             <strong>Credenziali demo:</strong> <br />
             <Tooltip
-              title={copied.email ? "Email copiata!" : "Clicca per copiare"}
+              title={copied.email ? "Email inserita!" : "Clicca per inserire"}
             >
               <span
                 style={{
@@ -209,7 +208,7 @@ const LoginPage = () => {
             /
             <Tooltip
               title={
-                copied.password ? "Password copiata!" : "Clicca per copiare"
+                copied.password ? "Password inserita!" : "Clicca per inserire"
               }
             >
               <span
