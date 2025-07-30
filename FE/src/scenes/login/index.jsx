@@ -77,6 +77,10 @@ const LoginPage = () => {
   const handleCopy = (text, field) => {
     navigator.clipboard.writeText(text);
     setCopied((prev) => ({ ...prev, [field]: true }));
+
+    if (field === "email") setEmail(text);
+    if (field === "password") setPassword(text);
+
     setTimeout(() => setCopied((prev) => ({ ...prev, [field]: false })), 1500);
   };
 
@@ -116,7 +120,7 @@ const LoginPage = () => {
             fontWeight="bold"
             textAlign="center"
           >
-            Banca NovaDigital
+            PW Bank
           </Typography>
 
           <TextField
