@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +41,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [openRecovery, setOpenRecovery] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -50,6 +52,8 @@ const LoginPage = () => {
   const [errore, setErrore] = useState("");
 
   const handleLogin = async () => {
+    setLoading(true);
+    setErrore("");
     try {
       const res = await axios.post("/login", {
         email,
@@ -69,9 +73,10 @@ const LoginPage = () => {
     } catch (err) {
       setErrore("Credenziali non valide");
       setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
-
   const [copied, setCopied] = useState({ email: false, password: false });
 
   const handleCopy = (text, field) => {
@@ -172,16 +177,19 @@ const LoginPage = () => {
             type="submit"
             variant="contained"
             fullWidth
-            onClick={handleLogin}
+            disabled={loading}
             sx={{
               bgcolor: colors.greenAccent[600],
               fontWeight: "bold",
-              ":hover": {
-                bgcolor: colors.greenAccent[700],
-              },
+              ":hover": { bgcolor: colors.greenAccent[700] },
+              height: 48,
             }}
           >
-            Accedi
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Accedi"
+            )}
           </Button>
           <Typography
             variant="body2"
