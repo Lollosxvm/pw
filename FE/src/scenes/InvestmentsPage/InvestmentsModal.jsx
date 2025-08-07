@@ -42,17 +42,26 @@ const InvestmentsModal = ({
   const quantitaCalcolata =
     importo && prezzoRaw ? (parseFloat(importo) / prezzoRaw).toFixed(8) : "";
 
+  const DEFAULT_PRICES = {
+    bitcoin: 100224.34,
+    ethereum: 3291.45,
+    solana: 145.88,
+  };
+
   useEffect(() => {
-    if (open && currentPrice) {
+    if (open) {
+      const ticker = asset?.toLowerCase();
+      let priceToUse = currentPrice ?? DEFAULT_PRICES[ticker] ?? 0.000001;
+
       const prezzoFormattato = new Intl.NumberFormat("it-IT", {
         minimumFractionDigits: 6,
         maximumFractionDigits: 6,
-      }).format(currentPrice);
+      }).format(priceToUse);
 
       setPrezzo(prezzoFormattato);
-      setPrezzoRaw(currentPrice);
+      setPrezzoRaw(priceToUse);
     }
-  }, [open, currentPrice]);
+  }, [open, currentPrice, asset]);
 
   useEffect(() => {
     if (open) {
