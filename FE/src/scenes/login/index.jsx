@@ -71,7 +71,19 @@ const LoginPage = () => {
 
       navigate("/dashboard");
     } catch (err) {
-      setErrore("Credenziali non valide");
+      let msg = "Errore del server";
+      const res = err.response;
+      if (!res) {
+        msg = "Server non raggiungibile";
+      } else if (res.status === 503 && res.data?.code === "DB_DOWN") {
+        msg =
+          "Servizio temporaneamente non disponibile. Problema del provider del database";
+      } else if (res.status === 401) {
+        msg = "Credenziali non valide";
+      } else if (res.data?.message) {
+        msg = res.data.message;
+      }
+      setErrore(msg);
       setOpenSnackbar(true);
     } finally {
       setLoading(false);

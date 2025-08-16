@@ -20,11 +20,9 @@ export const login = async (req, res) => {
 
     // 3. Utenza non riconosciuta: email e/o password errate (401 Unauthorized)
     if (rows.length === 0) {
-      return res
-        .status(401)
-        .json({
-          message: "Utenza non riconosciuta: email e/o password errate",
-        });
+      return res.status(401).json({
+        message: "Utenza non riconosciuta: email e/o password errate",
+      });
     }
 
     const utente = rows[0];
@@ -49,6 +47,18 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
+    const dbDown = [
+      "ECONNREFUSED",
+      "ETIMEDOUT",
+      "ENETUNREACH",
+      "EHOSTUNREACH",
+      "PROTOCOL_CONNECTION_LOST",
+    ].includes(err.code);
+    if (dbDown) {
+      return res
+        .status(503)
+        .json({ message: "Database non raggiungibile", code: "DB_DOWN" });
+    }
     console.error("Errore login:", err);
     res.status(500).json({ message: "Errore server" });
   }
