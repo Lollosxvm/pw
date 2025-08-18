@@ -30,7 +30,7 @@ export const aggiungiInvestimento = async (req, res) => {
 
     await conn.query(
       `INSERT INTO transazioni (utente, tipo, importo, categoria, data, indirizzo, metodo, stato, paese)
-       VALUES (?, ?, ?, ?, NOW(), ?, ?, 'Completato', ?)`,
+       VALUES (?, ?, ?, ?, NOW(), ?, 'online', 'Completato', ?)`,
       [
         utente,
         tipo,
