@@ -65,11 +65,9 @@ export const getLastTransactions = async (req, res) => {
       [utente]
     );
     if (!rows || rows.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "Nessuna transazione recente trovata per questo utente",
-        });
+      return res.status(404).json({
+        message: "Nessuna transazione recente trovata per questo utente",
+      });
     }
     res.json(rows);
   } catch (error) {
@@ -133,7 +131,7 @@ export const getAndamentiMensili = async (req, res) => {
       `SELECT
          DATE_FORMAT(data, '%Y-%m') AS mese,
          SUM(CASE WHEN tipo = 'Entrata' THEN importo ELSE 0 END) AS entrate,
-         SUM(CASE WHEN tipo IN ('Acquisto', 'Abbonamento', 'Altro', 'Ricorrente') THEN -importo ELSE 0 END) AS uscite,
+         SUM(CASE WHEN tipo != 'Entrata' THEN -importo ELSE 0 END) AS uscite,
          SUM(importo) AS saldo
        FROM transazioni
        WHERE stato = 'Completato' AND data BETWEEN ? AND ? AND utente = ?
@@ -142,11 +140,9 @@ export const getAndamentiMensili = async (req, res) => {
       [from, to, utente]
     );
     if (!rows || rows.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "Nessun andamento mensile trovato per questo intervallo",
-        });
+      return res.status(404).json({
+        message: "Nessun andamento mensile trovato per questo intervallo",
+      });
     }
     res.json(rows);
   } catch (err) {
